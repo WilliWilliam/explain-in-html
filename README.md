@@ -1,6 +1,6 @@
 > **explain-in-html** es una versión modificada de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) (Apache-2.0). Cambios: se agregó `skills/explain-in-html/references/patrones.md` con patrones propios, `SKILL.md` lo lee siempre, la skill se llama `explain-in-html` (también su carpeta) y acepta pedidos en español. Lo demás es el trabajo original de su autor.
 
-# html-artifacts
+# explain-in-html
 
 A Claude skill for producing self-contained HTML artifacts instead of markdown when the task warrants it. And for knowing when it doesn't.
 
@@ -10,17 +10,26 @@ A Claude skill for producing self-contained HTML artifacts instead of markdown w
 
 This skill operationalizes the recognition heuristic and per-category patterns from Thariq's post. It triggers on requests where HTML lands harder than markdown (comparisons, plans, code reviews, explainers, post-mortems, dashboards, custom editors) and stays out of the way for everything else.
 
-**[→ See the live examples](https://dogum.github.io/html-artifacts/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
+**[→ See the examples](docs/examples/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
 
-## What's new in 2.0
+## What this fork adds (1.0.1)
 
-The first version taught Claude *how* to write HTML. Models no longer need that. Version 2.0 spends the skill's budget on judgment and verification instead:
+- **`references/patrones.md`**, a set of its own patterns that `SKILL.md` always reads.
+- **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…).
+- **Name:** the skill and its folder are `explain-in-html`.
+- **Evals:** two Spanish cases on top of the original seven (nine in total).
+
+See [CHANGELOG.md](CHANGELOG.md) for details.
+
+## Inherited from upstream 2.0
+
+The first upstream version taught Claude *how* to write HTML. Models no longer need that. Upstream 2.0 spends the skill's budget on judgment and verification instead:
 
 - **Verify before delivering.** A new universal rule: if a browser is available, render the file headless, screenshot it at desktop and phone width, check the console, fix what you see. If no browser is available (Claude.ai chat, a surface without a shell), a read-through checklist runs instead, and the skill never stalls waiting for tooling it doesn't have. This one rule fixes more bad artifacts than any styling advice.
 - **A sharper "stay in markdown" section.** Over-triggering is the failure mode Thariq warned about. The carve-outs are now concrete, and the eval suite tests them.
 - **Four new references.** Data and charts (SVG, no library), accessibility and print, harness mechanics (the one file that knows which surface you're on), and the pre-delivery check.
 - **Facts fixed.** Storage rules in artifacts, the CDN allowlist, the `data-theme` toggle alongside `prefers-color-scheme`, no hardcoded paths.
-- **Evals.** Seven behavioural cases for `claude plugin eval`, four that should trigger and three that must not. Every run compares against a no-skill baseline, so the number you see is what the skill *adds*.
+- **Evals.** Behavioural cases for `claude plugin eval` (seven upstream; this fork has nine: five that should trigger and four that must not). Every run compares against a no-skill baseline, so the number you see is what the skill *adds*.
 - **Distribution.** A plugin marketplace, so Claude Code users get updates. A release workflow builds the Claude.ai zip from source so it can't drift.
 - **Examples.** Nine now, up from six: annotated code review, design-token sheet, and incident post-mortem are new. All nine pass the skill's own rules, including keyboard support and both themes, and were rendered headless before shipping.
 
@@ -101,7 +110,7 @@ In the original post, Thariq writes:
 
 > I'm a little bit afraid that people will read this article and turn it into a /html skill or something. While there might be some value in that, I want to emphasize that you don't need to do much to get Claude to do this.
 
-That worry is legitimate, and it's the reason 2.0 looks the way it does:
+That worry is legitimate, and it's the reason upstream 2.0 looks the way it does:
 
 - The recognition heuristic is about *when* HTML helps, and the "stay in markdown" list is as long as the "reach for HTML" list.
 - The should-not-trigger evals exist to catch the skill turning a two-sentence question into a page.
@@ -112,7 +121,7 @@ If the defaults still produce output you don't like, fork it, or put a `design-s
 
 ## Examples
 
-Each is a single `.html` file produced by the skill from the prompt shown. View them on the [site](https://dogum.github.io/html-artifacts/) or open `docs/examples/` directly.
+Each is a single `.html` file produced by the upstream `html-artifacts` skill from the prompt shown. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
 
 | Pattern | Prompt | File |
 |---|---|---|
@@ -126,7 +135,7 @@ Each is a single `.html` file produced by the skill from the prompt shown. View 
 | Design-token sheet | "Lay out our design tokens as a reference page" | [`08-design-tokens.html`](docs/examples/08-design-tokens.html) |
 | Incident post-mortem | "Write up yesterday's search latency outage as a post-mortem" | [`09-postmortem.html`](docs/examples/09-postmortem.html) |
 
-Made something with the skill you're proud of? [Open a gallery issue](https://github.com/dogum/html-artifacts/issues/new?template=gallery.yml).
+Made something with the skill you're proud of? [Open a gallery issue](https://github.com/WilliWilliam/explain-in-html/issues/new?template=gallery.yml).
 
 ## Contributing
 

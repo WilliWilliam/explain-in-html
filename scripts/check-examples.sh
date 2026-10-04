@@ -8,9 +8,9 @@ for f in docs/examples/*.html; do
   n=$(basename "$f"); problems=()
   grep -q '<title>' "$f"                          || problems+=("no <title>")
   grep -q 'name="viewport"' "$f"                  || problems+=("no viewport meta")
-  grep -q 'Produced by the html-artifacts skill' "$f" || problems+=("no prompt header comment")
+  grep -Eq 'Produced by the (explain-in-html|html-artifacts) skill' "$f" || problems+=("no prompt header comment")
   grep -q ':focus-visible' "$f"                   || problems+=("no :focus-visible style")
-  grep -Eq 'https?://' "$f" && ! grep -Eq 'https?://(github\.com|dogum\.github\.io|thariqs\.github\.io|x\.com|fonts\.googleapis\.com|fonts\.gstatic\.com)' "$f" && problems+=("external URL")
+  grep -Eq 'https?://' "$f" && ! grep -Eq 'https?://(github\.com|dogum\.github\.io|williwilliam\.github\.io|thariqs\.github\.io|x\.com|fonts\.googleapis\.com|fonts\.gstatic\.com)' "$f" && problems+=("external URL")
   grep -q '<script src=' "$f"                     && problems+=("external script")
   grep -Eq '^(html|body|header|\.hero|main|h1)[^{]*\{[^}]*gradient' "$f" && problems+=("gradient on a page-level element")
   # Dark theme: either both the media query and the data-theme block, or an explicitly single-theme deck.

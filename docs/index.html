@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>html-artifacts — a Claude skill</title>
+<title>explain-in-html — a Claude skill</title>
 <meta name="description" content="A Claude skill that operationalizes Thariq Shihipar's 'Unreasonable Effectiveness of HTML' — turning prompts for plans, comparisons, reports, explainers and editors into self-contained HTML artifacts instead of markdown."/>
-<meta property="og:title" content="html-artifacts — a Claude skill"/>
+<meta property="og:title" content="explain-in-html — a Claude skill"/>
 <meta property="og:description" content="Markdown is a poor format for the things agents now make. This skill teaches Claude when to make an HTML artifact instead — and when to leave well enough alone."/>
 <style>
 :root {
@@ -336,7 +336,7 @@ footer.foot .colophon code { font-size: .92em; }
 <!-- ─── top bar ─────────────────────────────────────────── -->
 <div class="bar">
   <div class="wrap">
-    <span class="repo"><a href="https://github.com/dogum/html-artifacts">github.com/dogum/html-artifacts</a></span>
+    <span class="repo"><a href="https://github.com/WilliWilliam/explain-in-html">github.com/WilliWilliam/explain-in-html</a></span>
     <span class="lineage">companion to <a href="https://thariqs.github.io/html-effectiveness/">Thariq's "Unreasonable Effectiveness of HTML"</a></span>
   </div>
 </div>
@@ -351,8 +351,8 @@ footer.foot .colophon code { font-size: .92em; }
   <p class="lead-small">Nine artifacts below, each produced by the skill in response to a real prompt, and each rendered headless and checked before it shipped. This page is itself one of them.</p>
 
   <div class="actions">
-    <a class="primary" href="https://github.com/dogum/html-artifacts/releases/latest">Download <code>.skill</code> →</a>
-    <a class="secondary" href="https://github.com/dogum/html-artifacts">github →</a>
+    <a class="primary" href="https://github.com/WilliWilliam/explain-in-html/releases/latest">Download <code>.skill</code> →</a>
+    <a class="secondary" href="https://github.com/WilliWilliam/explain-in-html">github →</a>
   </div>
 </header>
 
@@ -853,8 +853,8 @@ footer.foot .colophon code { font-size: .92em; }
         <li>Add this repo as a marketplace.</li>
         <li>Install the plugin. Updates arrive with <code>/plugin update</code>.</li>
       </ol>
-<pre>/plugin marketplace add dogum/html-artifacts
-/plugin install html-artifacts@html-artifacts</pre>
+<pre>/plugin marketplace add WilliWilliam/explain-in-html
+/plugin install explain-in-html@explain-in-html</pre>
       <span class="time">~20 seconds · auto-updatable</span>
     </div>
 
@@ -862,7 +862,7 @@ footer.foot .colophon code { font-size: .92em; }
       <div class="target">Claude.ai · Cowork · cloud</div>
       <h3>Upload the .skill file</h3>
       <ol>
-        <li>Download <a href="https://github.com/dogum/html-artifacts/releases/latest"><code>html-artifacts.skill</code></a> from the latest release.</li>
+        <li>Download <a href="https://github.com/WilliWilliam/explain-in-html/releases/latest"><code>explain-in-html.skill</code></a> from the latest release.</li>
         <li>In Claude.ai, go to <em>Settings → Capabilities → Skills</em>.</li>
         <li>Upload the <code>.skill</code> file.</li>
       </ol>
@@ -874,10 +874,10 @@ footer.foot .colophon code { font-size: .92em; }
       <h3>Copy the folder</h3>
       <ol>
         <li>Clone the repo.</li>
-        <li>Copy <code>skills/html-artifacts/</code> into your skills directory. Any Agent Skills-compatible runtime works.</li>
+        <li>Copy <code>skills/explain-in-html/</code> into your skills directory. Any Agent Skills-compatible runtime works.</li>
       </ol>
-<pre>git clone https://github.com/dogum/html-artifacts.git
-cp -r html-artifacts/skills/html-artifacts ~/.claude/skills/</pre>
+<pre>git clone https://github.com/WilliWilliam/explain-in-html.git
+cp -r explain-in-html/skills/explain-in-html ~/.claude/skills/</pre>
       <span class="time">~30 seconds</span>
     </div>
   </div>
@@ -891,20 +891,22 @@ cp -r html-artifacts/skills/html-artifacts ~/.claude/skills/</pre>
     <div>
       <h3>Lineage</h3>
       <p>Built on <a href="https://thariqs.github.io/html-effectiveness/">"The Unreasonable Effectiveness of HTML"</a> by Thariq Shihipar (Anthropic). The thesis, the categories, and several of the example shapes are his — the recognition heuristic and the carve-outs are extensions, not the original.</p>
+      <p>explain-in-html is a fork of <a href="https://github.com/dogum/html-artifacts">dogum/html-artifacts</a> (Apache-2.0) that adds its own patterns and Spanish-language triggers.</p>
       <p>This page is itself one of the skill's artifacts, in keeping with Thariq's companion site, which made the same gag first.</p>
     </div>
     <div>
       <h3>Links</h3>
       <ul>
-        <li><a href="https://github.com/dogum/html-artifacts">GitHub repo</a></li>
-        <li><a href="https://github.com/dogum/html-artifacts/releases/latest">Latest release (<code>.skill</code> download)</a></li>
-        <li><a href="https://github.com/dogum/html-artifacts/blob/main/CHANGELOG.md">Changelog</a></li>
+        <li><a href="https://github.com/WilliWilliam/explain-in-html">GitHub repo</a></li>
+        <li><a href="https://github.com/dogum/html-artifacts">Original: dogum/html-artifacts</a></li>
+        <li><a href="https://github.com/WilliWilliam/explain-in-html/releases/latest">Latest release (<code>.skill</code> download)</a></li>
+        <li><a href="https://github.com/WilliWilliam/explain-in-html/blob/main/CHANGELOG.md">Changelog</a></li>
         <li><a href="https://thariqs.github.io/html-effectiveness/">Thariq's companion site</a></li>
         <li><a href="https://github.com/anthropics/skills">Anthropic's skills repo</a></li>
       </ul>
     </div>
     <div class="colophon">
-      Apache 2.0 · Charter / Inter / IBM Plex Mono · No build step. No tracking. Single <code>index.html</code> + 9 example files. <a href="https://github.com/dogum/html-artifacts/blob/main/docs/index.html">View source →</a>
+      Apache 2.0 · Charter / Inter / IBM Plex Mono · No build step. No tracking. Single <code>index.html</code> + 9 example files. <a href="https://github.com/WilliWilliam/explain-in-html/blob/main/docs/index.html">View source →</a>
     </div>
   </div>
 </footer>
