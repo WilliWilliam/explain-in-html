@@ -1,10 +1,11 @@
 ---
-name: html-artifacts
-description: Produce a self-contained HTML artifact instead of a markdown document when the content benefits from spatial layout, color, real diagrams, interactivity, or a round-trip editor. Use when the user asks for a "doc," "writeup," "plan," "spec," "report," "explainer," "comparison," "review," "PR description," "mockup," "diagram," "flowchart," "deck," "slides," "status update," "post-mortem," "dashboard," "chart," "playground," or a one-off "editor" or "tool" for triaging, reordering, or tuning something, even without saying "HTML" or "artifact." Also when asked to "explain," "compare," "explore options for," or "walk through" a non-trivial topic. Always use it when the deliverable is an .html file or a web page, even if the user names the file or asks for HTML directly; the skill is how the page gets checked, not just written. Stay in markdown for short replies, code-only answers, terminal-style instructions, and anything the reader will read once and discard.
+name: explain-in-html
+description: Produce a self-contained HTML artifact instead of a markdown document when the content benefits from spatial layout, color, real diagrams, interactivity, or a round-trip editor. Use when the user asks for a "doc," "writeup," "plan," "spec," "report," "explainer," "comparison," "review," "PR description," "mockup," "diagram," "flowchart," "deck," "slides," "status update," "post-mortem," "dashboard," "chart," "playground," or a one-off "editor" or "tool" for triaging, reordering, or tuning something, even without saying "HTML" or "artifact." Also when asked to "explain," "compare," "explore options for," or "walk through" a non-trivial topic. Always use it when the deliverable is an .html file or a web page, even if the user names the file or asks for HTML directly; the skill is how the page gets checked, not just written. Stay in markdown for short replies, code-only answers, terminal-style instructions, and anything the reader will read once and discard. Spanish requests count too: "explícame", "explica", "compara", "reporte", "diagrama", "plan", "tablero".
 license: Apache-2.0
 metadata:
-  version: "2.0.0"
-  homepage: https://dogum.github.io/html-artifacts/
+  version: "1.0.0"
+  homepage: https://github.com/WilliWilliam/explain-in-html
+  upstream: https://github.com/dogum/html-artifacts
 ---
 
 # HTML Artifacts
@@ -52,6 +53,7 @@ Every artifact must satisfy all of these.
 
 1. **Decide.** Run the two lists above. Say in one line what you're making and why HTML.
 2. **Pick the reference.** Read the matching file from the index below. They are short; read two if the request spans categories.
+   Always also read `references/patrones.md` before drafting. Apply each pattern only when its condition holds.
 3. **Match the user's style.** If the project has a design system, tokens, or a frontend-design skill, use it. Otherwise use the baseline in `references/matching-your-style.md`.
 4. **Draft.** Layout first, then content, then interaction. Pre-fill any data the user gave you.
 5. **Verify.** Rule 8. Fix, then deliver with the path or the artifact and one sentence on what it is.
@@ -72,6 +74,7 @@ Every artifact must satisfy all of these.
 | Accessibility and print checklist | `references/accessibility-and-print.md` |
 | Where the file goes and what each surface allows: Claude Code, Claude.ai artifacts, Cowork, published artifacts | `references/harness-mechanics.md` |
 | The pre-delivery check, headless and manual | `references/verify-before-delivering.md` |
+| House patterns learned from real comparisons; always read | `references/patrones.md` |
 
 ## Output mechanics, briefly
 

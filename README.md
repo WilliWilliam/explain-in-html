@@ -1,3 +1,5 @@
+> **explain-in-html** es una versión modificada de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) (Apache-2.0). Cambios: se agregó `skills/html-artifacts/references/patrones.md` con patrones propios, `SKILL.md` lo lee siempre, el nombre de la skill es `explain-in-html` y acepta pedidos en español. Lo demás es el trabajo original de su autor.
+
 # html-artifacts
 
 A Claude skill for producing self-contained HTML artifacts instead of markdown when the task warrants it. And for knowing when it doesn't.

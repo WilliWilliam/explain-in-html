@@ -18,7 +18,7 @@ jobs:
           f=skills/html-artifacts/SKILL.md
           head -1 "$f" | grep -qx -- '---' || { echo "missing frontmatter"; exit 1; }
           fm="$(awk 'NR>1 && $0=="---"{exit} NR>1{print}' "$f")"
-          echo "$fm" | grep -q '^name: html-artifacts$' || { echo "name must be html-artifacts"; exit 1; }
+          echo "$fm" | grep -q '^name: explain-in-html$' || { echo "name must be explain-in-html"; exit 1; }
           echo "$fm" | grep -q '^description:' || { echo "description required"; exit 1; }
           desc_len=$(echo "$fm" | sed -n 's/^description: *//p' | wc -c)
           echo "description length: $desc_len chars (limit 1536)"

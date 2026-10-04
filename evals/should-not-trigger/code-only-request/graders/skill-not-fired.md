@@ -1,7 +1,7 @@
 ---
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:[\w-]+:)?html-artifacts"'
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?explain-in-html"'
 min: 0
 max: 0
 arm: both
