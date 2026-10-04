@@ -10,7 +10,7 @@ A Claude skill for producing self-contained HTML artifacts instead of markdown w
 
 This skill operationalizes the recognition heuristic and per-category patterns from Thariq's post. It triggers on requests where HTML lands harder than markdown (comparisons, plans, code reviews, explainers, post-mortems, dashboards, custom editors) and stays out of the way for everything else.
 
-**[→ See the live examples](https://dogum.github.io/html-artifacts/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/dogum/html-artifacts/releases/latest)**
+**[→ See the live examples](https://dogum.github.io/html-artifacts/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
 
 ## What's new in 2.0
 
@@ -29,26 +29,26 @@ The first version taught Claude *how* to write HTML. Models no longer need that.
 ### Claude Code (recommended)
 
 ```
-/plugin marketplace add dogum/html-artifacts
-/plugin install html-artifacts@html-artifacts
+/plugin marketplace add WilliWilliam/explain-in-html
+/plugin install explain-in-html@explain-in-html
 ```
 
 Updates arrive with `/plugin update`.
 
 ### Claude.ai, Cowork, cloud sessions
 
-1. Download `html-artifacts.skill` from the [latest release](https://github.com/dogum/html-artifacts/releases/latest).
+1. Download `explain-in-html.skill` from the [latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest).
 2. Open Claude.ai → Settings → Capabilities → Skills.
 3. Upload the file. Re-upload to update.
 
 ### Manual, or any Agent Skills-compatible runtime
 
 ```bash
-git clone https://github.com/dogum/html-artifacts.git
-cp -r html-artifacts/skills/html-artifacts ~/.claude/skills/
+git clone https://github.com/WilliWilliam/explain-in-html.git
+cp -r explain-in-html/skills/html-artifacts ~/.claude/skills/explain-in-html
 ```
 
-The folder containing `SKILL.md` is what loads. The frontmatter uses only [Agent Skills](https://agentskills.io) spec fields, so it works outside Claude too.
+The folder containing `SKILL.md` is what loads; name it `explain-in-html` so it matches the skill's `name`. The frontmatter uses only [Agent Skills](https://agentskills.io) spec fields, so it works outside Claude too.
 
 ## What this skill does
 
@@ -61,7 +61,7 @@ It is not "always answer in HTML." There is an explicit carve-out for short repl
 ```
 .claude-plugin/
 ├── plugin.json                         # plugin manifest
-└── marketplace.json                    # lets /plugin marketplace add dogum/html-artifacts work
+└── marketplace.json                    # lets /plugin marketplace add WilliWilliam/explain-in-html work
 skills/html-artifacts/
 ├── SKILL.md                            # recognition, carve-outs, universal rules, workflow, index
 └── references/

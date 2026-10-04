@@ -48,12 +48,12 @@ jobs:
           claude plugin validate .
 
       - name: Build the Claude.ai skill zip
-        run: scripts/build-skill.sh dist/html-artifacts.skill
+        run: scripts/build-skill.sh dist/explain-in-html.skill
 
       - name: Check examples against the skill's universal rules
         run: scripts/check-examples.sh
 
       - uses: actions/upload-artifact@v4
         with:
-          name: html-artifacts.skill
-          path: dist/html-artifacts.skill
+          name: explain-in-html.skill
+          path: dist/explain-in-html.skill

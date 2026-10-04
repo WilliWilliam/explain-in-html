@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
+## [1.0.0] - 2026-10-04
+
+Primera versión de **explain-in-html**, fork de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) 2.0.0. Las entradas de abajo son del proyecto original.
+
+### Added
+- `references/patrones.md`: patrones propios aprendidos comparando artefactos reales. `SKILL.md` lo lee siempre antes de redactar.
+- Disparadores en español en la description de la skill ("explícame", "compara", "reporte", "diagrama", "plan", "tablero").
+- Evals: `explicame-facturacion-electronica` (debe activarse y aplicar los patrones) y `explicame-en-una-frase` (no debe activarse). Todos los casos que deben activarse verifican que se leyó `patrones.md`.
+
+### Changed
+- La skill y el plugin se llaman `explain-in-html`. El zip de release es `explain-in-html.skill` y su carpeta interna coincide con el nombre de la skill.
+- La versión arranca en 1.0.0 para el fork.
+
 ## [2.0.0] - 2026-09-14
 
 The skill was written for models that needed to be told how to write HTML. Four months later they don't. This release moves the skill's budget from mechanics to judgment and verification, fixes the facts that had gone stale, and adds the distribution and testing scaffolding a shared skill should have.
@@ -36,5 +49,6 @@ The skill was written for models that needed to be told how to write HTML. Four 
 
 Initial release: `SKILL.md` with the recognition heuristic and universal rules, eight per-category references, six examples, and the GitHub Pages site.
 
+[1.0.0]: https://github.com/WilliWilliam/explain-in-html/releases/tag/v1.0.0
 [2.0.0]: https://github.com/dogum/html-artifacts/compare/v0.1.0...v2.0.0
 [0.1.0]: https://github.com/dogum/html-artifacts/releases/tag/v0.1.0

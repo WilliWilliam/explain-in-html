@@ -30,7 +30,7 @@ jobs:
           echo "releasing v$v at ${GITHUB_SHA}"
 
       - name: Build the Claude.ai skill zip
-        run: scripts/build-skill.sh dist/html-artifacts.skill
+        run: scripts/build-skill.sh dist/explain-in-html.skill
 
       - name: Extract release notes from CHANGELOG
         run: |
@@ -44,4 +44,4 @@ jobs:
           target_commitish: ${{ github.sha }}
           name: ${{ steps.v.outputs.tag }}
           body_path: notes.md
-          files: dist/html-artifacts.skill
+          files: dist/explain-in-html.skill

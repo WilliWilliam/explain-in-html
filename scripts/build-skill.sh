@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# Build html-artifacts.skill — the zip Claude.ai accepts under Settings → Capabilities → Skills.
+# Build explain-in-html.skill — the zip Claude.ai accepts under Settings → Capabilities → Skills.
 #
-# The zip contains a single top-level folder, html-artifacts/, holding SKILL.md and references/.
+# The zip contains a single top-level folder, explain-in-html/, holding SKILL.md and references/.
 # Its frontmatter is restricted to Agent Skills spec fields (name, description, license,
 # compatibility, metadata, allowed-tools); anything Claude Code-specific fails the upload.
 #
-# Usage: scripts/build-skill.sh [output-path]   (default: dist/html-artifacts.skill)
+# Usage: scripts/build-skill.sh [output-path]   (default: dist/explain-in-html.skill)
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 src="$root/skills/html-artifacts"
-out="${1:-$root/dist/html-artifacts.skill}"
+out="${1:-$root/dist/explain-in-html.skill}"
 
 # Reject Claude Code-only frontmatter keys before packaging.
 forbidden='^(when_to_use|argument-hint|arguments|disable-model-invocation|user-invocable|disallowed-tools|model|effort|context|agent|background|hooks|paths|shell):'
@@ -24,11 +24,11 @@ mkdir -p "$(dirname "$out")"
 out="$(cd "$(dirname "$out")" && pwd)/$(basename "$out")"
 stage="$(mktemp -d)"
 trap 'rm -rf "$stage"' EXIT
-mkdir -p "$stage/html-artifacts"
-cp "$src/SKILL.md" "$stage/html-artifacts/"
-cp -R "$src/references" "$stage/html-artifacts/"
+mkdir -p "$stage/explain-in-html"
+cp "$src/SKILL.md" "$stage/explain-in-html/"
+cp -R "$src/references" "$stage/explain-in-html/"
 rm -f "$out"
 # -X drops extended attributes, -D drops directory entries: byte-stable across machines.
-( cd "$stage" && find html-artifacts -type f | LC_ALL=C sort | zip -X -D -q "$out" -@ )
+( cd "$stage" && find explain-in-html -type f | LC_ALL=C sort | zip -X -D -q "$out" -@ )
 echo "built $out"
 unzip -l "$out"
