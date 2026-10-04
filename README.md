@@ -1,4 +1,4 @@
-> **explain-in-html** es una versión modificada de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) (Apache-2.0). Cambios: se agregó `skills/html-artifacts/references/patrones.md` con patrones propios, `SKILL.md` lo lee siempre, el nombre de la skill es `explain-in-html` y acepta pedidos en español. Lo demás es el trabajo original de su autor.
+> **explain-in-html** es una versión modificada de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) (Apache-2.0). Cambios: se agregó `skills/explain-in-html/references/patrones.md` con patrones propios, `SKILL.md` lo lee siempre, la skill se llama `explain-in-html` (también su carpeta) y acepta pedidos en español. Lo demás es el trabajo original de su autor.
 
 # html-artifacts
 
@@ -45,10 +45,10 @@ Updates arrive with `/plugin update`.
 
 ```bash
 git clone https://github.com/WilliWilliam/explain-in-html.git
-cp -r explain-in-html/skills/html-artifacts ~/.claude/skills/explain-in-html
+cp -r explain-in-html/skills/explain-in-html ~/.claude/skills/
 ```
 
-The folder containing `SKILL.md` is what loads; name it `explain-in-html` so it matches the skill's `name`. The frontmatter uses only [Agent Skills](https://agentskills.io) spec fields, so it works outside Claude too.
+The folder containing `SKILL.md` is what loads; its name matches the skill's `name`, as the Agent Skills spec requires. The frontmatter uses only [Agent Skills](https://agentskills.io) spec fields, so it works outside Claude too.
 
 ## What this skill does
 
@@ -62,7 +62,7 @@ It is not "always answer in HTML." There is an explicit carve-out for short repl
 .claude-plugin/
 ├── plugin.json                         # plugin manifest
 └── marketplace.json                    # lets /plugin marketplace add WilliWilliam/explain-in-html work
-skills/html-artifacts/
+skills/explain-in-html/
 ├── SKILL.md                            # recognition, carve-outs, universal rules, workflow, index
 └── references/
     ├── exploration-and-planning.md     # side-by-side comparisons, implementation plans

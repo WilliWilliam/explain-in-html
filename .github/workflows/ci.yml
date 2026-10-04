@@ -15,7 +15,7 @@ jobs:
       - name: Check SKILL.md frontmatter is Agent Skills spec-compatible
         run: |
           set -euo pipefail
-          f=skills/html-artifacts/SKILL.md
+          f=skills/explain-in-html/SKILL.md
           head -1 "$f" | grep -qx -- '---' || { echo "missing frontmatter"; exit 1; }
           fm="$(awk 'NR>1 && $0=="---"{exit} NR>1{print}' "$f")"
           echo "$fm" | grep -q '^name: explain-in-html$' || { echo "name must be explain-in-html"; exit 1; }
@@ -25,10 +25,10 @@ jobs:
           [ "$desc_len" -le 1536 ] || exit 1
           # Every reference file the skill points at must exist.
           for ref in $(grep -o 'references/[a-z0-9-]*\.md' "$f" | sort -u); do
-            test -f "skills/html-artifacts/$ref" || { echo "missing $ref"; exit 1; }
+            test -f "skills/explain-in-html/$ref" || { echo "missing $ref"; exit 1; }
           done
           # Every reference file must be indexed from SKILL.md.
-          for p in skills/html-artifacts/references/*.md; do
+          for p in skills/explain-in-html/references/*.md; do
             grep -q "references/$(basename "$p")" "$f" || { echo "$(basename "$p") is not referenced from SKILL.md"; exit 1; }
           done
 

@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
+## [1.0.1] - 2026-10-04
+
+### Changed
+- La carpeta de la skill pasa de `skills/html-artifacts/` a `skills/explain-in-html/`, igual que su `name`. En Claude Code la skill aparece como `explain-in-html:explain-in-html` en vez de `explain-in-html:html-artifacts`. La instalación manual copia la carpeta tal cual.
+
+### Fixed
+- Los graders `skill-fired` y `skill-not-fired` reconocen la skill con el nombre que le da Claude Code a las skills de un plugin (`plugin:carpeta`).
+
 ## [1.0.0] - 2026-10-04
 
 Primera versión de **explain-in-html**, fork de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) 2.0.0. Las entradas de abajo son del proyecto original.
@@ -49,6 +57,7 @@ The skill was written for models that needed to be told how to write HTML. Four 
 
 Initial release: `SKILL.md` with the recognition heuristic and universal rules, eight per-category references, six examples, and the GitHub Pages site.
 
+[1.0.1]: https://github.com/WilliWilliam/explain-in-html/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/WilliWilliam/explain-in-html/releases/tag/v1.0.0
 [2.0.0]: https://github.com/dogum/html-artifacts/compare/v0.1.0...v2.0.0
 [0.1.0]: https://github.com/dogum/html-artifacts/releases/tag/v0.1.0

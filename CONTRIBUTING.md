@@ -4,8 +4,8 @@ Thanks for helping. This is a small repo and the bar is simple: the skill should
 
 ## Layout
 
-- `skills/html-artifacts/SKILL.md` is the entry point. Keep it under about 100 lines; it is in context every time the skill fires.
-- `skills/html-artifacts/references/` hold the per-category and cross-cutting guidance. Each file should stay short enough to read in a minute.
+- `skills/explain-in-html/SKILL.md` is the entry point. Keep it under about 100 lines; it is in context every time the skill fires.
+- `skills/explain-in-html/references/` hold the per-category and cross-cutting guidance. Each file should stay short enough to read in a minute.
 - `evals/` are behavioural tests. `docs/` is the site and the examples. `scripts/` are the checks.
 
 ## Before you open a PR

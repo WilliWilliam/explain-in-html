@@ -9,7 +9,7 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-src="$root/skills/html-artifacts"
+src="$root/skills/explain-in-html"
 out="${1:-$root/dist/explain-in-html.skill}"
 
 # Reject Claude Code-only frontmatter keys before packaging.
