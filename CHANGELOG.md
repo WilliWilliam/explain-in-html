@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Patrón **Niveles de lectura** en `references/patrones.md`: las páginas para leer y entender (explicaciones, PRs, reportes, post-mortems, planes) llevan un selector 1 / 5 / 10 min que abre en 10. Los niveles se acumulan y se ocultan con CSS (`data-nivel`), así que sin `:has()` o sin JS se ve la página completa. Si el usuario pide un solo tiempo, se hace solo ese nivel. No aplica a tableros, editores ni decks.
+- `SKILL.md` remite al patrón en el paso de redacción.
+- Ejemplo `docs/examples/10-niveles-de-lectura.html`: el prompt de explicación en 1, 5 y 10 minutos aplicado a los commits de patrones propios, con diagramas UML de clases y de secuencia.
+- Eval `explicar-cambio-en-niveles` (selector con 10 min por defecto, niveles marcados, cada nivel se entiende solo) y grader `no-reading-levels` en `triage-editor-with-export`.
+
 ## [1.0.1] - 2026-10-04
 
 ### Changed

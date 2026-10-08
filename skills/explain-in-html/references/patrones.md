@@ -60,6 +60,35 @@ Prefiere páginas densas y fáciles de escanear sobre páginas largas con mucho 
 **Ideas clave en tarjetas.**
 Las dos o tres ideas que el lector debe llevarse van destacadas en tarjetas, no enterradas en párrafos.
 
+**Niveles de lectura: 1, 5 y 10 minutos.**
+Cuando: la página es para leer y entender (una explicación, la descripción o revisión de un PR, un reporte, un post-mortem, un plan). No va en tableros, editores ni decks, ni en páginas que se leen enteras en un minuto.
+Una sola página con un selector arriba: **1 min · 5 min · 10 min**, que abre en 10. Los niveles se acumulan: el de 5 incluye el de 1, y el de 10 incluye el de 5.
+- **1 min:** qué cambió o qué es, y por qué importa, en tres o cuatro frases, más las ideas clave y una sola figura. Unas 200 palabras.
+- **5 min:** los conceptos que hay que entender (estructura, flujo, decisiones principales), con sus diagramas.
+- **10 min:** alternativas descartadas, riesgos, casos borde, preguntas abiertas y el detalle que importa.
+
+Cada nivel debe entenderse solo. Nada de "ver el diagrama de abajo" si ese diagrama está oculto en ese nivel, y nada de enlaces a secciones ocultas.
+Si el usuario pide un solo tiempo ("explícamelo en 1 minuto", "versión de 5 min"), haz solo ese nivel y sin selector.
+
+Marcado (úsalo igual siempre):
+```html
+<fieldset class="nivel">
+  <legend>Tiempo de lectura</legend>
+  <input type="radio" name="nivel" id="nivel-1" value="1"><label for="nivel-1">1 min</label>
+  <input type="radio" name="nivel" id="nivel-5" value="5"><label for="nivel-5">5 min</label>
+  <input type="radio" name="nivel" id="nivel-10" value="10" checked><label for="nivel-10">10 min</label>
+</fieldset>
+<!-- Lo del nivel 1 va sin marca. data-nivel="N": visible desde el nivel N. -->
+<section data-nivel="5">…</section>
+<section data-nivel="10">…</section>
+```
+```css
+body:has(#nivel-1:checked) [data-nivel="5"],
+body:has(#nivel-1:checked) [data-nivel="10"],
+body:has(#nivel-5:checked) [data-nivel="10"] { display: none; }
+```
+Oculta con CSS, no con JS. Si algo falla, se ve la página completa. Un poco de JS puede guardar el nivel en la URL (`#5min`) para compartir el enlace. Al imprimir sale el nivel elegido. Verifica los tres niveles al revisar la página.
+
 **Glosario lateral.**
 Cuando: hay más de cuatro o cinco términos especializados.
 Glosario al margen, con los términos del texto enlazados a su definición.

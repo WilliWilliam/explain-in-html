@@ -17,7 +17,8 @@ This skill operationalizes the recognition heuristic and per-category patterns f
 - **`references/patrones.md`**, a set of its own patterns that `SKILL.md` always reads.
 - **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…).
 - **Name:** the skill and its folder are `explain-in-html`.
-- **Evals:** two Spanish cases on top of the original seven (nine in total).
+- **Reading levels:** pages meant to be read (explainers, PR writeups, reports) get a 1 / 5 / 10 minute selector, opening at 10. Ask for one time ("explícamelo en 1 minuto") and you get only that level.
+- **Evals:** three cases on top of the original seven (ten in total): two in Spanish and one for reading levels.
 
 See [CHANGELOG.md](CHANGELOG.md) for details.
 
@@ -29,7 +30,7 @@ The first upstream version taught Claude *how* to write HTML. Models no longer n
 - **A sharper "stay in markdown" section.** Over-triggering is the failure mode Thariq warned about. The carve-outs are now concrete, and the eval suite tests them.
 - **Four new references.** Data and charts (SVG, no library), accessibility and print, harness mechanics (the one file that knows which surface you're on), and the pre-delivery check.
 - **Facts fixed.** Storage rules in artifacts, the CDN allowlist, the `data-theme` toggle alongside `prefers-color-scheme`, no hardcoded paths.
-- **Evals.** Behavioural cases for `claude plugin eval` (seven upstream; this fork has nine: five that should trigger and four that must not). Every run compares against a no-skill baseline, so the number you see is what the skill *adds*.
+- **Evals.** Behavioural cases for `claude plugin eval` (seven upstream; this fork has ten: six that should trigger and four that must not). Every run compares against a no-skill baseline, so the number you see is what the skill *adds*.
 - **Distribution.** A plugin marketplace, so Claude Code users get updates. A release workflow builds the Claude.ai zip from source so it can't drift.
 - **Examples.** Nine now, up from six: annotated code review, design-token sheet, and incident post-mortem are new. All nine pass the skill's own rules, including keyboard support and both themes, and were rendered headless before shipping.
 
@@ -87,7 +88,7 @@ skills/explain-in-html/
     ├── harness-mechanics.md            # per-surface rules: Claude Code, Claude.ai, Cowork (new)
     └── verify-before-delivering.md     # headless check, or the read-through fallback    (new)
 evals/                                  # claude plugin eval cases; see evals/README.md
-docs/                                   # GitHub Pages site and the nine examples
+docs/                                   # GitHub Pages site and the ten examples
 scripts/
 ├── build-skill.sh                      # builds the Claude.ai zip from skills/
 ├── check-examples.sh                   # static checks against the universal rules
@@ -121,7 +122,7 @@ If the defaults still produce output you don't like, fork it, or put a `design-s
 
 ## Examples
 
-Each is a single `.html` file produced by the upstream `html-artifacts` skill from the prompt shown. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
+Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 by this fork. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
 
 | Pattern | Prompt | File |
 |---|---|---|
@@ -134,6 +135,7 @@ Each is a single `.html` file produced by the upstream `html-artifacts` skill fr
 | Annotated code review | "Review this PR: add retry with backoff to the API client" | [`07-code-review.html`](docs/examples/07-code-review.html) |
 | Design-token sheet | "Lay out our design tokens as a reference page" | [`08-design-tokens.html`](docs/examples/08-design-tokens.html) |
 | Incident post-mortem | "Write up yesterday's search latency outage as a post-mortem" | [`09-postmortem.html`](docs/examples/09-postmortem.html) |
+| Reading levels, UML (this fork) | "Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer…" | [`10-niveles-de-lectura.html`](docs/examples/10-niveles-de-lectura.html) |
 
 Made something with the skill you're proud of? [Open a gallery issue](https://github.com/WilliWilliam/explain-in-html/issues/new?template=gallery.yml).
 
