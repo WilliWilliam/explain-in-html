@@ -8,7 +8,7 @@
       "displayName": "Explain in HTML",
       "description": "Artefactos HTML autocontenidos para explicar, comparar y reportar, con patrones propios. Basado en dogum/html-artifacts.",
       "source": "./",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "author": { "name": "WilliWilliam", "url": "https://github.com/WilliWilliam" },
       "homepage": "https://github.com/WilliWilliam/explain-in-html",
       "repository": "https://github.com/WilliWilliam/explain-in-html",
