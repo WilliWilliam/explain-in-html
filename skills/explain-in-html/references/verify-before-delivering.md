@@ -43,6 +43,8 @@ Then **look at the screenshots** (the Read tool renders images). Check, in this 
 4. Interactive parts respond: click the first control, press the keyboard shortcut, trigger the export and check the output text.
 5. Console is clean.
 
+If the page has reading levels, the script above only sees the default (10 min). Shoot the 1 and 5 minute views too, by opening the file with `#1min` and `#5min` or clicking the selector, and check that each one stands alone.
+
 For a step walkthrough, also screenshot the diagram at a few steps: click the step, wait about 1.5 s for the transitions, then shoot. To test autoplay timing, Playwright's fake clock (`page.clock.install()` then `page.clock.runFor(ms)`) is the fast way, but it freezes CSS transitions, so never judge positions from screenshots taken under it.
 
 Fix what you find, re-run, then deliver. Delete the screenshots and the script unless the user wants them.

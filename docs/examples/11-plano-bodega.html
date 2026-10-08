@@ -13,6 +13,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Desconsolidación en un depósito habilitado</title>
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
 :root {
   --bg:#fafaf7; --surface:#ffffff; --ink:#1a1a1f; --ink-soft:#555560; --rule:#e7e5df;
@@ -49,6 +50,7 @@ a { color: var(--accent-ink); }
 
 /* Selector de nivel */
 .levelbar { position: sticky; top: 0; z-index: 3; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.theme-toggle { margin-left: auto; font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
 .levelbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; padding-top: .55rem; padding-bottom: .55rem; }
 fieldset.nivel { border: 0; margin: 0; padding: 0; display: flex; align-items: center; gap: .6rem; }
 fieldset.nivel legend { float: left; font: 600 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin-right: .2rem; }
@@ -188,9 +190,9 @@ aside.glosario dt:target, aside.glosario dt:target + dd { background: var(--hot)
   .plan .mov, .plan .zone { transition: none; }
 }
 @media print {
-  :root { --bg:#fff; --surface:#fff; --ink:#000; --ink-soft:#333; --rule:#bbb; --hot:#f3f3f3; }
+  :root, :root[data-theme] { --bg:#fff; --surface:#fff; --ink:#000; --ink-soft:#333; --rule:#bbb; --hot:#f3f3f3; }
   .levelbar { position: static; }
-  .seg, .controls, .chips, .kbd-hint { display: none; }
+  .seg, .controls, .chips, .kbd-hint, .theme-toggle { display: none; }
   fieldset.nivel legend::after { content: " (versión impresa: el nivel elegido)"; }
   .plan { min-width: 0; }
   aside.glosario { position: static; max-height: none; }
@@ -212,6 +214,7 @@ aside.glosario dt:target, aside.glosario dt:target + dd { background: var(--hot)
         <input type="radio" name="nivel" id="nivel-10" value="10" checked><label for="nivel-10">10 min</label>
       </div>
     </fieldset>
+    <button class="theme-toggle" type="button">◐ Sistema</button>
   </div>
 </div>
 
@@ -568,6 +571,22 @@ aside.glosario dt:target, aside.glosario dt:target + dd { background: var(--hot)
 </div>
 </div>
 
+<script>
+(() => {
+  const btn = document.querySelector('.theme-toggle'), root = document.documentElement;
+  const order = ['system', 'light', 'dark'];
+  const label = { system: '◐ Sistema', light: '☀ Claro', dark: '☾ Oscuro' };
+  let t = root.dataset.theme || 'system';
+  const show = () => { btn.textContent = label[t]; btn.setAttribute('aria-label', 'Tema: ' + label[t].slice(2)); };
+  btn.addEventListener('click', () => {
+    t = order[(order.indexOf(t) + 1) % order.length];
+    if (t === 'system') delete root.dataset.theme; else root.dataset.theme = t;
+    try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {}
+    show();
+  });
+  show();
+})();
+</script>
 <script>
 (() => {
   document.documentElement.classList.add('js');
