@@ -12,13 +12,14 @@ This skill operationalizes the recognition heuristic and per-category patterns f
 
 **[→ See the examples](docs/examples/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
 
-## What this fork adds (1.2.0)
+## What this fork adds (1.3.0)
 
 - **`references/patrones.md`**, a set of its own patterns that `SKILL.md` always reads.
 - **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…).
 - **Name:** the skill and its folder are `explain-in-html`.
 - **Reading levels:** pages meant to be read (explainers, PR writeups, reports) get a 1 / 5 / 10 minute selector, opening at 10. Ask for one time ("explícamelo en 1 minuto") and you get only that level.
 - **Places and walkthroughs:** physical processes (a warehouse, a port, a terminal) get a top-down plan drawn like an engineer's drawing: fixed zones, moving cargo, one color per shipment, exceptions drawn where they happen. Step-by-step diagrams get a play button that never starts on its own and pauses on questions.
+- **Theme button:** every page gets a small system · light · dark button, so the reader can switch without changing their OS setting.
 - **Evals:** four cases on top of the original seven (eleven in total): two in Spanish, one for reading levels and one for logistics.
 
 See [CHANGELOG.md](CHANGELOG.md) for details.

@@ -13,6 +13,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Régimen de ensamble de motos en Colombia</title>
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
 :root {
   --bg: #fafaf7; --surface: #ffffff; --ink: #1a1a1f; --ink-soft: #555560; --rule: #e7e5df;
@@ -167,11 +168,12 @@ aside.glosario dt:target, aside.glosario dt:target + dd { background: color-mix(
 a.g { color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; }
 
 footer.fuentes { font: .85rem/1.45 var(--sans); border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; }
+.theme-toggle { position: fixed; top: .75rem; right: .75rem; z-index: 10; font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
 footer.fuentes ol { padding-left: 1.2rem; }
 footer.fuentes li { margin: .3rem 0; }
 
 @media print {
-  :root { --bg: #fff; --surface: #fff; --ink: #000; --ink-soft: #333; --rule: #bbb; }
+  :root, :root[data-theme] { --bg: #fff; --surface: #fff; --ink: #000; --ink-soft: #333; --rule: #bbb; }
   body { font-size: 11pt; }
   .wrap { padding: 0; max-width: none; }
   .layout { display: block; }
@@ -185,6 +187,7 @@ footer.fuentes li { margin: .3rem 0; }
 </style>
 </head>
 <body>
+<button class="theme-toggle" type="button">◐ Sistema</button>
 <div class="wrap">
 <header>
   <p class="kicker">Comercio exterior · Colombia · actualizado a octubre de 2026</p>
@@ -527,6 +530,22 @@ footer.fuentes li { margin: .3rem 0; }
 </div>
 </div>
 
+<script>
+(() => {
+  const btn = document.querySelector('.theme-toggle'), root = document.documentElement;
+  const order = ['system', 'light', 'dark'];
+  const label = { system: '◐ Sistema', light: '☀ Claro', dark: '☾ Oscuro' };
+  let t = root.dataset.theme || 'system';
+  const show = () => { btn.textContent = label[t]; btn.setAttribute('aria-label', 'Tema: ' + label[t].slice(2)); };
+  btn.addEventListener('click', () => {
+    t = order[(order.indexOf(t) + 1) % order.length];
+    if (t === 'system') delete root.dataset.theme; else root.dataset.theme = t;
+    try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {}
+    show();
+  });
+  show();
+})();
+</script>
 <script>
 (function () {
   // ---------- nivel de lectura en la URL ----------

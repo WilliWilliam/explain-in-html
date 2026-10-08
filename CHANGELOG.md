@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
+## [1.3.0] - 2026-10-08
+
+### Added
+- **Botón de tema** (sistema · claro · oscuro) en la regla universal 5 de `SKILL.md`, con el código en `references/matching-your-style.md`: recuerda la elección cuando hay almacenamiento, la aplica antes del primer pintado y se oculta al imprimir. Antes la página solo seguía la preferencia del sistema operativo.
+- `verify-before-delivering.md` pide probar los tres modos, incluido claro con el sistema en oscuro.
+- Los ejemplos 10, 11 y 12 llevan el botón: en la barra fija del selector de nivel cuando la hay, y en la esquina cuando no.
+- `verify-before-delivering.md` pide capturar también las vistas de 1 y 5 minutos cuando la página tiene niveles de lectura.
+
 ## [1.2.0] - 2026-10-07
 
 ### Added
