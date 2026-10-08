@@ -85,6 +85,44 @@ th, td { padding: .5rem .75rem; border-bottom: 1px solid var(--rule);
 
 `--accent` is for outlines, focus rings and thin rules. Text in the accent color, and any filled control with text on it (the selected segment, the current step), uses `--accent-ink`, with `--bg` as the text color on top. The plain accent under white text is about 4.2:1 and fails the 4.5:1 minimum.
 
+### Theme button
+
+Every page gets one small button that cycles **system → light → dark**. It sets or removes `data-theme` on `<html>`, which the two dark blocks above already honor. Put it in a corner (top right, or inside a sticky bar if the page has one), label it in the page's language, and remember the choice when storage is available.
+
+```html
+<!-- in <head>, before the <style>, so the saved theme applies before first paint -->
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+
+<!-- anywhere in <body> -->
+<button class="theme-toggle" type="button">◐ System</button>
+```
+
+```css
+.theme-toggle { position: fixed; top: .75rem; right: .75rem; z-index: 10;
+  font: 13px/1 var(--sans); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+@media print { .theme-toggle { display: none; } }
+```
+
+```js
+(() => {
+  const btn = document.querySelector('.theme-toggle'), root = document.documentElement;
+  const order = ['system', 'light', 'dark'];
+  const label = { system: '◐ System', light: '☀ Light', dark: '☾ Dark' };   // translate to the page's language
+  let t = root.dataset.theme || 'system';
+  const show = () => { btn.textContent = label[t]; btn.setAttribute('aria-label', 'Theme: ' + label[t].slice(2)); };
+  btn.addEventListener('click', () => {
+    t = order[(order.indexOf(t) + 1) % order.length];
+    if (t === 'system') delete root.dataset.theme; else root.dataset.theme = t;
+    try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {}
+    show();
+  });
+  show();
+})();
+```
+
+If the page has print styles that reset colors on `:root`, write the selector as `:root, :root[data-theme]`, or a reader who chose dark prints a dark page. The label says the current mode, not the next one. If the page already has a sticky bar (a reading-level selector, a toolbar), put the button in it instead of fixing it to the corner, so the two don't overlap. Surfaces that supply their own theme switch (some published-artifact hosts) don't need it.
+
 That's enough to make a document that looks deliberate. Add complexity only when the artifact actually needs it — sliders, color swatches, charts, etc.
 
 ## Tools and editors get a different default
