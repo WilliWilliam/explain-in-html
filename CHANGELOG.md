@@ -2,6 +2,28 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
+## [1.2.0] - 2026-10-07
+
+### Added
+- Patrón **Recorrido con reproducir** en `references/patrones.md`: un diagrama con recorrido paso a paso lleva pasos clicables, anterior, siguiente, ▶ Reproducir y "Paso N de M". Nunca arranca solo, se detiene con cualquier acción manual y al final, se pausa en los pasos que hacen una pregunta y da a cada paso un tiempo según su texto. No aplica a diagramas estáticos.
+- `references/diagrams-and-illustrations.md`: sección **Floor plan of a physical process** con la forma, lo que importa, errores comunes y un esqueleto en SVG.
+- Ejemplo `docs/examples/11-plano-bodega.html`: desconsolidación de un contenedor en un depósito habilitado, con plano de la bodega, tabla de documentos sincronizada, reproductor, niveles de lectura y plazos con fechas reales. Lo hizo un agente nuevo que solo tenía la skill, como prueba de que los patrones funcionan sin ver otro plano y con el estilo de la casa.
+- Ejemplo `docs/examples/12-regimen-ensamble.html`: el régimen de importación para transformación y/o ensamble de motos en Colombia, investigado en fuentes oficiales y dibujado como la planta, con los puntos donde se suspenden y donde se pagan los tributos. También lo hizo un agente nuevo con solo la skill.
+- Eval `explicar-desconsolidacion-bodega` (plano del lugar con zonas y carga por documento, reproductor que no arranca solo y se pausa en preguntas).
+
+### Changed
+- **Dibuja el lugar** pasa de una línea a reglas concretas: escenario fijo y carga en movimiento, zonas en el orden del proceso, trazo de plano de ingeniero, un color por entidad, la excepción dibujada donde ocurre, lo físico junto a lo documental, el lugar fijo en el HTML y el plano desplazable dentro de su caja en el celular.
+- **Notación estándar antes que metáforas** aclara que una metáfora es dibujar un lugar para algo que no es un lugar; cuando el tema es un lugar físico (bodega, puerto, terminal, aeropuerto), el plano es la notación estándar.
+- `SKILL.md` nombra los planos de bodegas, puertos, terminales y aeropuertos como información espacial y en el índice de referencias.
+- `matching-your-style.md` separa el acento (controles de la página) de los colores por categoría (entidades de un diagrama o serie de datos): máximo cinco, con valor para modo oscuro y siempre con etiqueta. **Dibuja el lugar** pide el estilo de la página y no el del plano de referencia que traiga el usuario.
+- **Recorrido con reproducir** precisa que ▶ avanza de una vez, que se pausa al llegar al paso con pregunta y que las flechas no se roban el foco del selector de nivel, del plano ni de las tablas.
+- `matching-your-style.md` agrega `--accent-ink` para texto en el acento y controles seleccionados: el violeta base con texto blanco da 4.2:1 y no pasa el mínimo de 4.5:1.
+- **Niveles de lectura** aclaran que lo que siempre se ve de una figura (pasos, tabla) cuenta como nivel 1 y que una lista anunciada va completa en su nivel. **Glosario lateral** va desde el nivel 5 y en el nivel 1 los términos se explican en la frase. **Ideas clave en tarjetas** se distingue de la grilla decorativa.
+- `verify-before-delivering.md` explica cómo capturar un recorrido por pasos y advierte que el reloj simulado de Playwright congela las transiciones. `accessibility-and-print.md` pide `lang` según el idioma del contenido.
+
+### Fixed
+- La skill ya no menciona archivos de `docs/examples/`: el paquete solo lleva `SKILL.md` y `references/`, y apuntar a un ejemplo metía sesgo.
+
 ## [1.1.0] - 2026-10-07
 
 ### Added

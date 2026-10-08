@@ -5,7 +5,7 @@ Shared artifacts get read by screen readers, keyboard-only users, and printers. 
 ## The baseline, every artifact
 
 - **Landmarks.** `<header>`, `<main>`, `<nav>`, `<aside>`, `<footer>`. One `<h1>`. Headings in order.
-- **Language.** `<html lang="en">` (or the content's language). When publishing to a surface that supplies the skeleton, skip this.
+- **Language.** `<html lang>` set to the content's language (`es` for a Spanish page, `en` for English). When publishing to a surface that supplies the skeleton, skip this.
 - **Controls have names.** Every `<button>` has text or `aria-label`. Every input has a `<label>`. Icon-only buttons get `aria-label`.
 - **Keyboard.** Anything clickable is a `<button>`, `<a href>`, or has `tabindex="0"` with `keydown` handling for Enter and Space. Drag-and-drop has a keyboard alternative (select then arrow keys, or "move to…" buttons). Custom shortcuts are listed on the page.
 - **Focus is visible.** Don't `outline: none` without a replacement. `:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }` is enough.

@@ -43,6 +43,8 @@ Then **look at the screenshots** (the Read tool renders images). Check, in this 
 4. Interactive parts respond: click the first control, press the keyboard shortcut, trigger the export and check the output text.
 5. Console is clean.
 
+For a step walkthrough, also screenshot the diagram at a few steps: click the step, wait about 1.5 s for the transitions, then shoot. To test autoplay timing, Playwright's fake clock (`page.clock.install()` then `page.clock.runFor(ms)`) is the fast way, but it freezes CSS transitions, so never judge positions from screenshots taken under it.
+
 Fix what you find, re-run, then deliver. Delete the screenshots and the script unless the user wants them.
 
 If Playwright isn't installed, don't install a browser on the user's machine without asking. `npx playwright screenshot --viewport-size=400,800 file.html out.png` works when a browser is already present; otherwise fall through to the read-through.

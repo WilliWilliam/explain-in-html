@@ -8,6 +8,8 @@ Bad-looking HTML is worse than good markdown. Most of the harm an HTML-artifact 
 2. **Use real type.** Default the body to a real serif (Charter, Iowan, Source Serif, Tinos, system serif fallback) for documents and explainers. Sans-serif (Inter, system-ui) for tools and editors. 16–18px body, 60–75ch line length, 1.5–1.6 line height. These numbers are not negotiable; they're table stakes.
 3. **Color carries meaning, not mood.** If a color appears in the artifact it should be doing work — severity, status, category, axis. If a color is there for vibe, remove it.
 
+   The accent is for the page's own chrome: links, focus, the selected control, the current step. Categorical colors are a separate budget: when a diagram or chart tracks several entities (shipments, customers, services, data series), give each one a color, at most five, distinct from the accent and from each other, with a dark-mode value each, and repeat it everywhere that entity appears. Always pair the color with a label or letter. Use `--warn`, `--danger` and `--ok` for state, never an entity color.
+
 ## The design-system-from-codebase trick
 
 When the user has an existing visual identity (a deployed product, a brand, a codebase), don't invent one. Build a one-time **design system reference HTML file** by reading the codebase, then have it sit alongside future artifacts as input.
@@ -34,6 +36,7 @@ Use this baseline if the user hasn't specified anything and there's no codebase 
   --ink-soft:  #555560;
   --rule:      #e7e5df;
   --accent:    #8b5cf6;     /* one accent only */
+  --accent-ink:#6d28d9;     /* accent as text, or as a fill under light text */
   --warn:      #d97706;
   --danger:    #b91c1c;
   --ok:        #15803d;
@@ -53,6 +56,7 @@ Use this baseline if the user hasn't specified anything and there's no codebase 
     --ink-soft: #a8a8b3;
     --rule:     #2a2a32;
     --accent:   #a78bfa;
+    --accent-ink:#c4b5fd;
   }
 }
 :root[data-theme="dark"] {
@@ -62,6 +66,7 @@ Use this baseline if the user hasn't specified anything and there's no codebase 
   --ink-soft: #a8a8b3;
   --rule:     #2a2a32;
   --accent:   #a78bfa;
+  --accent-ink:#c4b5fd;
 }
 
 html { background: var(--bg); color: var(--ink); }
@@ -77,6 +82,8 @@ table { border-collapse: collapse; width: 100%; }
 th, td { padding: .5rem .75rem; border-bottom: 1px solid var(--rule);
          text-align: left; vertical-align: top; }
 ```
+
+`--accent` is for outlines, focus rings and thin rules. Text in the accent color, and any filled control with text on it (the selected segment, the current step), uses `--accent-ink`, with `--bg` as the text color on top. The plain accent under white text is about 4.2:1 and fails the 4.5:1 minimum.
 
 That's enough to make a document that looks deliberate. Add complexity only when the artifact actually needs it — sliders, color swatches, charts, etc.
 
