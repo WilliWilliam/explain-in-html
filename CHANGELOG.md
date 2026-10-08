@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.2.0] - 2026-10-07
 
 ### Added
 - Patrón **Recorrido con reproducir** en `references/patrones.md`: un diagrama con recorrido paso a paso lleva pasos clicables, anterior, siguiente, ▶ Reproducir y "Paso N de M". Nunca arranca solo, se detiene con cualquier acción manual y al final, se pausa en los pasos que hacen una pregunta y da a cada paso un tiempo según su texto. No aplica a diagramas estáticos.
