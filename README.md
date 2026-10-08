@@ -12,7 +12,7 @@ This skill operationalizes the recognition heuristic and per-category patterns f
 
 **[→ See the examples](docs/examples/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
 
-## What this fork adds (1.0.1)
+## What this fork adds (1.1.0)
 
 - **`references/patrones.md`**, a set of its own patterns that `SKILL.md` always reads.
 - **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…).

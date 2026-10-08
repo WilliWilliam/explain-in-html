@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-10-07
 
 ### Added
 - Patrón **Niveles de lectura** en `references/patrones.md`: las páginas para leer y entender (explicaciones, PRs, reportes, post-mortems, planes) llevan un selector 1 / 5 / 10 min que abre en 10. Los niveles se acumulan y se ocultan con CSS (`data-nivel`), así que sin `:has()` o sin JS se ve la página completa. Si el usuario pide un solo tiempo, se hace solo ese nivel. No aplica a tableros, editores ni decks.
