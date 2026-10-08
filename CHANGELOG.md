@@ -8,6 +8,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Patrón **Recorrido con reproducir** en `references/patrones.md`: un diagrama con recorrido paso a paso lleva pasos clicables, anterior, siguiente, ▶ Reproducir y "Paso N de M". Nunca arranca solo, se detiene con cualquier acción manual y al final, se pausa en los pasos que hacen una pregunta y da a cada paso un tiempo según su texto. No aplica a diagramas estáticos.
 - `references/diagrams-and-illustrations.md`: sección **Floor plan of a physical process** con la forma, lo que importa, errores comunes y un esqueleto en SVG.
 - Ejemplo `docs/examples/11-plano-bodega.html`: desconsolidación de un contenedor en un depósito habilitado, con plano de la bodega, tabla de documentos sincronizada, reproductor, niveles de lectura y plazos con fechas reales. Lo hizo un agente nuevo que solo tenía la skill, como prueba de que los patrones funcionan sin ver otro plano y con el estilo de la casa.
+- Ejemplo `docs/examples/12-regimen-ensamble.html`: el régimen de importación para transformación y/o ensamble de motos en Colombia, investigado en fuentes oficiales y dibujado como la planta, con los puntos donde se suspenden y donde se pagan los tributos. También lo hizo un agente nuevo con solo la skill.
 - Eval `explicar-desconsolidacion-bodega` (plano del lugar con zonas y carga por documento, reproductor que no arranca solo y se pausa en preguntas).
 
 ### Changed

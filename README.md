@@ -123,7 +123,7 @@ If the defaults still produce output you don't like, fork it, or put a `design-s
 
 ## Examples
 
-Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 and 11 by this fork. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
+Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 to 12 by this fork. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
 
 | Pattern | Prompt | File |
 |---|---|---|
@@ -138,6 +138,7 @@ Each is a single `.html` file produced from the prompt shown: 01–09 by the ups
 | Incident post-mortem | "Write up yesterday's search latency outage as a post-mortem" | [`09-postmortem.html`](docs/examples/09-postmortem.html) |
 | Reading levels, UML (this fork) | "Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer…" | [`10-niveles-de-lectura.html`](docs/examples/10-niveles-de-lectura.html) |
 | Floor plan with play-through (this fork) | "Explícame cómo se desconsolida un contenedor consolidado en un depósito habilitado en Colombia…" | [`11-plano-bodega.html`](docs/examples/11-plano-bodega.html) |
+| Researched regulatory explainer (this fork) | "Explícame cómo funciona el régimen de ensamble en Colombia… Investiga." | [`12-regimen-ensamble.html`](docs/examples/12-regimen-ensamble.html) |
 
 Made something with the skill you're proud of? [Open a gallery issue](https://github.com/WilliWilliam/explain-in-html/issues/new?template=gallery.yml).
 
