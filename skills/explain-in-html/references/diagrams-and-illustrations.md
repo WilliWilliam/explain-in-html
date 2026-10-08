@@ -37,6 +37,70 @@ For "diagram our deploy pipeline" or "show me how a request flows through the sy
 - Drawing every possible edge case. A flowchart with 40 nodes is unreadable; abstract the rare branches into a single "error handling" subgraph.
 - Using only color to distinguish states. Use shape *and* color so it survives colorblind viewing and grayscale printing.
 
+## Floor plan of a physical process
+
+For logistics, foreign trade, operations: "explain how a consolidated container is unloaded at the warehouse," "walk me through the port," "how does a parcel move through the hub." When the subject is a place, the top-down plan *is* the standard notation; boxes and arrows throw away the one thing the reader already knows, the layout. The rules live in `patrones.md` ("Dibuja el lugar", "Recorrido con reproducir"); this is the shape.
+
+**Layout**
+- A top-down plan in inline SVG: building walls, doors as gaps, yard or quay outside, zones as dashed outlines with uppercase labels. Zones ordered in the direction the process runs.
+- Below or beside it, the paper trail as a table (document, owner, declared vs. counted, status) that updates with each step.
+- Step controls under the plan: numbered step chips, previous, next, play/pause, "Step N of M".
+- Like every artifact, the plan uses the page's tokens from `matching-your-style.md`; it does not bring its own look.
+
+**What's load-bearing**
+- Static stage, moving cargo. The walls and zones are markup and never change; JS only translates the moving groups (`transform` with a CSS transition). With JS off the plan still reads.
+- One color per entity across plan, table and prose.
+- Exceptions drawn in place: a dashed ghost for a missing package, a hatched zone for inspection, a short note next to it.
+- The plan scrolls inside its own box at phone width (`overflow-x: auto` wrapper with `tabindex="0"` and `aria-label`, SVG `min-width` around 720px). The page itself never scrolls sideways.
+
+**Common mistakes**
+- Isometric or illustrated warehouses. They look nice and hide the distances and adjacency the reader needs.
+- Redrawing the whole plan per step, so zones jump around. The reader loses their place.
+- Autoplay on load, or a play loop that runs past a question the step asks.
+
+```html
+<div class="plan-scroll" tabindex="0" aria-label="Warehouse plan (scrolls on small screens)">
+  <svg class="plan" viewBox="0 0 1000 480" role="img" aria-labelledby="planDesc">
+    <desc id="planDesc">Top-down plan: yard on the left, receiving dock, sorting lanes, storage, inspection and dispatch on the right.</desc>
+    <defs>
+      <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" stroke-width="2" opacity=".2"/>
+      </pattern>
+    </defs>
+    <!-- stage: fixed, in markup -->
+    <rect class="yard" x="0" y="0" width="140" height="480"/>
+    <rect class="wall" x="140" y="20" width="840" height="440"/>
+    <rect class="door" x="136" y="160" width="10" height="160"/>       <!-- gap in the wall -->
+    <rect class="zone" x="160" y="140" width="110" height="200"/>
+    <text class="zlabel" x="166" y="132">Receiving</text>
+    <rect class="zone restricted" x="640" y="280" width="140" height="120"/>
+    <text class="zlabel" x="648" y="300">Inspection</text>
+    <!-- actors: moved by JS -->
+    <g id="cargo"><g class="bx A" data-id="A1"><rect width="18" height="14"/></g>…</g>
+    <g id="notes" aria-hidden="true"></g>
+  </svg>
+</div>
+<div class="controls">
+  <button id="prev" type="button">← Previous</button>
+  <button id="next" type="button">Next →</button>
+  <button id="play" type="button">▶ Play</button>  <!-- label swaps to ❚❚ Pause -->
+  <span id="pos" aria-live="polite"></span>
+</div>
+```
+
+```css
+.plan-scroll { overflow-x: auto; }
+.plan { display: block; width: 100%; min-width: 720px; height: auto; }
+.plan .wall { fill: none; stroke: var(--ink); stroke-width: 6; }
+.plan .door { fill: var(--surface); }
+.plan .zone { fill: none; stroke: var(--ink-soft); stroke-width: 2; stroke-dasharray: 10 6; }
+.plan .zone.restricted { stroke: var(--danger); fill: url(#hatch); }
+.plan .zone.hot { stroke: var(--accent); }                 /* zone of the current step */
+.plan .bx.A rect { fill: var(--A); }                         /* one categorical color per entity */
+.plan .bx { transition: transform .8s cubic-bezier(.6,0,.3,1), opacity .4s; }
+@media (prefers-reduced-motion: reduce) { .plan .bx { transition: none; } }
+```
+
 ## SVG craftsmanship notes
 
 For both figure sheets and flowcharts:

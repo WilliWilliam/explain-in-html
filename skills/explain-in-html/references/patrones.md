@@ -12,7 +12,8 @@ Orden de prioridad: instrucción del usuario → design system del proyecto → 
 
 **Notación estándar antes que metáforas.**
 Cuando: el contenido es técnico (sistemas, APIs, autenticación, datos).
-Usa la notación que un técnico reconoce: diagrama de secuencia, carriles, máquina de estados, arquitectura. Una metáfora visual (una ruta de envío, una fábrica) solo si aclara algo que la notación no muestra. Las cajas y flechas no son genéricas cuando son la notación correcta.
+Usa la notación que un técnico reconoce: diagrama de secuencia, carriles, máquina de estados, arquitectura. Una metáfora visual (dibujar un sistema de software como una fábrica o una ruta de envío) solo si aclara algo que la notación no muestra. Las cajas y flechas no son genéricas cuando son la notación correcta.
+Una metáfora es dibujar un lugar para algo que no es un lugar. Cuando el tema *sí* es un lugar físico (bodega, puerto, terminal, aeropuerto, planta), el plano es la notación estándar: ver "Dibuja el lugar".
 
 **Diagrama de secuencia completo.**
 Cuando: varios sistemas intercambian mensajes.
@@ -23,8 +24,18 @@ Cuando: el concepto tiene dos umbrales distintos que la gente confunde (dónde p
 Márcalos ambos, con estilos distintos (por ejemplo, línea sólida y punteada) y una etiqueta que diga qué significa cada uno.
 
 **Dibuja el lugar.**
-Cuando: es un proceso físico (una bodega, un puerto, una planta).
-Un plano visto desde arriba con las zonas reales ubica al lector mejor que cajas abstractas.
+Cuando: es un proceso físico (una bodega, un puerto, una terminal, un aeropuerto, una planta, una zona franca).
+Un plano visto desde arriba con las zonas reales ubica al lector mejor que cajas abstractas. Dibújalo como un plano de ingeniero, no como una ilustración, y con el estilo de la página (tipografía, botones, colores de `matching-your-style.md`). Si el usuario trae un plano de referencia, toma su estructura, no su apariencia:
+- **El escenario no se mueve, la carga sí.** Muros, puertas, zonas, carriles y estanterías quedan fijos en todos los pasos. Lo que cambia de un paso a otro es lo que se mueve entre zonas: bultos, contenedor, camiones, personas, documentos.
+- **El orden en el espacio es el orden del proceso.** Ubica las zonas para que el recorrido se lea en un sentido (izquierda a derecha, o de arriba abajo), de la entrada a la salida. Lo de afuera (patio, portería, muelle, pista) va al borde.
+- **Trazo de plano.** Muros gruesos en `--ink`, puertas como huecos en el muro, zonas con contorno punteado en `--ink-soft` y su nombre en mayúscula pequeña, zonas restringidas con contorno `--danger` y rayado siempre visible. La zona del paso actual se resalta con el acento. Nada de sombras, perspectiva ni íconos decorativos.
+- **Un color por entidad, en todas partes.** Cada carga, documento o cliente tiene su color, y es el mismo en el plano, en la tabla, en la leyenda y en el texto. Estos colores son categorías, no acentos: no cuentan para la regla de "un solo acento". Máximo cinco, distintos del acento y entre sí, cada uno con su valor para modo oscuro, y siempre con una letra o etiqueta además del color.
+- **La excepción se dibuja donde ocurre.** Un faltante es un hueco punteado en su carril; una inspección es su zona resaltada; la nota ("4 / 5 faltante") va pegada al lugar, no en un párrafo aparte.
+- **Lo físico y lo documental lado a lado.** Si el proceso tiene papeles (manifiesto, documento de transporte, declaración), muestra junto al plano una tabla que avanza con él: "en el piso" y "en los papeles" tienen que cuadrar.
+- **El lugar fijo va en el HTML.** Muros y zonas se escriben en el SVG; el JS solo mueve objetos. Si el JS falla, el plano se ve completo.
+- **En el celular, el plano se desplaza dentro de su caja, no la página.** Un contenedor con `overflow-x: auto`, `tabindex="0"` y `aria-label`, y el SVG con un `min-width` que mantenga legibles las etiquetas.
+
+Si el plano tiene un recorrido por pasos, aplica "Recorrido con reproducir".
 
 **Transiciones con su disparador.**
 Cuando: el contenido es un ciclo de estados.
@@ -35,6 +46,19 @@ Entre cada estado, muestra el evento o documento que hace que pase al siguiente.
 **Simuladores que se rompen.**
 Cuando: hay un proceso que puede fallar.
 Deja que el lector lo rompa con controles (estado de cada sistema, datos faltantes, credenciales, modo síncrono o asíncrono, control de duplicados), no solo con escenarios fijos. Muestra qué hace cada sistema, qué estado queda y quién tiene que actuar.
+
+**Recorrido con reproducir.**
+Cuando: un diagrama tiene un recorrido paso a paso (un plano donde se mueve la carga, una secuencia de mensajes, una máquina de estados que avanza). No en diagramas estáticos: si no hay pasos, no hay nada que reproducir.
+Controles debajo del diagrama: los pasos con número y nombre corto (clicables), **← Anterior**, **Siguiente →**, **▶ Reproducir** y "Paso N de M".
+- Nunca arranca solo al cargar. El lector decide. Al oprimir ▶ avanza de una vez al paso siguiente.
+- Cualquier acción manual (un paso, anterior, siguiente, las flechas del teclado) detiene la reproducción. Las flechas no cambian de paso cuando el foco está en el selector de nivel, en el plano desplazable o en una tabla: ahí ya tienen su uso.
+- Se detiene al llegar al final. Oprimir ▶ en el último paso vuelve al primero (no al segundo) y sigue desde ahí.
+- Se pausa al llegar a cualquier paso que le pregunte algo al lector. Una pregunta que se salta sola no sirve. Si la pregunta está oculta en el nivel de lectura elegido, no se pausa ahí.
+- El tiempo de cada paso depende de su texto visible: unas 3 palabras por segundo, mínimo 4 segundos.
+- El botón cambia su texto entre ▶ Reproducir y ❚❚ Pausa (sin `aria-pressed`: el texto ya dice qué hace). "Paso N de M" va en `aria-live="polite"`.
+- Con `prefers-reduced-motion: reduce` se quitan las transiciones, pero los pasos siguen funcionando.
+- Todo lo fijo del diagrama se ve siempre (como en "Diagrama de secuencia completo"); los pasos solo cambian lo que se mueve y lo que se resalta.
+- Al imprimir se ocultan los controles y sale el paso actual.
 
 **El artefacto real en cada paso.**
 Cuando: se explica un proceso técnico paso a paso.
@@ -58,7 +82,7 @@ Agrega "copiar como texto" con un formato listo para pegar en un correo o ticket
 Prefiere páginas densas y fáciles de escanear sobre páginas largas con mucho aire. No repitas en prosa lo que ya muestra un diagrama o una tabla.
 
 **Ideas clave en tarjetas.**
-Las dos o tres ideas que el lector debe llevarse van destacadas en tarjetas, no enterradas en párrafos.
+Las dos o tres ideas que el lector debe llevarse van destacadas en tarjetas, no enterradas en párrafos. Son una sola fila de dos o tres, sin sombras ni íconos, cerca del principio. Eso no es la "grilla de tarjetas porque sí" que prohíbe la guía de estilo: aquí la tarjeta marca lo que hay que recordar.
 
 **Niveles de lectura: 1, 5 y 10 minutos.**
 Cuando: la página es para leer y entender (una explicación, la descripción o revisión de un PR, un reporte, un post-mortem, un plan). No va en tableros, editores ni decks, ni en páginas que se leen enteras en un minuto.
@@ -67,7 +91,7 @@ Una sola página con un selector arriba: **1 min · 5 min · 10 min**, que abre 
 - **5 min:** los conceptos que hay que entender (estructura, flujo, decisiones principales), con sus diagramas.
 - **10 min:** alternativas descartadas, riesgos, casos borde, preguntas abiertas y el detalle que importa.
 
-Cada nivel debe entenderse solo. Nada de "ver el diagrama de abajo" si ese diagrama está oculto en ese nivel, y nada de enlaces a secciones ocultas.
+Cada nivel debe entenderse solo. Nada de "ver el diagrama de abajo" si ese diagrama está oculto en ese nivel, y nada de enlaces a secciones ocultas. Si una frase anuncia una lista ("hay dos lugares"), todos sus elementos van en el mismo nivel. Lo que siempre se ve de una figura (los nombres de los pasos, el texto corto de cada paso, las celdas de su tabla) cuenta como nivel 1: escríbelo sin jerga o explica el término ahí mismo.
 Si el usuario pide un solo tiempo ("explícamelo en 1 minuto", "versión de 5 min"), haz solo ese nivel y sin selector.
 
 Marcado (úsalo igual siempre):
@@ -87,11 +111,12 @@ body:has(#nivel-1:checked) [data-nivel="5"],
 body:has(#nivel-1:checked) [data-nivel="10"],
 body:has(#nivel-5:checked) [data-nivel="10"] { display: none; }
 ```
-Oculta con CSS, no con JS. Si algo falla, se ve la página completa. Un poco de JS puede guardar el nivel en la URL (`#5min`) para compartir el enlace. Al imprimir sale el nivel elegido. Verifica los tres niveles al revisar la página.
+Los radios pueden ir dentro de un contenedor para darles estilo de botones segmentados (el radio oculto con `opacity: 0` y la etiqueta como botón). Oculta con CSS, no con JS. Si algo falla, se ve la página completa. Un poco de JS puede guardar el nivel en la URL (`#5min`) para compartir el enlace. Al imprimir sale el nivel elegido. Verifica los tres niveles al revisar la página.
 
 **Glosario lateral.**
 Cuando: hay más de cuatro o cinco términos especializados.
 Glosario al margen, con los términos del texto enlazados a su definición.
+Con niveles de lectura, el glosario va desde el nivel 5. En lo que se ve en el nivel 1, los términos se explican en la misma frase y no se enlazan al glosario, que ahí está oculto.
 
 **Caso con hilo de punta a punta.**
 Cuando: se usa un ejemplo.

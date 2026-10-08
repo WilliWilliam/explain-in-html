@@ -17,7 +17,7 @@ The skill is a judgment call, not a format switch. Most of what follows is about
 ## Reach for HTML when any of these hold
 
 - **Comparison.** Two or more options the reader must weigh. Side by side beats stacked.
-- **Spatial information.** Diffs, call graphs, module maps, flowcharts, timelines, before/after. Position carries meaning.
+- **Spatial information.** Diffs, call graphs, module maps, flowcharts, timelines, before/after, the floor plan of a warehouse, port, terminal or airport. Position carries meaning.
 - **Interaction matters.** Easing curves, parameter tuning, state machines, simulations. Things the reader needs to *feel*.
 - **Reference material.** Navigated non-linearly: tabs, collapsibles, a glossary in the margin, jump links.
 - **Color or hierarchy carries meaning.** Severity, status, syntax, design tokens, data series.
@@ -65,7 +65,7 @@ Every artifact must satisfy all of these.
 | Option comparisons, implementation plans, exploring directions before committing | `references/exploration-and-planning.md` |
 | Annotated diffs, PR writeups, code review, module maps, "explain this code" | `references/code-review-and-pr.md` |
 | Design tokens, component sheets, mockups, animation and interaction prototypes | `references/design-and-prototypes.md` |
-| Inline SVG figures, flowcharts, architecture diagrams | `references/diagrams-and-illustrations.md` |
+| Inline SVG figures, flowcharts, architecture diagrams, floor plans of physical processes (logistics, ports, warehouses) | `references/diagrams-and-illustrations.md` |
 | Charts, dashboards, sortable and filterable data tables, metrics | `references/data-and-charts.md` |
 | Status reports, incident post-mortems, concept explainers, learning material | `references/reports-and-research.md` |
 | Slide decks, arrow-key presentations | `references/decks.md` |

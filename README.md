@@ -18,7 +18,8 @@ This skill operationalizes the recognition heuristic and per-category patterns f
 - **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…).
 - **Name:** the skill and its folder are `explain-in-html`.
 - **Reading levels:** pages meant to be read (explainers, PR writeups, reports) get a 1 / 5 / 10 minute selector, opening at 10. Ask for one time ("explícamelo en 1 minuto") and you get only that level.
-- **Evals:** three cases on top of the original seven (ten in total): two in Spanish and one for reading levels.
+- **Places and walkthroughs:** physical processes (a warehouse, a port, a terminal) get a top-down plan drawn like an engineer's drawing: fixed zones, moving cargo, one color per shipment, exceptions drawn where they happen. Step-by-step diagrams get a play button that never starts on its own and pauses on questions.
+- **Evals:** four cases on top of the original seven (eleven in total): two in Spanish, one for reading levels and one for logistics.
 
 See [CHANGELOG.md](CHANGELOG.md) for details.
 
@@ -30,7 +31,7 @@ The first upstream version taught Claude *how* to write HTML. Models no longer n
 - **A sharper "stay in markdown" section.** Over-triggering is the failure mode Thariq warned about. The carve-outs are now concrete, and the eval suite tests them.
 - **Four new references.** Data and charts (SVG, no library), accessibility and print, harness mechanics (the one file that knows which surface you're on), and the pre-delivery check.
 - **Facts fixed.** Storage rules in artifacts, the CDN allowlist, the `data-theme` toggle alongside `prefers-color-scheme`, no hardcoded paths.
-- **Evals.** Behavioural cases for `claude plugin eval` (seven upstream; this fork has ten: six that should trigger and four that must not). Every run compares against a no-skill baseline, so the number you see is what the skill *adds*.
+- **Evals.** Behavioural cases for `claude plugin eval` (seven upstream; this fork has eleven: seven that should trigger and four that must not). Every run compares against a no-skill baseline, so the number you see is what the skill *adds*.
 - **Distribution.** A plugin marketplace, so Claude Code users get updates. A release workflow builds the Claude.ai zip from source so it can't drift.
 - **Examples.** Nine now, up from six: annotated code review, design-token sheet, and incident post-mortem are new. All nine pass the skill's own rules, including keyboard support and both themes, and were rendered headless before shipping.
 
@@ -122,7 +123,7 @@ If the defaults still produce output you don't like, fork it, or put a `design-s
 
 ## Examples
 
-Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 by this fork. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
+Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 and 11 by this fork. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
 
 | Pattern | Prompt | File |
 |---|---|---|
@@ -136,6 +137,7 @@ Each is a single `.html` file produced from the prompt shown: 01–09 by the ups
 | Design-token sheet | "Lay out our design tokens as a reference page" | [`08-design-tokens.html`](docs/examples/08-design-tokens.html) |
 | Incident post-mortem | "Write up yesterday's search latency outage as a post-mortem" | [`09-postmortem.html`](docs/examples/09-postmortem.html) |
 | Reading levels, UML (this fork) | "Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer…" | [`10-niveles-de-lectura.html`](docs/examples/10-niveles-de-lectura.html) |
+| Floor plan with play-through (this fork) | "Explícame cómo se desconsolida un contenedor consolidado en un depósito habilitado en Colombia…" | [`11-plano-bodega.html`](docs/examples/11-plano-bodega.html) |
 
 Made something with the skill you're proud of? [Open a gallery issue](https://github.com/WilliWilliam/explain-in-html/issues/new?template=gallery.yml).
 
