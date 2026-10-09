@@ -10,7 +10,7 @@ A Claude skill for producing self-contained HTML artifacts instead of markdown w
 
 This skill operationalizes the recognition heuristic and per-category patterns from Thariq's post. It triggers on requests where HTML lands harder than markdown (comparisons, plans, code reviews, explainers, post-mortems, dashboards, custom editors) and stays out of the way for everything else.
 
-**[→ See the examples](docs/examples/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
+**[→ See the examples](https://williwilliam.github.io/explain-in-html/#examples)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
 
 ## What this fork adds (1.4.0)
 
@@ -124,7 +124,7 @@ If the defaults still produce output you don't like, fork it, or put a `design-s
 
 ## Examples
 
-Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 to 12 by this fork (11 and 12 were asked in Spanish and translated for this repo). Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
+Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 to 12 by this fork (11 and 12 were asked in Spanish and translated for this repo). Open `docs/examples/` directly, or see them on the [site](https://williwilliam.github.io/explain-in-html/#examples).
 
 | Pattern | Prompt | File |
 |---|---|---|
