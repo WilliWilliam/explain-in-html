@@ -1,12 +1,12 @@
 ---
-description: Explicación de un cambio para el equipo de desarrollo, con 1, 5 y 10 minutos. Debe producir una sola página con selector de nivel que abre en 10 min.
-tags: [trigger, explainer, niveles]
+description: Explainer of a change for the dev team, at 1, 5 and 10 minutes. Must produce a single page with a level selector that opens at 10 min.
+tags: [trigger, explainer, levels]
 max_turns: 15
 timeout_seconds: 480
 allowed_tools: [Read, Glob, Grep, Skill]
 ---
 
-Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer. I am part of the dev team and want to understand the change deeply without being too distracted by implementation details. Focus on important design and architectural concepts. Use UML diagrams (class and sequence) wherever appropriate to highlight important structural and dynamic relationships. Save it as cambio.html.
+Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer. I am part of the dev team and want to understand the change deeply without being too distracted by implementation details. Focus on important design and architectural concepts. Use UML diagrams (class and sequence) wherever appropriate to highlight important structural and dynamic relationships. Save it as change.html.
 
 ```diff
 --- a/src/payments/client.ts

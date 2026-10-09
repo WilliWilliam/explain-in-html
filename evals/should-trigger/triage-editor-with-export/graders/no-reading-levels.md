@@ -1,6 +1,6 @@
 ---
 type: regex
-pattern: 'data-nivel='
+pattern: 'data-level='
 match: not_contains
 target: { source: file, path: triage.html }
 ---

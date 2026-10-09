@@ -2,64 +2,74 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- The whole repo is in English. Requests in Spanish still trigger the skill and still get answers in Spanish; only the repo's own text changed.
+- `references/patrones.md` is now `references/patterns.md`, translated. It adds one line: UI labels follow the page's language. `SKILL.md` and `diagrams-and-illustrations.md` point to the new name.
+- Reading-level markup uses `data-level`, `name="level"` and `#level-N` instead of `data-nivel`, `name="nivel"` and `#nivel-N`.
+- Examples renamed and translated: `10-reading-levels.html`, `11-warehouse-floor-plan.html`, `12-assembly-regime.html`. Old links to `10-niveles-de-lectura.html`, `11-plano-bodega.html` and `12-regimen-ensamble.html` no longer resolve.
+- Evals renamed: `explain-e-invoicing-spanish`, `explain-in-one-sentence-spanish`, `explain-change-in-levels`, `explain-warehouse-deconsolidation`; graders `patterns-read` and `applies-patterns`. Descriptions and grader rubrics are in English; the Spanish cases keep their Spanish prompts and still require a Spanish reply.
+- Plugin and marketplace descriptions are in English.
+
 ## [1.3.0] - 2026-10-08
 
 ### Added
-- **Botón de tema** (sistema · claro · oscuro) en la regla universal 5 de `SKILL.md`, con el código en `references/matching-your-style.md`: recuerda la elección cuando hay almacenamiento, la aplica antes del primer pintado y se oculta al imprimir. Antes la página solo seguía la preferencia del sistema operativo.
-- `verify-before-delivering.md` pide probar los tres modos, incluido claro con el sistema en oscuro.
-- Los ejemplos 10, 11 y 12 llevan el botón: en la barra fija del selector de nivel cuando la hay, y en la esquina cuando no.
-- `verify-before-delivering.md` pide capturar también las vistas de 1 y 5 minutos cuando la página tiene niveles de lectura.
+- **Theme button** (system · light · dark) in universal rule 5 of `SKILL.md`, with the code in `references/matching-your-style.md`: it remembers the choice when storage is available, applies it before first paint, and hides when printing. Before, the page only followed the OS preference.
+- `verify-before-delivering.md` asks to test all three modes, including light with the OS in dark mode.
+- Examples 10, 11 and 12 carry the button: in the level selector's sticky bar when there is one, in the corner when there isn't.
+- `verify-before-delivering.md` also asks to capture the 1 and 5 minute views when the page has reading levels.
 
 ## [1.2.0] - 2026-10-07
 
 ### Added
-- Patrón **Recorrido con reproducir** en `references/patrones.md`: un diagrama con recorrido paso a paso lleva pasos clicables, anterior, siguiente, ▶ Reproducir y "Paso N de M". Nunca arranca solo, se detiene con cualquier acción manual y al final, se pausa en los pasos que hacen una pregunta y da a cada paso un tiempo según su texto. No aplica a diagramas estáticos.
-- `references/diagrams-and-illustrations.md`: sección **Floor plan of a physical process** con la forma, lo que importa, errores comunes y un esqueleto en SVG.
-- Ejemplo `docs/examples/11-plano-bodega.html`: desconsolidación de un contenedor en un depósito habilitado, con plano de la bodega, tabla de documentos sincronizada, reproductor, niveles de lectura y plazos con fechas reales. Lo hizo un agente nuevo que solo tenía la skill, como prueba de que los patrones funcionan sin ver otro plano y con el estilo de la casa.
-- Ejemplo `docs/examples/12-regimen-ensamble.html`: el régimen de importación para transformación y/o ensamble de motos en Colombia, investigado en fuentes oficiales y dibujado como la planta, con los puntos donde se suspenden y donde se pagan los tributos. También lo hizo un agente nuevo con solo la skill.
-- Eval `explicar-desconsolidacion-bodega` (plano del lugar con zonas y carga por documento, reproductor que no arranca solo y se pausa en preguntas).
+- **Walkthrough with play** pattern in `references/patrones.md`: a diagram with a step-by-step walkthrough gets clickable steps, previous, next, ▶ Play and "Step N of M". It never starts on its own, stops on any manual action and at the end, pauses on steps that ask a question, and gives each step a duration based on its text. It does not apply to static diagrams.
+- `references/diagrams-and-illustrations.md`: **Floor plan of a physical process** section with the shape, what matters, common mistakes and an SVG skeleton.
+- Example `docs/examples/11-plano-bodega.html`: deconsolidating a container in a bonded warehouse, with a warehouse floor plan, a synced documents table, a player, reading levels and deadlines with real dates. It was made by a fresh agent that only had the skill, as proof that the patterns work without seeing another floor plan and in the house style.
+- Example `docs/examples/12-regimen-ensamble.html`: Colombia's import regime for motorcycle transformation and/or assembly, researched from official sources and drawn as the plant, showing where duties and taxes are suspended and where they are paid. Also made by a fresh agent with only the skill.
+- Eval `explicar-desconsolidacion-bodega` (floor plan with zones and cargo per document, a player that never starts on its own and pauses on questions).
 
 ### Changed
-- **Dibuja el lugar** pasa de una línea a reglas concretas: escenario fijo y carga en movimiento, zonas en el orden del proceso, trazo de plano de ingeniero, un color por entidad, la excepción dibujada donde ocurre, lo físico junto a lo documental, el lugar fijo en el HTML y el plano desplazable dentro de su caja en el celular.
-- **Notación estándar antes que metáforas** aclara que una metáfora es dibujar un lugar para algo que no es un lugar; cuando el tema es un lugar físico (bodega, puerto, terminal, aeropuerto), el plano es la notación estándar.
-- `SKILL.md` nombra los planos de bodegas, puertos, terminales y aeropuertos como información espacial y en el índice de referencias.
-- `matching-your-style.md` separa el acento (controles de la página) de los colores por categoría (entidades de un diagrama o serie de datos): máximo cinco, con valor para modo oscuro y siempre con etiqueta. **Dibuja el lugar** pide el estilo de la página y no el del plano de referencia que traiga el usuario.
-- **Recorrido con reproducir** precisa que ▶ avanza de una vez, que se pausa al llegar al paso con pregunta y que las flechas no se roban el foco del selector de nivel, del plano ni de las tablas.
-- `matching-your-style.md` agrega `--accent-ink` para texto en el acento y controles seleccionados: el violeta base con texto blanco da 4.2:1 y no pasa el mínimo de 4.5:1.
-- **Niveles de lectura** aclaran que lo que siempre se ve de una figura (pasos, tabla) cuenta como nivel 1 y que una lista anunciada va completa en su nivel. **Glosario lateral** va desde el nivel 5 y en el nivel 1 los términos se explican en la frase. **Ideas clave en tarjetas** se distingue de la grilla decorativa.
-- `verify-before-delivering.md` explica cómo capturar un recorrido por pasos y advierte que el reloj simulado de Playwright congela las transiciones. `accessibility-and-print.md` pide `lang` según el idioma del contenido.
+- **Draw the place** goes from one line to concrete rules: fixed stage and moving cargo, zones in process order, engineering-drawing line work, one color per entity, the exception drawn where it happens, physical flow next to paperwork, the place fixed in the HTML, and the plan scrollable inside its box on phones.
+- **Standard notation before metaphors** clarifies that a metaphor means drawing a place for something that isn't one; when the subject is a physical place (warehouse, port, terminal, airport), the floor plan is the standard notation.
+- `SKILL.md` names floor plans of warehouses, ports, terminals and airports as spatial information, and lists them in the reference index.
+- `matching-your-style.md` separates the accent (page controls) from category colors (diagram entities or data series): five at most, with a dark-mode value and always labeled. **Draw the place** asks for the page's style, not the style of a reference plan the user brings.
+- **Walkthrough with play** specifies that ▶ advances right away, pauses on reaching a step with a question, and that arrow keys don't steal focus from the level selector, the plan or the tables.
+- `matching-your-style.md` adds `--accent-ink` for text on the accent and selected controls: the base violet with white text gives 4.2:1, below the 4.5:1 minimum.
+- **Reading levels** clarify that what a figure always shows (steps, table) counts as level 1, and that an announced list appears complete in its level. **Side glossary** starts at level 5; at level 1 terms are explained inline. **Key ideas in cards** is distinguished from the decorative grid.
+- `verify-before-delivering.md` explains how to capture a step-by-step walkthrough and warns that Playwright's fake clock freezes transitions. `accessibility-and-print.md` asks for `lang` to match the content's language.
 
 ### Fixed
-- La skill ya no menciona archivos de `docs/examples/`: el paquete solo lleva `SKILL.md` y `references/`, y apuntar a un ejemplo metía sesgo.
+- The skill no longer mentions files in `docs/examples/`: the package only ships `SKILL.md` and `references/`, and pointing to an example introduced bias.
 
 ## [1.1.0] - 2026-10-07
 
 ### Added
-- Patrón **Niveles de lectura** en `references/patrones.md`: las páginas para leer y entender (explicaciones, PRs, reportes, post-mortems, planes) llevan un selector 1 / 5 / 10 min que abre en 10. Los niveles se acumulan y se ocultan con CSS (`data-nivel`), así que sin `:has()` o sin JS se ve la página completa. Si el usuario pide un solo tiempo, se hace solo ese nivel. No aplica a tableros, editores ni decks.
-- `SKILL.md` remite al patrón en el paso de redacción.
-- Ejemplo `docs/examples/10-niveles-de-lectura.html`: el prompt de explicación en 1, 5 y 10 minutos aplicado a los commits de patrones propios, con diagramas UML de clases y de secuencia.
-- Eval `explicar-cambio-en-niveles` (selector con 10 min por defecto, niveles marcados, cada nivel se entiende solo) y grader `no-reading-levels` en `triage-editor-with-export`.
+- **Reading levels** pattern in `references/patrones.md`: pages meant to be read and understood (explainers, PRs, reports, post-mortems, plans) get a 1 / 5 / 10 min selector that opens at 10. Levels stack and are hidden with CSS (`data-nivel`), so without `:has()` or without JS the full page shows. If the user asks for a single length, only that level is made. It does not apply to dashboards, editors or decks.
+- `SKILL.md` points to the pattern in the drafting step.
+- Example `docs/examples/10-niveles-de-lectura.html`: the 1, 5 and 10 minute explainer prompt applied to the fork's own pattern commits, with UML class and sequence diagrams.
+- Eval `explicar-cambio-en-niveles` (selector defaults to 10 min, levels marked, each level stands on its own) and grader `no-reading-levels` in `triage-editor-with-export`.
 
 ## [1.0.1] - 2026-10-04
 
 ### Changed
-- La carpeta de la skill pasa de `skills/html-artifacts/` a `skills/explain-in-html/`, igual que su `name`. En Claude Code la skill aparece como `explain-in-html:explain-in-html` en vez de `explain-in-html:html-artifacts`. La instalación manual copia la carpeta tal cual.
+- The skill folder moves from `skills/html-artifacts/` to `skills/explain-in-html/`, matching its `name`. In Claude Code the skill shows up as `explain-in-html:explain-in-html` instead of `explain-in-html:html-artifacts`. Manual install copies the folder as is.
 
 ### Fixed
-- Los graders `skill-fired` y `skill-not-fired` reconocen la skill con el nombre que le da Claude Code a las skills de un plugin (`plugin:carpeta`).
+- The `skill-fired` and `skill-not-fired` graders recognize the skill by the name Claude Code gives plugin skills (`plugin:folder`).
 
 ## [1.0.0] - 2026-10-04
 
-Primera versión de **explain-in-html**, fork de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) 2.0.0. Las entradas de abajo son del proyecto original.
+First version of **explain-in-html**, a fork of [dogum/html-artifacts](https://github.com/dogum/html-artifacts) 2.0.0. The entries below are from the original project.
 
 ### Added
-- `references/patrones.md`: patrones propios aprendidos comparando artefactos reales. `SKILL.md` lo lee siempre antes de redactar.
-- Disparadores en español en la description de la skill ("explícame", "compara", "reporte", "diagrama", "plan", "tablero").
-- Evals: `explicame-facturacion-electronica` (debe activarse y aplicar los patrones) y `explicame-en-una-frase` (no debe activarse). Todos los casos que deben activarse verifican que se leyó `patrones.md`.
+- `references/patrones.md`: the fork's own patterns, learned by comparing real artifacts. `SKILL.md` always reads it before drafting.
+- Spanish triggers in the skill's description ("explícame", "compara", "reporte", "diagrama", "plan", "tablero").
+- Evals: `explicame-facturacion-electronica` (must trigger and apply the patterns) and `explicame-en-una-frase` (must not trigger). Every should-trigger case checks that `patrones.md` was read.
 
 ### Changed
-- La skill y el plugin se llaman `explain-in-html`. El zip de release es `explain-in-html.skill` y su carpeta interna coincide con el nombre de la skill.
-- La versión arranca en 1.0.0 para el fork.
+- The skill and the plugin are named `explain-in-html`. The release zip is `explain-in-html.skill` and its inner folder matches the skill's name.
+- Versioning restarts at 1.0.0 for the fork.
 
 ## [2.0.0] - 2026-09-14
 

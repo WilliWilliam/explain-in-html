@@ -53,9 +53,9 @@ Every artifact must satisfy all of these.
 
 1. **Decide.** Run the two lists above. Say in one line what you're making and why HTML.
 2. **Pick the reference.** Read the matching file from the index below. They are short; read two if the request spans categories.
-   Always also read `references/patrones.md` before drafting. Apply each pattern only when its condition holds.
+   Always also read `references/patterns.md` before drafting. Apply each pattern only when its condition holds.
 3. **Match the user's style.** If the project has a design system, tokens, or a frontend-design skill, use it. Otherwise use the baseline in `references/matching-your-style.md`.
-4. **Draft.** Layout first, then content, then interaction. Pre-fill any data the user gave you. Pages meant to be read and understood get the 1 / 5 / 10 minute reading levels from `references/patrones.md`. If the user names one reading time ("in 1 minute", "versión de 5 min"), build only that level.
+4. **Draft.** Layout first, then content, then interaction. Pre-fill any data the user gave you. Pages meant to be read and understood get the 1 / 5 / 10 minute reading levels from `references/patterns.md`. If the user names one reading time ("in 1 minute", "versión de 5 min"), build only that level.
 5. **Verify.** Rule 8. Fix, then deliver with the path or the artifact and one sentence on what it is.
 
 ## Category index
@@ -74,7 +74,7 @@ Every artifact must satisfy all of these.
 | Accessibility and print checklist | `references/accessibility-and-print.md` |
 | Where the file goes and what each surface allows: Claude Code, Claude.ai artifacts, Cowork, published artifacts | `references/harness-mechanics.md` |
 | The pre-delivery check, headless and manual | `references/verify-before-delivering.md` |
-| House patterns learned from real comparisons; always read | `references/patrones.md` |
+| House patterns learned from real comparisons; always read | `references/patterns.md` |
 
 ## Output mechanics, briefly
 

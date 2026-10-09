@@ -1,0 +1,764 @@
+<!doctype html>
+<!--
+  Produced by the explain-in-html skill (https://github.com/WilliWilliam/explain-in-html)
+  Prompt: "Explain how a consolidated container is deconsolidated at a bonded warehouse (depósito habilitado) in Colombia,
+  from the moment it arrives from the port until each shipment leaves on its truck. I'm new to foreign trade
+  and I don't understand what happens inside the warehouse or why one shipment leaves before another from the same container."
+  Translated from the Spanish original; the page was generated from the Spanish prompt.
+  Made by a fresh agent that only had the skill (without seeing other floor plans), as a test of the
+  "Draw the place" and "Walkthrough with play" patterns. Later adjustments: maritime terminology (house BL).
+  The case, companies, container and license plates are fictitious. A single file, no network when opened.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deconsolidation at a Bonded Warehouse</title>
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root {
+  --bg:#fafaf7; --surface:#ffffff; --ink:#1a1a1f; --ink-soft:#555560; --rule:#e7e5df;
+  --accent:#8b5cf6; --accent-ink:#6d28d9; --warn:#b45309; --danger:#b91c1c; --ok:#15803d;
+  --tape:#a8a39a; --alert:#b91c1c; --hot:rgba(139,92,246,.08);
+  /* one color per shipment, in the plan, the table and the text */
+  --A:#2563eb; --B:#c2410c; --C:#0e7490; --D:#a21caf;
+  --serif: Charter, "Iowan Old Style", "Source Serif 4", ui-serif, Georgia, serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#0e0e12; --surface:#16161c; --ink:#f1f1f4; --ink-soft:#a8a8b3; --rule:#2a2a32;
+    --accent:#a78bfa; --accent-ink:#c4b5fd; --warn:#f59e0b; --danger:#f87171; --ok:#4ade80;
+    --tape:#6b6875; --alert:#f87171; --hot:rgba(167,139,250,.10);
+    --A:#60a5fa; --B:#fb923c; --C:#22d3ee; --D:#e879f9;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#0e0e12; --surface:#16161c; --ink:#f1f1f4; --ink-soft:#a8a8b3; --rule:#2a2a32;
+  --accent:#a78bfa; --accent-ink:#c4b5fd; --warn:#f59e0b; --danger:#f87171; --ok:#4ade80;
+  --tape:#6b6875; --alert:#f87171; --hot:rgba(167,139,250,.10);
+  --A:#60a5fa; --B:#fb923c; --C:#22d3ee; --D:#e879f9;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body { font: 17px/1.55 var(--serif); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 1rem 3rem; }
+a { color: var(--accent-ink); }
+.ca { color: var(--A); } .cb { color: var(--B); } .cc { color: var(--C); } .cd { color: var(--D); }
+.ca, .cb, .cc, .cd { font-weight: 600; font-family: var(--sans); font-size: .92em; }
+
+/* Level selector */
+.levelbar { position: sticky; top: 0; z-index: 3; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.theme-toggle { margin-left: auto; font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.levelbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; padding-top: .55rem; padding-bottom: .55rem; }
+fieldset.level { border: 0; margin: 0; padding: 0; display: flex; align-items: center; gap: .6rem; }
+fieldset.level legend { float: left; font: 600 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin-right: .2rem; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.seg label { font: 500 14px/1 var(--sans); padding: .5rem .85rem; cursor: pointer; border-left: 1px solid var(--rule); }
+.seg label:first-of-type { border-left: 0; }
+.seg input:checked + label { background: var(--accent-ink); color: var(--bg); }
+.seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: -3px; }
+body:has(#level-1:checked) [data-level="5"],
+body:has(#level-1:checked) [data-level="10"],
+body:has(#level-5:checked) [data-level="10"] { display: none; }
+
+/* Header */
+header.top { padding: 1.8rem 0 .2rem; }
+header.top h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .3em; letter-spacing: -.01em; }
+.meta { font: 13px/1.5 var(--sans); color: var(--ink-soft); }
+.tldr { font-size: 1.08rem; max-width: 70ch; margin: 1rem 0 1.2rem; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .8rem; margin: 0 0 1.4rem; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 4px; padding: .7rem .9rem; font: 14.5px/1.45 var(--sans); }
+.card b { display: block; margin-bottom: .2em; }
+
+/* Floor plan */
+figure.planfig { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: .8rem; }
+.plan-scroll { overflow-x: auto; }
+.plan { display: block; width: 100%; min-width: 720px; height: auto; color: var(--ink); }
+.plan text { font-family: var(--sans); fill: var(--ink); }
+.plan .wall { fill: none; stroke: var(--ink); stroke-width: 6; }
+.plan .door { fill: var(--surface); }
+.plan .yard { fill: none; stroke: var(--rule); stroke-width: 2; }
+.plan .zone { fill: none; stroke: var(--tape); stroke-width: 2.5; stroke-dasharray: 10 6; transition: stroke .3s; }
+.plan .zone.restricted { stroke: var(--alert); fill: url(#hatch); }
+.plan .zone.hot { stroke: var(--accent); stroke-width: 3.5; fill: var(--hot); }
+.plan .zone.restricted.hot { fill: url(#hatch); }
+.plan .zlabel { font-size: 11px; font-weight: 700; letter-spacing: .07em; fill: var(--ink-soft); }
+.plan .llabel { font-size: 10.5px; font-weight: 600; letter-spacing: .05em; }
+.plan .rack { fill: none; stroke: var(--ink-soft); stroke-width: 1.5; }
+.plan .small { font-size: 10px; fill: var(--ink-soft); }
+.plan .bx rect { stroke: var(--surface); stroke-width: 1; }
+.plan .bx text { font-size: 11px; font-weight: 700; fill: var(--surface); text-anchor: middle; }
+.plan .bx.A rect { fill: var(--A); } .plan .bx.B rect { fill: var(--B); }
+.plan .bx.C rect { fill: var(--C); } .plan .bx.D rect { fill: var(--D); }
+.plan .ghost rect { fill: none; stroke: var(--D); stroke-width: 1.5; stroke-dasharray: 3 2; }
+.plan .ghost text { font-size: 11px; font-weight: 700; fill: var(--D); text-anchor: middle; }
+.plan .mov { transition: transform .8s cubic-bezier(.6,0,.3,1), opacity .4s; }
+.plan .off { opacity: 0; }
+.plan .faded { opacity: .45; }
+.plan .cont rect { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+.plan .cont text { font-size: 10px; font-family: var(--mono); text-anchor: middle; }
+.plan .truck rect { fill: var(--surface); stroke-width: 2.5; }
+.plan .truck text { font-size: 12px; font-weight: 700; text-anchor: middle; }
+.plan #tA rect { stroke: var(--A); } .plan #tA text { fill: var(--A); }
+.plan #tB rect { stroke: var(--B); } .plan #tB text { fill: var(--B); }
+.plan #tC rect { stroke: var(--C); } .plan #tC text { fill: var(--C); }
+.plan #tD rect { stroke: var(--D); } .plan #tD text { fill: var(--D); }
+.plan .note { font-size: 11px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.plan .note.warn { fill: var(--warn); } .plan .note.bad { fill: var(--danger); } .plan .note.ok { fill: var(--ok); }
+.legend { list-style: none; padding: 0; margin: .6rem 0 0; display: flex; flex-wrap: wrap; gap: .3rem 1rem; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
+.legend i { display: inline-block; width: 12px; height: 10px; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
+.legend .ghostk { border: 1.5px dashed var(--D); }
+.legend .hatchk { border: 1.5px dashed var(--alert); background: repeating-linear-gradient(45deg, transparent 0 3px, var(--rule) 3px 5px); }
+figcaption { font: 13px/1.45 var(--sans); color: var(--ink-soft); margin-top: .5rem; }
+
+/* Walkthrough controls */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .8rem 0 .2rem; font-family: var(--sans); }
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: .35rem; padding: 0; margin: .6rem 0 0; }
+button { font: 500 14px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 5px; padding: .5rem .75rem; cursor: pointer; }
+button:hover { border-color: var(--ink-soft); }
+button:disabled { opacity: .45; cursor: default; }
+.chips button { font-size: 13px; padding: .4rem .55rem; }
+.chips button[aria-current="step"] { background: var(--accent-ink); color: var(--bg); border-color: var(--accent-ink); }
+#play { min-width: 8.5em; font-weight: 600; }
+#pos { font: 13px var(--sans); color: var(--ink-soft); margin-left: .3rem; }
+.kbd-hint { font: 12px var(--sans); color: var(--ink-soft); }
+
+.walk { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 1.2rem; margin-top: 1rem; align-items: start; }
+.steps-text { list-style: none; padding: 0; margin: 0; }
+.js .steps-text > li:not(.on) { display: none; }
+.steps-text > li { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem .9rem; margin-bottom: 1rem; }
+.steps-text h3 { font: 600 1.05rem/1.3 var(--sans); margin: 0 0 .35rem; }
+.steps-text p { margin: 0 0 .5rem; max-width: 62ch; }
+.rec { font: 12.5px/1.45 var(--mono); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: .4rem .55rem; overflow-wrap: anywhere; }
+.rec span { display: block; font: 600 10.5px/1.4 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); }
+.q { border: 1px solid var(--accent); border-radius: 4px; padding: .55rem .7rem; margin-top: .4rem; font: 15px/1.45 var(--sans); }
+.q p { margin: 0 0 .3rem; }
+.q summary { cursor: pointer; color: var(--accent-ink); font-weight: 600; }
+
+/* Tables */
+.tscroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font: 14px/1.4 var(--sans); }
+caption { text-align: left; font: 600 12px var(--sans); color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; padding-bottom: .4rem; }
+th, td { text-align: left; vertical-align: top; padding: .4rem .55rem; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; background: var(--bg); }
+.papers td:first-child { white-space: nowrap; }
+.papers td:nth-child(3), .papers td:nth-child(4) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.papers td.mismatch { color: var(--danger); font-weight: 700; }
+.st { font-weight: 600; }
+.st-ok { color: var(--ok); } .st-warn { color: var(--warn); } .st-bad { color: var(--danger); } .st-n { color: var(--ink-soft); font-weight: 500; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: .35rem; vertical-align: 0; }
+
+/* Body with glossary in the margin */
+.doc { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 2rem; margin-top: 1rem; }
+.doc main > section { margin: 2.2rem 0 0; }
+.doc main > section:first-child { margin-top: 1rem; }
+section > h2 { font-size: 1.35rem; margin: 0 0 .5rem; }
+section > p, section > ul, section > ol { max-width: 70ch; }
+.tag { font: 600 10.5px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 3px; padding: 2px 5px; vertical-align: 3px; margin-left: .4rem; }
+a.term { color: inherit; text-decoration: underline dotted var(--accent); text-underline-offset: 3px; }
+aside.glossary { position: sticky; top: 4rem; align-self: start; font: 13.5px/1.45 var(--sans); border-left: 1px solid var(--rule); padding-left: 1rem; margin-top: 1rem; max-height: calc(100vh - 5rem); overflow-y: auto; }
+aside.glossary h2 { font: 600 12px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin: 0 0 .5rem; }
+aside.glossary dt { font-weight: 600; margin-top: .6rem; }
+aside.glossary dd { margin: .1rem 0 0; color: var(--ink-soft); }
+aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot); }
+
+.timeline { list-style: none; padding: 0; margin: .6rem 0; border-left: 2px solid var(--rule); max-width: 70ch; }
+.timeline li { position: relative; padding: 0 0 .9rem 1.1rem; }
+.timeline li::before { content: ""; position: absolute; left: -6px; top: .45em; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
+.timeline li.limit::before { border-color: var(--danger); background: var(--danger); }
+.timeline time { display: block; font: 600 13px var(--sans); color: var(--ink-soft); }
+.hedge { font: 13.5px/1.5 var(--sans); color: var(--ink-soft); border-left: 3px solid var(--warn); padding-left: .7rem; max-width: 70ch; }
+.mistakes li, .questions li { margin-bottom: .45rem; }
+.questions h3 { font: 600 1rem var(--sans); margin: 1rem 0 .3rem; }
+
+@media (max-width: 900px) {
+  .walk { grid-template-columns: 1fr; }
+  .doc { grid-template-columns: 1fr; }
+  aside.glossary { position: static; max-height: none; border-left: 0; border-top: 1px solid var(--rule); padding: 1rem 0 0; }
+}
+@media (max-width: 720px) {
+  .cards { grid-template-columns: 1fr; }
+  header.top h1 { font-size: 1.55rem; }
+  body { font-size: 16.5px; }
+  table { font-size: 13px; }
+  .kbd-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plan .mov, .plan .zone { transition: none; }
+}
+@media print {
+  :root, :root[data-theme] { --bg:#fff; --surface:#fff; --ink:#000; --ink-soft:#333; --rule:#bbb; --hot:#f3f3f3; }
+  .levelbar { position: static; }
+  .seg, .controls, .chips, .kbd-hint, .theme-toggle { display: none; }
+  fieldset.level legend::after { content: " (printed version: the chosen level)"; }
+  .plan { min-width: 0; }
+  aside.glossary { position: static; max-height: none; }
+  .doc { grid-template-columns: 1fr; }
+  figure, table, .walk { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div class="levelbar">
+  <div class="wrap">
+    <fieldset class="level">
+      <legend>Reading time</legend>
+      <div class="seg">
+        <input type="radio" name="level" id="level-1" value="1"><label for="level-1">1 min</label>
+        <input type="radio" name="level" id="level-5" value="5"><label for="level-5">5 min</label>
+        <input type="radio" name="level" id="level-10" value="10" checked><label for="level-10">10 min</label>
+      </div>
+    </fieldset>
+    <button class="theme-toggle" type="button">◐ System</button>
+  </div>
+</div>
+
+<div class="wrap">
+<header class="top">
+  <h1>How a container is deconsolidated at a bonded warehouse</h1>
+  <div class="meta">Colombia · sea imports · for people new to foreign trade · fictitious case, companies and plates</div>
+</header>
+
+<!-- ═════════ 1 minute ═════════ -->
+<p class="tldr">A consolidated container carries goods from several owners under a single <i>master</i> transport document, issued to the freight forwarder. Inside, each importer's cargo has its own <b>house document</b> (documento hijo). At the bonded warehouse (depósito habilitado) the container is opened and every package is counted against its house document. From there, <strong>each shipment follows its own process</strong>: its own declaration, its own DIAN review and its own payments. That is why the shipments arrive together in the container and leave on different days.</p>
+
+<div class="cards">
+  <div class="card"><b>One container, several owners</b>The master belongs to the freight forwarder. Each importer declares with its house document and answers only for its own cargo.</div>
+  <div class="card"><b>What was counted has to match the papers</b>If a package is missing or extra, DIAN is notified and only that shipment is held until it is cleared up.</div>
+  <div class="card"><b>The first to get customs release leaves first</b>The order inside the container does not matter. For each declaration, DIAN decides whether it gets automatic release (levante) or a documentary or physical inspection.</div>
+</div>
+
+<figure class="planfig" id="floor-plan">
+  <div class="plan-scroll" tabindex="0" aria-label="Warehouse floor plan (scrolls sideways on small screens)">
+  <svg class="plan" viewBox="0 0 1000 500" role="img" aria-labelledby="planT planD">
+    <title id="planT">Floor plan of a bonded warehouse during a deconsolidation</title>
+    <desc id="planD">Top view. On the left, the yard and the gate where the container comes in from the port. Inside the warehouse, from left to right: unloading dock, deconsolidation area with one lane per house document (A, B, C and D), rack storage, the DIAN inspection area below it, and the dispatch dock with one door per shipment. On the right, the exit yard where each shipment is loaded onto its truck.</desc>
+    <defs>
+      <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" stroke-width="2" opacity=".18"/>
+      </pattern>
+    </defs>
+
+    <!-- FIXED STAGE -->
+    <g id="stage">
+      <rect id="z-yard" class="zone" x="4" y="20" width="146" height="460"/>
+      <text class="zlabel" x="12" y="40">YARD AND GATE</text>
+      <text class="small" x="12" y="58">from the port ↓</text>
+
+      <rect id="z-exit" class="zone" x="870" y="20" width="126" height="460"/>
+      <text class="zlabel" x="878" y="40">EXIT YARD</text>
+      <text class="small" x="878" y="470">to the road →</text>
+
+      <rect class="wall" x="160" y="20" width="700" height="460"/>
+      <rect class="door" x="156" y="222" width="8" height="76"/>
+      <rect class="door" x="856" y="82" width="8" height="46"/>
+      <rect class="door" x="856" y="182" width="8" height="46"/>
+      <rect class="door" x="856" y="282" width="8" height="46"/>
+      <rect class="door" x="856" y="382" width="8" height="46"/>
+
+      <rect id="z-unload" class="zone" x="172" y="216" width="92" height="88"/>
+      <text class="zlabel" x="172" y="196">UNLOADING</text>
+      <text class="zlabel" x="172" y="209">DOCK</text>
+
+      <g id="z-sort-g">
+        <text class="zlabel" x="282" y="48">DECONSOLIDATION</text>
+        <rect id="z-sort" class="zone" x="278" y="56" width="174" height="398"/>
+        <rect class="zone" x="284" y="62"  width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
+        <rect class="zone" x="284" y="162" width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
+        <rect class="zone" x="284" y="262" width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
+        <rect class="zone" x="284" y="362" width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
+        <text class="llabel" x="292" y="78"  style="fill:var(--A)">A · TEXTILES</text>
+        <text class="llabel" x="292" y="178" style="fill:var(--B)">B · SPARE PARTS</text>
+        <text class="llabel" x="292" y="278" style="fill:var(--C)">C · COSMETICS</text>
+        <text class="llabel" x="292" y="378" style="fill:var(--D)">D · ELECTRONICS</text>
+      </g>
+
+      <text class="zlabel" x="466" y="48">STORAGE</text>
+      <rect id="z-storage" class="zone" x="466" y="56" width="164" height="240"/>
+      <rect class="rack" x="474" y="84"  width="148" height="26"/>
+      <rect class="rack" x="474" y="136" width="148" height="26"/>
+      <rect class="rack" x="474" y="188" width="148" height="26"/>
+      <rect class="rack" x="474" y="240" width="148" height="26"/>
+      <text class="small" x="612" y="102">A</text>
+      <text class="small" x="612" y="154">B</text>
+      <text class="small" x="612" y="206">C</text>
+      <text class="small" x="612" y="258">D</text>
+
+      <rect id="z-insp" class="zone restricted" x="466" y="316" width="164" height="138" fill="url(#hatch)"/>
+      <text class="zlabel" x="474" y="336" style="fill:var(--alert)">DIAN INSPECTION</text>
+
+      <text class="zlabel" x="648" y="48">DISPATCH DOCK</text>
+      <rect id="z-dispatch" class="zone" x="644" y="56" width="204" height="398"/>
+      <text class="llabel" x="656" y="78"  style="fill:var(--ink-soft)">DOOR A</text>
+      <text class="llabel" x="656" y="178" style="fill:var(--ink-soft)">DOOR B</text>
+      <text class="llabel" x="656" y="278" style="fill:var(--ink-soft)">DOOR C</text>
+      <text class="llabel" x="656" y="378" style="fill:var(--ink-soft)">DOOR D</text>
+    </g>
+
+    <!-- WHAT MOVES (step 1 positions) -->
+    <g id="cont" class="cont mov" style="transform:translate(15px,70px)">
+      <rect width="120" height="36"/>
+      <text x="60" y="15">MODU 000123-4</text>
+      <text x="60" y="29" id="contSub">seal 000481</text>
+    </g>
+
+    <g transform="translate(878,82)"><g id="tA" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">A</text></g></g>
+    <g transform="translate(878,182)"><g id="tB" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">B</text></g></g>
+    <g transform="translate(878,282)"><g id="tC" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">C</text></g></g>
+    <g transform="translate(878,382)"><g id="tD" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">D</text></g></g>
+
+    <g id="cargo">
+      <g class="bx A mov off" id="A0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
+      <g class="bx A mov off" id="A1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
+      <g class="bx A mov off" id="A2" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
+      <g class="bx A mov off" id="A3" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
+      <g class="bx B mov off" id="B0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">B</text></g>
+      <g class="bx B mov off" id="B1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">B</text></g>
+      <g class="bx C mov off" id="C0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">C</text></g>
+      <g class="bx C mov off" id="C1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">C</text></g>
+      <g class="bx C mov off" id="C2" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">C</text></g>
+      <g class="bx D mov off" id="D0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">D</text></g>
+      <g class="bx D mov off" id="D1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">D</text></g>
+      <g class="ghost mov off" id="Dx" style="transform:translate(348px,400px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">?</text></g>
+    </g>
+    <g id="notes" aria-hidden="true"><text class="note" x="12" y="126">Number and seal checked</text></g>
+  </svg>
+  </div>
+  <ul class="legend" aria-label="Floor plan key">
+    <li><i style="background:var(--A)"></i>A · Example Textiles S.A.S.</li>
+    <li><i style="background:var(--B)"></i>B · Fictional Parts Ltda.</li>
+    <li><i style="background:var(--C)"></i>C · Demo Cosmetics S.A.S.</li>
+    <li><i style="background:var(--D)"></i>D · Test Electro S.A.S.</li>
+    <li><i class="ghostk"></i>missing package</li>
+    <li><i class="hatchk"></i>restricted area</li>
+  </ul>
+
+  <div class="controls" id="controls">
+    <button id="prev" type="button">← Previous</button>
+    <button id="next" type="button">Next →</button>
+    <button id="play" type="button">▶ Play</button>
+    <span id="pos" aria-live="polite">Step 1 of 10</span>
+    <span class="kbd-hint">· the ← → arrow keys also change steps</span>
+  </div>
+  <ol class="chips" id="chips" aria-label="Walkthrough steps">
+    <li><button type="button" data-go="0" aria-current="step">1 Gate</button></li>
+    <li><button type="button" data-go="1">2 Unloading</button></li>
+    <li><button type="button" data-go="2">3 Count</button></li>
+    <li><button type="button" data-go="3">4 Racks</button></li>
+    <li><button type="button" data-go="4">5 Declarations</button></li>
+    <li><button type="button" data-go="5">6 A leaves</button></li>
+    <li><button type="button" data-go="6">7 B inspected</button></li>
+    <li><button type="button" data-go="7">8 B and C leave</button></li>
+    <li><button type="button" data-go="8">9 D leaves</button></li>
+    <li><button type="button" data-go="9">10 Close-out</button></li>
+  </ol>
+  <figcaption>The floor plan does not change; what moves is the cargo. Each importer has a color, and it is the same in the plan, in the table and in the text.</figcaption>
+</figure>
+
+<div class="walk">
+  <ol class="steps-text" id="stepsText">
+    <li class="on">
+      <h3>1 · Arrives at the gate</h3>
+      <p>The container leaves the port (here, Cartagena) for the warehouse the freight forwarder chose. At the gate they check that the container number and the seal number match the transfer form.</p>
+      <p data-level="5">The <a class="term" href="#g-transfer-form">transfer form (planilla de envío)</a> is generated in DIAN's systems and authorizes moving the cargo, not yet cleared through customs, from the port to the warehouse. Nobody has seen the cargo yet: the container is still closed.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Transfer form · container MODU 000123-4 · seal 000481 · destination: Example Warehouse</p>
+    </li>
+    <li>
+      <h3>2 · To the unloading dock</h3>
+      <p>The container backs up to the dock door. They confirm the seal arrived intact, break it and open the doors. The warehouse records that it received the container.</p>
+      <p data-level="5">If the seal arrives broken or with a different number, that is recorded before opening. It changes who is liable if something turns out to be missing later.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Receipt form (planilla de recepción) · MODU 000123-4 · seal 000481 intact · 6 Oct 2026, 10:40</p>
+    </li>
+    <li>
+      <h3>3 · Deconsolidate: separate and count</h3>
+      <p>The packages come out and go into one lane per house document. Each shipment is counted against its document. <span class="ca">A</span>, <span class="cb">B</span> and <span class="cc">C</span> match. For <span class="cd">D</span>, only 2 of the 3 packages arrived.</p>
+      <p data-level="5">The count is package by package, with weight and marks. Besides shortages, they look for overages and damaged packages, and everything is written down.</p>
+      <div class="q" data-level="5">
+        <p><b>Before moving on:</b> one package from <span class="cd">D</span> is missing. Does that also hold up <span class="ca">A</span>, <span class="cb">B</span> and <span class="cc">C</span>?</p>
+        <details><summary>See answer</summary><p>No. Each house document is a separate process. The shortage only affects D; the other three shipments carry on as normal.</p></details>
+      </div>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Count · A 4/4 · B 2/2 · C 3/3 · D 2/3 (1 missing)</p>
+    </li>
+    <li>
+      <h3>4 · Report, then to the racks</h3>
+      <p>DIAN is told what arrived and what did not match. Each shipment goes to its place on the racks, still not cleared through customs. The empty container goes back to the shipping line.</p>
+      <p data-level="5">The <a class="term" href="#g-report">unloading and discrepancy report (informe de descargue e inconsistencias)</a> for the house documents is filed by the freight forwarder. The storage period starts running: one month from arrival in the country, extendable by one more month.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Unloading and discrepancy report · house BL D · shortage: 1 package</p>
+    </li>
+    <li>
+      <h3>5 · Each importer declares</h3>
+      <p>Each owner, through its customs broker (agencia de aduanas), files its own import declaration and pays its duties and taxes. DIAN decides, separately for each declaration, how much to check.</p>
+      <p data-level="5"><span class="ca">A</span>: automatic <a class="term" href="#g-release">customs release</a>. <span class="cb">B</span>: physical inspection, the packages have to be opened. <span class="cc">C</span>: documentary inspection of the invoices and of the INVIMA <a class="term" href="#g-approval">prior approval</a>. <span class="cd">D</span>: has to clear up the shortage before declaring.</p>
+      <div class="q" data-level="5">
+        <p><b>Question:</b> based on what you see in the floor plan, which shipment leaves first?</p>
+        <details><summary>See answer</summary><p>A. It has automatic release and waits for no review. Whether it was at the back or by the door of the container does not matter.</p></details>
+      </div>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Declarations · A automatic release · B physical inspection · C documentary inspection · D not declared</p>
+    </li>
+    <li>
+      <h3>6 · <span class="ca">A</span> leaves first</h3>
+      <p>A has its release. With storage fees paid and the house document released by the freight forwarder, the warehouse books A's truck and loads its 4 packages through door A.</p>
+      <p data-level="5">Without the freight forwarder's release, which comes only after it collects its local charges, the warehouse does not deliver, even if DIAN has already granted customs release.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Pickup order · house BL A · 4 packages · truck plate XYZ 001</p>
+    </li>
+    <li>
+      <h3>7 · Physical inspection of <span class="cb">B</span></h3>
+      <p>A's truck leaves. B's packages move to the inspection area: a DIAN officer opens them and compares the goods with what was declared. C is still in document review.</p>
+      <p data-level="5">While the inspection lasts, the storage period is suspended. The cargo does not leave the area without DIAN's authorization.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Inspection record · B's declaration · 2 packages opened · compliant</p>
+    </li>
+    <li>
+      <h3>8 · <span class="cb">B</span> and <span class="cc">C</span> leave</h3>
+      <p>B's inspection comes out compliant and it gets release. C's documents are approved and it gets release too. Both go to the dispatch dock and onto their trucks.</p>
+      <p data-level="5">B and C leave at the same time even though their reviews were different. What lines them up is the release date, not where they sat in the container.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Release · B and C declarations · trucks plate XYZ 002 and XYZ 003</p>
+    </li>
+    <li>
+      <h3>9 · <span class="cd">D</span> leaves last</h3>
+      <p>D cleared up the shortage and declared the 2 packages that did arrive. It gets release and its truck loads through door D. The missing package is handled separately if it turns up.</p>
+      <p data-level="5">How a shortage is justified, and who is liable for it (the shipping line or the freight forwarder), is worth asking your customs broker.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>D's declaration · 2 packages · release · truck plate XYZ 004</p>
+    </li>
+    <li>
+      <h3>10 · Close-out</h3>
+      <p>The four shipments left on four trucks, at three different moments. They arrived together in one container, but each left when its own process was done.</p>
+      <p class="rec" data-level="5"><span>What gets recorded</span>Deconsolidation closed · 11 packages delivered · 1 shortage reported</p>
+    </li>
+  </ol>
+
+  <div class="tscroll">
+    <table class="papers" id="papers">
+      <caption>On paper and on the floor</caption>
+      <thead><tr><th scope="col">Document</th><th scope="col">Owner</th><th scope="col">Papers</th><th scope="col">Floor</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+        <tr id="r-M"><td>Master BL</td><td>Model Cargo (freight forwarder)</td><td>12 packages</td><td>—</td><td class="st st-n">In transit with transfer form</td></tr>
+        <tr id="r-A"><td><span class="sw" style="background:var(--A)"></span>House BL A</td><td>Example Textiles</td><td>4</td><td>—</td><td class="st st-n">Inside the container</td></tr>
+        <tr id="r-B"><td><span class="sw" style="background:var(--B)"></span>House BL B</td><td>Fictional Parts</td><td>2</td><td>—</td><td class="st st-n">Inside the container</td></tr>
+        <tr id="r-C"><td><span class="sw" style="background:var(--C)"></span>House BL C</td><td>Demo Cosmetics</td><td>3</td><td>—</td><td class="st st-n">Inside the container</td></tr>
+        <tr id="r-D"><td><span class="sw" style="background:var(--D)"></span>House BL D</td><td>Test Electro</td><td>3</td><td>—</td><td class="st st-n">Inside the container</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="doc">
+<main id="content">
+
+<!-- ═════════ 5 minutes ═════════ -->
+<section data-level="5">
+  <h2>Why one shipment leaves before another</h2>
+  <p>To the shipping line the container is a single shipment, but not to customs. For DIAN what counts are the <a class="term" href="#g-house">house documents</a>, and each one moves at its own pace. These are the things that decide when each shipment leaves:</p>
+  <div class="tscroll">
+  <table>
+    <caption>What sets each shipment's exit date</caption>
+    <thead><tr><th scope="col">What decides</th><th scope="col">How it holds up or speeds up</th><th scope="col">In this container</th></tr></thead>
+    <tbody>
+      <tr><td>The count matching</td><td>A shortage or overage is reported and that shipment waits until it is cleared up.</td><td><span class="cd">D</span> leaves last.</td></tr>
+      <tr><td>The declaration and the taxes</td><td>Each importer declares when its papers are ready and pays the tariff and VAT.</td><td>All of them. If one does not declare, it stays.</td></tr>
+      <tr><td>DIAN's <a class="term" href="#g-risk">risk management</a></td><td>Automatic release, documentary inspection or physical inspection (aforo). Each takes a different amount of time.</td><td><span class="ca">A</span> automatic, <span class="cc">C</span> documentary, <span class="cb">B</span> physical.</td></tr>
+      <tr><td>Prior approvals</td><td>Some products need a prior permit (INVIMA, ICA) processed through the VUCE, the foreign trade single window.</td><td><span class="cc">C</span>, cosmetics.</td></tr>
+      <tr><td>Private payments</td><td>Without storage fees paid and the freight forwarder's release, there is no delivery.</td><td>All of them.</td></tr>
+      <tr><td>The truck</td><td>The warehouse only hands over to the authorized truck and driver, by appointment.</td><td>All of them.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section data-level="5">
+  <h2>The papers, in order</h2>
+  <p>Every physical movement on the floor plan has a paper behind it. The warehouse's job is to make the floor and the papers say the same thing at all times.</p>
+  <div class="tscroll">
+  <table>
+    <caption>Documents in the walkthrough</caption>
+    <thead><tr><th scope="col">Document</th><th scope="col">Who produces it</th><th scope="col">What it is for</th></tr></thead>
+    <tbody>
+      <tr><td><a class="term" href="#g-manifest">Cargo manifest</a></td><td>The shipping line, before the vessel arrives</td><td>Lists everything the vessel is carrying.</td></tr>
+      <tr><td>Master BL</td><td>The shipping line, issued to the freight forwarder</td><td>Covers the whole container.</td></tr>
+      <tr><td>House documents (house BLs or air waybills)</td><td>The <a class="term" href="#g-forwarder">international freight forwarder</a></td><td>Covers each importer's cargo. It is what the importer declares with.</td></tr>
+      <tr><td>Transfer form</td><td>Generated in DIAN's systems when the cargo leaves the port</td><td>Moving the uncleared cargo to the warehouse.</td></tr>
+      <tr><td>Receipt form</td><td>The <a class="term" href="#g-warehouse">bonded warehouse</a></td><td>That the container arrived, when, and in what condition.</td></tr>
+      <tr><td>Unloading and discrepancy report</td><td>The carrier (master) and the freight forwarder (house documents)</td><td>Tells DIAN what was extra, what was missing and what arrived damaged.</td></tr>
+      <tr><td><a class="term" href="#g-declaration">Import declaration</a></td><td>Each importer's customs broker</td><td>Declares the goods, their value and the taxes.</td></tr>
+      <tr><td>Customs release (levante)</td><td>DIAN</td><td>Authorizes the importer to dispose of the goods.</td></tr>
+      <tr><td>Release and pickup order</td><td>The freight forwarder and the warehouse</td><td>Handing the cargo over to the authorized truck.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ═════════ 10 minutes ═════════ -->
+<section data-level="10">
+  <h2>The deadlines, with real dates <span class="tag">example</span></h2>
+  <p>Suppose the vessel arrives in Cartagena on Tuesday 6 October 2026. Some deadlines are counted in business days and others in calendar months, and there are public holidays along the way.</p>
+  <ol class="timeline">
+    <li><time datetime="2026-10-06">Tue 6 Oct 2026</time>The vessel arrives and the unloading report for the master is filed.</li>
+    <li><time datetime="2026-10-14">Wed 14 Oct 2026</time>Last day to take the cargo to the warehouse: 5 business days at a seaport. Monday 12 October is a public holiday (Día de la Raza), so it does not count.</li>
+    <li class="limit"><time datetime="2026-11-06">Fri 6 Nov 2026</time>The one-month storage period at the warehouse ends, without extension. That is 21 business days for the whole process, because Monday 2 November (All Saints' Day) is also a holiday. An inspection pauses the count.</li>
+    <li class="limit"><time datetime="2026-12-06">Sun 6 Dec 2026</time>End of the one-month extension, if requested. It falls on a Sunday: ask whether it moves to the next business day.</li>
+    <li><time>Afterwards</time>A shipment with no release and no re-export falls into <a class="term" href="#g-abandonment">legal abandonment</a>. Getting it back costs more than declaring it on time would have.</li>
+  </ol>
+  <p class="hedge">Deadlines per articles 169 and 171 of Decree 1165 of 2019, as summarized in DIAN rulings from 2025. Decree 659 of 2024 changed part of these rules, and some depend on DIAN switching on its systems. Confirm them with your customs broker before relying on them.</p>
+</section>
+
+<section data-level="10">
+  <h2>Cases outside the walkthrough</h2>
+  <ul>
+    <li><b>Overage.</b> A package shows up that is not on any house document. It is reported just like a shortage and held until someone proves it is theirs.</li>
+    <li><b>Damage.</b> A package arrives broken or wet. It is noted and photographed during the count, before it is moved, because that is the evidence for an insurance claim.</li>
+    <li><b>Broken or different seal.</b> It is recorded before opening. From then on, liability for any shortage is argued differently.</li>
+    <li><b>Dangerous or refrigerated cargo.</b> It needs special areas, and not every warehouse accepts it. That is settled before choosing the warehouse.</li>
+    <li><b>Pre-declaration cargo check.</b> DIAN can examine the cargo before the declaration. While it lasts, the deadlines are suspended.</li>
+    <li><b>An importer who does not show up.</b> Its cargo stays on the racks while the others leave, and its clock keeps running toward legal abandonment.</li>
+  </ul>
+</section>
+
+<section data-level="10">
+  <h2>Common beginner mistakes</h2>
+  <ul class="mistakes">
+    <li><b>Thinking the container leaves as a whole.</b> It leaves by house document. Ask about your client's cargo, not about the container.</li>
+    <li><b>Mixing up the master and the house document.</b> The importer declares with its house document. The master belongs to the freight forwarder.</li>
+    <li><b>Believing that customs release means you can pick up.</b> You still need storage fees paid, the freight forwarder's release and the truck appointment.</li>
+    <li><b>Declaring what the invoice says instead of what was counted.</b> If there was a shortage, you declare what arrived, once the discrepancy is cleared up.</li>
+    <li><b>Requesting prior approvals after the cargo arrives.</b> INVIMA or ICA approvals are processed beforehand, in the VUCE. Otherwise the cargo waits in the warehouse, racking up storage fees.</li>
+    <li><b>Counting everything in business days.</b> The transfer to the warehouse is counted in business days, but the storage period is one calendar month.</li>
+  </ul>
+</section>
+
+<section data-level="10" class="questions">
+  <h2>Questions for the expert</h2>
+  <h3>For the customs broker</h3>
+  <ul>
+    <li>From what exact date do you count this cargo's one-month storage period, and what happens if it ends on a Sunday or a holiday?</li>
+    <li>Is it worth filing an advance declaration so the release comes through as soon as the cargo arrives?</li>
+    <li>How is a shortage justified, and can we declare only what arrived?</li>
+  </ul>
+  <h3>For the bonded warehouse</h3>
+  <ul>
+    <li>How much do you charge per day for storage, and from when do you start charging?</li>
+    <li>How is the truck appointment booked, and what documents does the driver have to bring?</li>
+  </ul>
+  <h3>For the freight forwarder</h3>
+  <ul>
+    <li>Who files the discrepancy report for the house documents, and within what deadline?</li>
+    <li>What local charges have to be paid for the house document to be released?</li>
+  </ul>
+</section>
+
+</main>
+
+<aside class="glossary" data-level="5" aria-labelledby="gloss-t">
+  <h2 id="gloss-t">Glossary</h2>
+  <dl>
+    <dt id="g-consolidated">Consolidated container</dt><dd>A container with cargo from several owners (LCL), put together by a freight forwarder.</dd>
+    <dt id="g-forwarder">International freight forwarder</dt><dd>Consolidates and deconsolidates. Holds the master BL and issues the house documents.</dd>
+    <dt id="g-house">House document (documento hijo)</dt><dd>Each importer's BL or air waybill within the master. It is the unit the importer declares with.</dd>
+    <dt id="g-manifest">Cargo manifest</dt><dd>List of everything the vessel is carrying, which the shipping line transmits before arrival.</dd>
+    <dt id="g-warehouse">Bonded warehouse (depósito habilitado)</dt><dd>A warehouse authorized by DIAN to store cargo that has not yet been cleared through customs.</dd>
+    <dt id="g-transfer-form">Transfer form (planilla de envío)</dt><dd>Authorizes moving the cargo from the port to the warehouse.</dd>
+    <dt id="g-report">Unloading and discrepancy report (informe de descargue e inconsistencias)</dt><dd>Report to DIAN of what arrived extra, short or damaged.</dd>
+    <dt id="g-declaration">Import declaration</dt><dd>The document with which the importer clears its goods through customs and assesses the taxes.</dd>
+    <dt id="g-risk">Risk management</dt><dd>DIAN system that decides whether a declaration gets automatic release or goes to inspection.</dd>
+    <dt id="g-release">Customs release (levante)</dt><dd>DIAN's authorization to dispose of the goods.</dd>
+    <dt id="g-approval">Prior approval (visto bueno)</dt><dd>Prior permit from another agency (INVIMA, ICA) for certain products, processed through the VUCE.</dd>
+    <dt id="g-abandonment">Legal abandonment (abandono legal)</dt><dd>What happens when the deadline passes with no release: the goods are placed at DIAN's disposal.</dd>
+  </dl>
+</aside>
+</div>
+</div>
+
+<script>
+(() => {
+  const btn = document.querySelector('.theme-toggle'), root = document.documentElement;
+  const order = ['system', 'light', 'dark'];
+  const label = { system: '◐ System', light: '☀ Light', dark: '☾ Dark' };
+  let t = root.dataset.theme || 'system';
+  const show = () => { btn.textContent = label[t]; btn.setAttribute('aria-label', 'Theme: ' + label[t].slice(2)); };
+  btn.addEventListener('click', () => {
+    t = order[(order.indexOf(t) + 1) % order.length];
+    if (t === 'system') delete root.dataset.theme; else root.dataset.theme = t;
+    try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {}
+    show();
+  });
+  show();
+})();
+</script>
+<script>
+(() => {
+  document.documentElement.classList.add('js');
+
+  /* level in the URL (#1min, #5min, #10min) */
+  const radios = [...document.querySelectorAll('input[name="level"]')];
+  const fromHash = location.hash.match(/^#(1|5|10)min$/);
+  if (fromHash) radios.forEach(r => { r.checked = r.value === fromHash[1]; });
+  radios.forEach(r => r.addEventListener('change', () => history.replaceState(null, '', `#${r.value}min`)));
+
+  /* ── floor plan geometry ── */
+  const LANE  = { A: 62, B: 162, C: 262, D: 362 };
+  const SHELF = { A: 84, B: 136, C: 188, D: 240 };
+  const COUNT = { A: 4, B: 2, C: 3, D: 2 };
+  const CONT  = { gate: [15, 70], dock: [36, 242], empty: [15, 70], gone: [15, -60] };
+  function spot(loc, k, i, cpos) {
+    switch (loc) {
+      case 'cont':  return [cpos[0] + 49, cpos[1] + 9, false];
+      case 'lane':  return [292 + 28 * i, LANE[k] + 36, true];
+      case 'rack':  return [480 + 28 * i, SHELF[k] + 4, true];
+      case 'insp':  return [490 + 28 * i, 390, true];
+      case 'bay':   return [668 + 28 * i, LANE[k] + 36, true];
+      case 'truck': return [900, LANE[k] + 36, false];
+    }
+  }
+
+  /* ── steps: what is where, notes pinned to the place, and the state of the papers ── */
+  const all = l => ({ A: l, B: l, C: l, D: l });
+  const off = { A: 'off', B: 'off', C: 'off', D: 'off' };
+  const S = [
+    { c: 'gate', loc: all('cont'), ghost: null, trucks: off, hot: 'z-yard',
+      notes: [[12, 126, 'Number and seal checked', '']],
+      p: { M: ['—', 'In transit with transfer form', 'n'], A: ['—', 'Inside the container', 'n'], B: ['—', 'Inside the container', 'n'], C: ['—', 'Inside the container', 'n'], D: ['—', 'Inside the container', 'n'] } },
+    { c: 'dock', loc: all('cont'), ghost: null, trucks: off, hot: 'z-unload',
+      notes: [[20, 300, 'Seal intact: opened', 'ok']],
+      p: { M: ['—', 'Received (receipt form)', 'ok'], A: ['—', 'Inside the container', 'n'], B: ['—', 'Inside the container', 'n'], C: ['—', 'Inside the container', 'n'], D: ['—', 'Inside the container', 'n'] } },
+    { c: 'dock', loc: all('lane'), ghost: 'lane', trucks: off, hot: 'z-sort',
+      notes: [[292, 140, '4 / 4 matches', 'ok'], [292, 240, '2 / 2 matches', 'ok'], [292, 340, '3 / 3 matches', 'ok'], [292, 440, '2 / 3 · 1 package short', 'bad']],
+      p: { M: ['11', 'Counted: 11 of 12', 'warn'], A: ['4', 'Matches', 'ok'], B: ['2', 'Matches', 'ok'], C: ['3', 'Matches', 'ok'], D: ['2', 'Shortage: 2 of 3', 'bad'] } },
+    { c: 'empty', loc: all('rack'), ghost: 'rack', trucks: off, hot: 'z-storage',
+      notes: [[12, 126, 'Empty: back to the line', ''], [474, 284, 'D: shortage reported to DIAN', 'bad']],
+      p: { M: ['11', 'Discrepancy reported', 'warn'], A: ['4', 'In storage, not cleared', 'n'], B: ['2', 'In storage, not cleared', 'n'], C: ['3', 'In storage, not cleared', 'n'], D: ['2', 'Shortage reported', 'bad'] } },
+    { c: 'gone', loc: all('rack'), ghost: 'rack', trucks: off, hot: 'z-storage',
+      notes: [[474, 80, 'automatic release', 'ok'], [474, 132, 'physical inspection', 'warn'], [474, 184, 'document inspection', 'warn'], [474, 236, 'clear up shortage', 'bad']],
+      p: { M: ['11', 'Each house doc on its own', 'n'], A: ['4', 'Automatic release', 'ok'], B: ['2', 'Physical inspection', 'warn'], C: ['3', 'Documentary inspection', 'warn'], D: ['2', 'Not declared: clear up shortage', 'bad'] } },
+    { c: 'gone', loc: { A: 'bay', B: 'rack', C: 'rack', D: 'rack' }, ghost: 'rack', trucks: { A: 'dock', B: 'off', C: 'off', D: 'off' }, hot: 'z-dispatch',
+      notes: [[656, 140, 'release + fees paid + BL freed', 'ok']],
+      p: { M: ['11', 'Deliveries under way', 'n'], A: ['4', 'Loading at door A', 'ok'], B: ['2', 'Awaiting inspection', 'warn'], C: ['3', 'In document review', 'warn'], D: ['2', 'Clearing up shortage', 'bad'] } },
+    { c: 'gone', loc: { A: 'truck', B: 'insp', C: 'rack', D: 'rack' }, ghost: 'rack', trucks: { A: 'gone', B: 'off', C: 'off', D: 'off' }, hot: 'z-insp',
+      notes: [[474, 430, 'DIAN opens, compares', 'warn'], [474, 184, 'paper review', 'warn']],
+      p: { M: ['7', '1 of 4 shipments delivered', 'n'], A: ['0', 'Left', 'n'], B: ['2', 'Under inspection (clock paused)', 'warn'], C: ['3', 'In document review', 'warn'], D: ['2', 'Clearing up shortage', 'bad'] } },
+    { c: 'gone', loc: { A: 'truck', B: 'bay', C: 'bay', D: 'rack' }, ghost: 'rack', trucks: { A: 'gone', B: 'dock', C: 'dock', D: 'off' }, hot: 'z-dispatch',
+      notes: [[656, 240, 'inspection OK · release', 'ok'], [656, 340, 'docs approved · release', 'ok'], [474, 236, 'declared 2 packages', 'warn']],
+      p: { M: ['7', 'Deliveries under way', 'n'], A: ['0', 'Left', 'n'], B: ['2', 'Loading at door B', 'ok'], C: ['3', 'Loading at door C', 'ok'], D: ['2', 'Declared 2 packages', 'warn'] } },
+    { c: 'gone', loc: { A: 'truck', B: 'truck', C: 'truck', D: 'bay' }, ghost: null, trucks: { A: 'gone', B: 'gone', C: 'gone', D: 'dock' }, hot: 'z-dispatch',
+      notes: [[656, 440, 'release for 2 packages', 'ok']],
+      p: { M: ['2', '3 of 4 shipments delivered', 'n'], A: ['0', 'Left', 'n'], B: ['0', 'Left', 'n'], C: ['0', 'Left', 'n'], D: ['2', 'Loading at door D', 'ok'] } },
+    { c: 'gone', loc: all('truck'), ghost: null, trucks: { A: 'gone', B: 'gone', C: 'gone', D: 'gone' }, hot: 'z-exit',
+      notes: [[878, 250, 'Warehouse empty', '']],
+      p: { M: ['0', 'Deconsolidation closed', 'ok'], A: ['0', 'Left', 'n'], B: ['0', 'Left', 'n'], C: ['0', 'Left', 'n'], D: ['0', 'Left (1 package reported)', 'n'] } },
+  ];
+
+  const $ = id => document.getElementById(id);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const items = [...document.querySelectorAll('#stepsText > li')];
+  const chips = [...document.querySelectorAll('#chips button')];
+  const zones = ['z-yard', 'z-unload', 'z-sort', 'z-storage', 'z-insp', 'z-dispatch', 'z-exit'].map($);
+  const M = S.length;
+  let cur = 0, playing = false, timer = null;
+
+  function place(el, x, y, show) {
+    el.style.transform = `translate(${x}px,${y}px)`;
+    el.classList.toggle('off', !show);
+  }
+
+  function render(n) {
+    const s = S[n];
+    const cpos = CONT[s.c];
+    const cont = $('cont');
+    place(cont, cpos[0], cpos[1], s.c !== 'gone');
+    cont.classList.toggle('faded', s.c === 'empty');
+    $('contSub').textContent = s.c === 'gate' ? 'seal 000481' : s.c === 'dock' ? 'open' : 'empty';
+
+    for (const k of 'ABCD') {
+      for (let i = 0; i < COUNT[k]; i++) {
+        const [x, y, show] = spot(s.loc[k], k, i, cpos);
+        place($(k + i), x, y, show);
+      }
+      const t = $('t' + k), ts = s.trucks[k];
+      t.style.transform = ts === 'dock' ? 'translate(0px,0)' : 'translate(130px,0)';
+      t.classList.toggle('off', ts !== 'dock');
+    }
+    const g = $('Dx');
+    if (s.ghost === 'lane') place(g, 348, 398, true);
+    else if (s.ghost === 'rack') place(g, 536, 244, true);
+    else g.classList.add('off');
+
+    zones.forEach(z => z.classList.toggle('hot', z.id === s.hot));
+
+    const notes = $('notes');
+    notes.replaceChildren(...s.notes.map(([x, y, txt, cls]) => {
+      const t = document.createElementNS(svgNS, 'text');
+      t.setAttribute('x', x); t.setAttribute('y', y);
+      t.setAttribute('class', 'note ' + cls);
+      t.textContent = txt;
+      return t;
+    }));
+
+    for (const k of 'MABCD') {
+      const row = $('r-' + k).cells, [floor, state, cls] = s.p[k];
+      row[3].textContent = floor;
+      row[3].classList.toggle('mismatch', k === 'D' && floor === '2' && n < 7);
+      row[4].textContent = state;
+      row[4].className = 'st st-' + cls;
+    }
+
+    items.forEach((li, i) => li.classList.toggle('on', i === n));
+    chips.forEach((b, i) => i === n ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current'));
+    $('pos').textContent = `Step ${n + 1} of ${M}`;
+    $('prev').disabled = n === 0;
+    $('next').disabled = n === M - 1;
+  }
+
+  /* ── play ── */
+  const visible = el => el && (el.checkVisibility ? el.checkVisibility() : el.offsetParent !== null);
+  const asksQuestion = n => [...items[n].querySelectorAll('.q')].some(visible);
+  const duration = n => {
+    const words = items[n].innerText.trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(4000, words / 3 * 1000);
+  };
+
+  function setPlaying(on) {
+    playing = on;
+    clearTimeout(timer);
+    $('play').textContent = on ? '❚❚ Pause' : '▶ Play';
+  }
+  function stop() { setPlaying(false); }
+
+  function goTo(n) { cur = Math.max(0, Math.min(M - 1, n)); render(cur); }
+
+  function afterArrive() {
+    if (!playing) return;
+    if (cur === M - 1 || asksQuestion(cur)) { stop(); return; }
+    timer = setTimeout(() => { goTo(cur + 1); afterArrive(); }, duration(cur));
+  }
+
+  $('play').addEventListener('click', () => {
+    if (playing) { stop(); return; }
+    setPlaying(true);
+    goTo(cur === M - 1 ? 0 : cur + 1);
+    afterArrive();
+  });
+  $('prev').addEventListener('click', () => { stop(); goTo(cur - 1); });
+  $('next').addEventListener('click', () => { stop(); goTo(cur + 1); });
+  chips.forEach((b, i) => b.addEventListener('click', () => { stop(); goTo(i); }));
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const a = document.activeElement;
+    if (a && a.closest('fieldset.level, .plan-scroll, input, textarea, select, .tscroll, aside')) return;
+    e.preventDefault();
+    stop();
+    goTo(cur + (e.key === 'ArrowRight' ? 1 : -1));
+  });
+
+  /* if the level changes during playback, the step's time is recalculated */
+  radios.forEach(r => r.addEventListener('change', () => { if (playing) { clearTimeout(timer); afterArrive(); } }));
+
+  render(0);
+})();
+</script>
+</body>
+</html>

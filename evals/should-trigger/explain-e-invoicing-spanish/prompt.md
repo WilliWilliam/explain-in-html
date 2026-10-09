@@ -1,5 +1,5 @@
 ---
-description: Pedido en español con contexto técnico y local (Colombia). Debe activar la skill, leer patrones.md y aplicar sus patrones.
+description: Spanish request with technical and local (Colombian) context. Must trigger the skill, read patterns.md and apply its patterns.
 tags: [trigger, spanish, explainer]
 max_turns: 15
 timeout_seconds: 420

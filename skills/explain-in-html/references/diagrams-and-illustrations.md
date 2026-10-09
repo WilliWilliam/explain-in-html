@@ -39,7 +39,7 @@ For "diagram our deploy pipeline" or "show me how a request flows through the sy
 
 ## Floor plan of a physical process
 
-For logistics, foreign trade, operations: "explain how a consolidated container is unloaded at the warehouse," "walk me through the port," "how does a parcel move through the hub." When the subject is a place, the top-down plan *is* the standard notation; boxes and arrows throw away the one thing the reader already knows, the layout. The rules live in `patrones.md` ("Dibuja el lugar", "Recorrido con reproducir"); this is the shape.
+For logistics, foreign trade, operations: "explain how a consolidated container is unloaded at the warehouse," "walk me through the port," "how does a parcel move through the hub." When the subject is a place, the top-down plan *is* the standard notation; boxes and arrows throw away the one thing the reader already knows, the layout. The rules live in `patterns.md` ("Draw the place", "Walkthrough with play"); this is the shape.
 
 **Layout**
 - A top-down plan in inline SVG: building walls, doors as gaps, yard or quay outside, zones as dashed outlines with uppercase labels. Zones ordered in the direction the process runs.

@@ -1,0 +1,742 @@
+<!doctype html>
+<!--
+  Produced by the explain-in-html skill (https://github.com/WilliWilliam/explain-in-html)
+  Prompt: "Explain how the assembly regime works in Colombia: spare parts or components arrive (for example,
+  motorcycle parts), they get assembled in a warehouse or plant and customs duties are paid, etc. There is a
+  customs assembly regime. Research it."
+  Translated from the Spanish original; the page was generated from the Spanish prompt.
+  Made by a fresh agent that only had SKILL.md and references/, researching official sources
+  (DIAN normograma, MinCIT). Rules cited as of October 2026: confirm with a customs broker before relying on them.
+  Company and case are fictional. A single file, no network when opened (the Sources links are external).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motorcycle assembly regime in Colombia</title>
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root {
+  --bg: #fafaf7; --surface: #ffffff; --ink: #1a1a1f; --ink-soft: #555560; --rule: #e7e5df;
+  --accent: #8b5cf6; --accent-ink: #6d28d9;
+  --warn: #b45309; --danger: #b91c1c; --ok: #15803d;
+  /* colors per entity (categories, not accents) */
+  --c-kit: #1f63c6; --c-nat: #b02a74; --c-bike: #0b7f7a;
+  --serif: Charter, "Iowan Old Style", "Source Serif 4", ui-serif, Georgia, serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e0e12; --surface: #16161c; --ink: #f1f1f4; --ink-soft: #a8a8b3; --rule: #2a2a32;
+    --accent: #a78bfa; --accent-ink: #c4b5fd; --warn: #f59e0b; --danger: #f87171; --ok: #4ade80;
+    --c-kit: #6ea8ff; --c-nat: #f07ab8; --c-bike: #3cc8c0;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e0e12; --surface: #16161c; --ink: #f1f1f4; --ink-soft: #a8a8b3; --rule: #2a2a32;
+  --accent: #a78bfa; --accent-ink: #c4b5fd; --warn: #f59e0b; --danger: #f87171; --ok: #4ade80;
+  --c-kit: #6ea8ff; --c-nat: #f07ab8; --c-bike: #3cc8c0;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); color: var(--ink); }
+body { font: 17px/1.55 var(--serif); margin: 0; background: var(--bg); color: var(--ink); }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+@media (min-width: 1100px) { .layout { grid-template-columns: minmax(0, 1fr) 15.5rem; } }
+main > * { max-width: 72ch; }
+main > .wide { max-width: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent-ink); }
+h1 { font-size: 2.1rem; line-height: 1.15; letter-spacing: -.01em; margin: .2em 0 .3em; }
+h2 { font-size: 1.4rem; margin: 2.2em 0 .5em; }
+h3 { font-size: 1.08rem; margin: 1.5em 0 .4em; }
+p { margin: .6em 0; }
+.kicker { font: 600 .78rem/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.tldr { font-size: 1.08rem; }
+small, .muted { color: var(--ink-soft); }
+code { font-family: var(--mono); font-size: .9em; }
+
+/* reading-level selector */
+fieldset.level { border: 0; padding: 0; margin: 1.2rem 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-family: var(--sans); }
+fieldset.level legend { float: left; font-size: .85rem; color: var(--ink-soft); margin-right: .5rem; padding: 0; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.seg label { padding: .35rem .8rem; font-size: .9rem; cursor: pointer; border-right: 1px solid var(--rule); background: var(--surface); }
+.seg label:last-of-type { border-right: 0; }
+.seg input:checked + label { background: var(--accent-ink); color: var(--bg); font-weight: 600; }
+.seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: -2px; }
+body:has(#level-1:checked) [data-level="5"],
+body:has(#level-1:checked) [data-level="10"],
+body:has(#level-5:checked) [data-level="10"] { display: none !important; }
+
+/* key ideas */
+.ideas { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .8rem; margin: 1.4rem 0; max-width: none; }
+.idea { border: 1px solid var(--rule); border-top: 3px solid var(--accent); background: var(--surface); padding: .8rem 1rem; border-radius: 4px; font-size: .95rem; }
+.idea b { display: block; font-family: var(--sans); font-size: .95rem; margin-bottom: .2rem; }
+
+/* floor plan */
+figure { margin: 1.4rem 0; }
+figcaption { font-size: .9rem; color: var(--ink-soft); margin-top: .5rem; }
+.plan-scroll { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); border-radius: 4px; }
+.plan { display: block; width: 100%; min-width: 780px; height: auto; color: var(--ink); font-family: var(--sans); }
+.plan text { fill: var(--ink); }
+.plan .wall { fill: none; stroke: var(--ink); stroke-width: 6; stroke-linecap: square; }
+.plan .zone { fill: none; stroke: var(--ink-soft); stroke-width: 1.6; stroke-dasharray: 8 5; transition: stroke .3s, stroke-width .3s; }
+.plan .zone.outside { stroke-dasharray: 3 4; }
+.plan .zone.restricted { stroke: var(--danger); fill: url(#hatch); }
+.plan .zone.hot { stroke: var(--accent); stroke-width: 3; stroke-dasharray: none; }
+.plan .zlabel { font-size: 14px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; fill: var(--ink-soft); }
+.plan .zsub { font-size: 12.5px; fill: var(--ink-soft); }
+.plan .lane { stroke: var(--ink-soft); stroke-width: 1.5; stroke-dasharray: 2 6; fill: none; }
+.plan .cut { stroke-width: 3; }
+.plan .cut.suspend { stroke: var(--ink); }
+.plan .cut.pay { stroke: var(--ink); stroke-dasharray: 9 6; }
+.plan .cut.hot { stroke: var(--accent); }
+.plan .cutlabel { font-size: 13px; font-weight: 600; }
+.plan .bx rect { stroke: var(--surface); stroke-width: 1.5; }
+.plan .bx text { fill: #fff; font-size: 12px; font-weight: 700; text-anchor: middle; }
+.plan .kit rect { fill: var(--c-kit); }
+.plan .nat rect { fill: var(--c-nat); }
+.plan .bike rect { fill: var(--c-bike); }
+.plan .bike circle { fill: var(--surface); stroke: var(--c-bike); stroke-width: 3; }
+:root[data-theme="dark"] .plan .bx text { fill: #0e0e12; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .plan .bx text { fill: #0e0e12; } }
+.plan .mover { transition: transform .9s cubic-bezier(.6,0,.3,1), opacity .5s; }
+.plan .note { font-size: 13.5px; font-weight: 700; fill: var(--accent-ink); }
+@media (prefers-reduced-motion: reduce) { .plan .mover, .plan .zone { transition: none; } }
+
+.legend { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font: .85rem/1.3 var(--sans); margin: .6rem 0 0; padding: 0; list-style: none; color: var(--ink-soft); }
+.sw { display: inline-block; width: .85rem; height: .85rem; border-radius: 2px; vertical-align: -2px; margin-right: .3rem; }
+.sw.kit { background: var(--c-kit); } .sw.nat { background: var(--c-nat); } .sw.bike { background: var(--c-bike); }
+.sw.line { width: 1.6rem; height: 0; border-top: 3px solid var(--ink); border-radius: 0; vertical-align: 3px; }
+.sw.dash { width: 1.6rem; height: 0; border-top: 3px dashed var(--ink); border-radius: 0; vertical-align: 3px; }
+.sw.restr { background: repeating-linear-gradient(45deg, transparent 0 3px, var(--danger) 3px 4px); border: 1.5px solid var(--danger); }
+
+/* step controls */
+.steps { display: flex; flex-wrap: wrap; gap: .35rem; margin: .8rem 0 .5rem; padding: 0; list-style: none; font-family: var(--sans); }
+.steps button { font: .82rem/1.2 var(--sans); padding: .35rem .55rem; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); border-radius: 4px; cursor: pointer; }
+.steps button[aria-current="step"] { background: var(--accent-ink); color: var(--bg); border-color: var(--accent-ink); font-weight: 600; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-family: var(--sans); }
+.controls button { font: 600 .9rem/1 var(--sans); padding: .5rem .8rem; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); border-radius: 4px; cursor: pointer; }
+.controls #play { border-color: var(--accent-ink); color: var(--accent-ink); }
+#pos { font-size: .9rem; color: var(--ink-soft); margin-left: .3rem; }
+.kbd-hint { font: .8rem var(--sans); color: var(--ink-soft); }
+.steptext { border-left: 3px solid var(--accent); padding: .3rem 0 .3rem .9rem; margin: .8rem 0; min-height: 5.5em; }
+.steptext h3 { margin: 0 0 .2rem; font-size: 1.05rem; }
+.quiz { margin-top: .6rem; font-family: var(--sans); font-size: .92rem; }
+.quiz button { font: .88rem var(--sans); margin: .25rem .35rem .25rem 0; padding: .4rem .6rem; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); border-radius: 4px; cursor: pointer; text-align: left; }
+.quiz .res { margin-top: .4rem; }
+
+.tour { display: grid; grid-template-columns: minmax(0,1fr); gap: 1rem; }
+.duo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.2rem; }
+@media (min-width: 900px) { .duo { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; } }
+
+/* tables */
+.tscroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font: .9rem/1.4 var(--sans); }
+caption { text-align: left; font-weight: 600; padding: 0 0 .4rem; font-size: .9rem; }
+th, td { padding: .45rem .6rem; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+thead th { border-bottom: 2px solid var(--ink-soft); font-weight: 600; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.now td { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.st { font-weight: 600; white-space: nowrap; }
+.st.pend { color: var(--ink-soft); } .st.act { color: var(--warn); } .st.ok { color: var(--ok); } .st.na { color: var(--ink-soft); font-weight: 400; }
+tr.best td { font-weight: 600; }
+
+.box { border: 1px solid var(--rule); background: var(--surface); padding: .9rem 1rem; border-radius: 4px; }
+.hedge { border-left: 3px solid var(--warn); padding: .2rem 0 .2rem .9rem; font-size: .95rem; }
+.hedge b { font-family: var(--sans); font-size: .85rem; color: var(--warn); text-transform: uppercase; letter-spacing: .04em; }
+.calc fieldset { border: 0; padding: 0; margin: 0 0 .7rem; font-family: var(--sans); font-size: .9rem; }
+.calc legend { font-weight: 600; padding: 0; margin-bottom: .3rem; }
+.calc label { margin-right: .9rem; white-space: nowrap; }
+.timeline { list-style: none; padding: 0; margin: 1rem 0; border-left: 2px solid var(--rule); font-size: .95rem; }
+.timeline li { position: relative; padding: 0 0 .9rem 1.1rem; }
+.timeline li::before { content: ""; position: absolute; left: -6px; top: .45em; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink-soft); }
+.timeline time { font: 600 .85rem var(--sans); display: block; }
+.cmp th[scope="row"] { font-weight: 600; width: 9rem; }
+ol.tight, ul.tight { padding-left: 1.2rem; margin: .4rem 0; }
+ul.tight li, ol.tight li { margin: .25rem 0; }
+.err { display: grid; grid-template-columns: minmax(0,1fr); gap: .6rem; }
+
+/* glossary */
+aside.glossary { font: .88rem/1.45 var(--sans); }
+@media (min-width: 1100px) { aside.glossary > div { position: sticky; top: 1rem; } }
+aside.glossary h2 { font-size: 1rem; margin: 0 0 .5rem; }
+aside.glossary dt { font-weight: 700; margin-top: .7rem; }
+aside.glossary dd { margin: .1rem 0 0; color: var(--ink-soft); }
+aside.glossary dt:target, aside.glossary dt:target + dd { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+a.g { color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; }
+
+footer.sources { font: .85rem/1.45 var(--sans); border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; }
+.theme-toggle { position: fixed; top: .75rem; right: .75rem; z-index: 10; font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+footer.sources ol { padding-left: 1.2rem; }
+footer.sources li { margin: .3rem 0; }
+
+@media print {
+  :root, :root[data-theme] { --bg: #fff; --surface: #fff; --ink: #000; --ink-soft: #333; --rule: #bbb; }
+  body { font-size: 11pt; }
+  .wrap { padding: 0; max-width: none; }
+  .layout { display: block; }
+  fieldset.level, .steps, .controls, .kbd-hint, .calc fieldset, button { display: none !important; }
+  .plan-scroll { overflow: visible; border: 0; }
+  .plan { min-width: 0; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .85em; }
+  table, figure, .box { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+<button class="theme-toggle" type="button">◐ System</button>
+<div class="wrap">
+<header>
+  <p class="kicker">Foreign trade · Colombia · updated October 2026</p>
+  <h1>Motorcycle assembly regime in Colombia</h1>
+  <p class="tldr"><strong>Yes, it exists.</strong> An assembler authorized by the Ministry of Commerce (MinCIT) imports motorcycles knocked down (CKD kits) without paying customs duty (arancel) or VAT (IVA) on arrival. It stores and assembles them in a warehouse the DIAN licenses for that purpose. It pays once the motorcycle is finished: a <strong>3&#8239;%</strong> duty, and only on the imported parts each motorcycle contains, versus 30–35&#8239;% for a gasoline motorcycle imported fully built. In return, every year it must buy a minimum share of parts made in Colombia.</p>
+  <fieldset class="level">
+    <legend>Reading time</legend>
+    <span class="seg">
+      <input type="radio" name="level" id="level-1" value="1"><label for="level-1">1 min</label>
+      <input type="radio" name="level" id="level-5" value="5"><label for="level-5">5 min</label>
+      <input type="radio" name="level" id="level-10" value="10" checked><label for="level-10">10 min</label>
+    </span>
+  </fieldset>
+</header>
+
+<div class="layout">
+<main>
+
+<section class="ideas" aria-label="Key ideas">
+  <div class="idea"><b>It is a real customs procedure</b>It is called “import for transformation and/or assembly” (importación para transformación y/o ensamble, Decreto 1165 de 2019, art. 250). For motorcycles, MinCIT runs it as the “Motorcycle Assembly Regime” (Régimen de Ensamble para Motos).</div>
+  <div class="idea"><b>You pay at the end, and little</b>The parts come in without paying. When the finished motorcycle leaves, you pay 3&#8239;% on the value of its imported parts, not on the whole motorcycle.</div>
+  <div class="idea"><b>Two authorities, two permits</b>MinCIT authorizes the company and monitors the minimum of Colombian parts. The DIAN licenses the warehouse and receives the declarations.</div>
+</section>
+
+<section aria-labelledby="h-walkthrough" class="wide">
+  <h2 id="h-walkthrough">A kit's journey, from the port to the dealer</h2>
+  <div class="tour">
+    <div>
+      <figure>
+        <div class="plan-scroll" tabindex="0" aria-label="Floor plan of the assembly plant (scrolls on small screens)">
+          <svg class="plan" viewBox="0 0 1100 500" role="img" aria-labelledby="planTitle planDesc">
+            <title id="planTitle">Floor plan of a motorcycle assembly plant with a licensed warehouse</title>
+            <desc id="planDesc">Top-down view. On the left, the port and the transit road. In the center, the DIAN-licensed warehouse with receiving, imported kit storage, a local parts area, the assembly line and a finished motorcycles area. On the right, the exit to dealers. A solid line at the entrance marks where duties and taxes are suspended, and a dashed line at the exit marks where they are paid.</desc>
+            <defs>
+              <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="8" stroke="var(--danger)" stroke-width="1.5" opacity=".35"/>
+              </pattern>
+            </defs>
+            <!-- fixed stage -->
+            <g id="stage">
+              <rect id="z-port" class="zone outside" x="12" y="160" width="112" height="170"/>
+              <text class="zlabel" x="20" y="152">Port</text>
+              <text class="zsub" x="20" y="348">Cartagena or</text>
+              <text class="zsub" x="20" y="362">Buenaventura</text>
+
+              <rect id="z-road" class="zone outside" x="132" y="200" width="80" height="90"/>
+              <path class="lane" d="M124 245 H222"/>
+              <text class="zlabel" x="136" y="192">Road</text>
+              <text class="zsub" x="136" y="308">customs</text>
+              <text class="zsub" x="136" y="322">transit</text>
+
+              <!-- walls with three doors: entrance (left), local parts (top), exit (right) -->
+              <path class="wall" d="M222 205 V62 H560 M640 62 H960 V205 M960 285 V462 H222 V285"/>
+              <text class="zlabel" x="560" y="350" style="fill:var(--ink)">DIAN-licensed</text>
+              <text class="zlabel" x="560" y="368" style="fill:var(--ink)">warehouse</text>
+              <text class="zsub" x="560" y="388">private, for transformation</text>
+              <text class="zsub" x="560" y="404">and/or assembly: the plant</text>
+
+              <rect id="z-receiving" class="zone" x="242" y="160" width="118" height="170"/>
+              <text class="zlabel" x="250" y="152">Receiving</text>
+
+              <rect id="z-storage" class="zone restricted" x="380" y="120" width="150" height="320"/>
+              <text class="zlabel" x="386" y="138">Kit storage</text>
+              <text class="zsub" x="388" y="410">foreign parts:</text>
+              <text class="zsub" x="388" y="426" style="fill:var(--danger)">cannot be sold</text>
+
+              <rect id="z-local" class="zone" x="560" y="82" width="200" height="88"/>
+              <text class="zlabel" x="568" y="162">Local parts</text>
+
+              <rect id="z-line" class="zone" x="560" y="205" width="230" height="80"/>
+              <path class="lane" d="M570 245 H780"/>
+              <text class="zlabel" x="568" y="302">Assembly line</text>
+
+              <rect id="z-finished" class="zone" x="810" y="130" width="130" height="250"/>
+              <text class="zlabel" x="818" y="122">Bikes ready</text>
+
+              <rect id="z-market" class="zone outside" x="982" y="160" width="108" height="170"/>
+              <text class="zlabel" x="988" y="152">Sale</text>
+              <text class="zsub" x="988" y="348">dealers,</text>
+              <text class="zsub" x="988" y="362">domestic market</text>
+
+              <rect id="z-suppliers" class="zone outside" x="560" y="6" width="250" height="44"/>
+              <text class="zsub" x="568" y="32">Colombian manufacturers</text>
+
+              <!-- two cut-off points -->
+              <line id="cut-suspend" class="cut suspend" x1="222" y1="190" x2="222" y2="300"/>
+              <text class="cutlabel" x="228" y="480">│ Duties and taxes suspended</text>
+              <line id="cut-pay" class="cut pay" x1="960" y1="190" x2="960" y2="300"/>
+              <text class="cutlabel" x="760" y="480">┆ Duties and taxes paid</text>
+            </g>
+            <!-- what moves -->
+            <g id="kit" class="mover" transform="translate(30 228)">
+              <g class="bx kit"><rect x="0" y="0" width="26" height="20" rx="2"/><text x="13" y="14">K</text></g>
+              <g class="bx kit"><rect x="30" y="0" width="26" height="20" rx="2"/><text x="43" y="14">K</text></g>
+              <g class="bx kit"><rect x="60" y="0" width="26" height="20" rx="2"/><text x="73" y="14">K</text></g>
+            </g>
+            <g id="nat" class="mover" transform="translate(745 18)">
+              <g class="bx nat"><rect x="0" y="0" width="26" height="20" rx="2"/><text x="13" y="14">L</text></g>
+              <g class="bx nat"><rect x="30" y="0" width="26" height="20" rx="2"/><text x="43" y="14">L</text></g>
+            </g>
+            <g id="bike" class="mover" transform="translate(735 226)" style="opacity:0">
+              <g class="bx bike"><rect x="0" y="0" width="44" height="22" rx="4"/><text x="22" y="15">M</text>
+              <circle cx="7" cy="28" r="6"/><circle cx="37" cy="28" r="6"/></g>
+            </g>
+            <g id="notes" aria-hidden="true"></g>
+          </svg>
+        </div>
+        <ul class="legend" aria-label="Legend">
+          <li><span class="sw kit"></span>K · imported kit (CKD)</li>
+          <li><span class="sw nat"></span>L · Colombian (local) parts</li>
+          <li><span class="sw bike"></span>M · finished motorcycle</li>
+          <li><span class="sw restr"></span>foreign goods not yet nationalized</li>
+          <li><span class="sw line"></span>duties and taxes suspended</li>
+          <li><span class="sw dash"></span>duties and taxes paid</li>
+        </ul>
+      </figure>
+
+      <ol class="steps" id="steps" aria-label="Walkthrough steps"></ol>
+      <div class="controls">
+        <button id="prev" type="button">← Previous</button>
+        <button id="next" type="button">Next →</button>
+        <button id="play" type="button">▶ Play</button>
+        <span id="pos" aria-live="polite">Step 1 of 8</span>
+      </div>
+      <p class="kbd-hint">Keyboard: ← → arrow keys change the step.</p>
+      <div class="steptext" id="steptext">
+        <h3>1. The container arrives at the port</h3>
+        <p>The container holds knocked-down motorcycles: unpainted body parts, the engine, the suspension, the brakes and the wheels, all separate. It is consigned to the assembler.</p>
+      </div>
+    </div>
+
+    <div data-level="5">
+      <div class="tscroll">
+      <table id="paperwork" tabindex="0">
+        <caption>On paper (advances with the plan)</caption>
+        <thead><tr><th scope="col">Document</th><th scope="col">Filed with</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr data-doc="bl"><td>Transport document, consigned to the assembler</td><td>Carrier / DIAN</td><td class="st"></td></tr>
+          <tr data-doc="transit"><td>Customs transit (tránsito aduanero), if the plant is not at the port</td><td>DIAN</td><td class="st"></td></tr>
+          <tr data-doc="entry"><td>Import declaration under the <em>transformation and/or assembly</em> procedure, <strong>without paying duties or taxes</strong> (art. 250)</td><td>DIAN</td><td class="st"></td></tr>
+          <tr data-doc="local"><td>Invoices and Form B (planilla B) for the Colombian parts (for the PIN)</td><td>MinCIT</td><td class="st"></td></tr>
+          <tr data-doc="costs"><td>Production cost sheet: imported parts per motorcycle</td><td>Company records (supports the value)</td><td class="st"></td></tr>
+          <tr data-doc="ordinary"><td><strong>Ordinary</strong> import declaration for the motorcycle, heading 98.01, pays duty and VAT (art. 252)</td><td>DIAN</td><td class="st"></td></tr>
+          <tr data-doc="report"><td>Half-yearly and annual PIN report in the VUCE, RTE module</td><td>MinCIT</td><td class="st"></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="muted" style="font-size:.85rem">“On the floor” and “on paper” have to match: every kit entering storage is covered by a declaration under the procedure, and every motorcycle leaving carries its own ordinary declaration.</p>
+    </div>
+  </div>
+</section>
+
+<section data-level="5" aria-labelledby="h-who">
+  <h2 id="h-who">Who can use it and which permits it needs</h2>
+  <p>There are two permits and they go in order: without MinCIT's you cannot apply for the DIAN's.</p>
+  <ol class="tight">
+    <li><strong>MinCIT authorization as an assembler.</strong> You apply to the Foreign Trade Directorate (Dirección de Comercio Exterior) through the <a class="g" href="#g-vuce">VUCE</a>, module “Régimen de Ensamble para Motos de Transformación o Ensamble – RTE” (Decreto 1131 de 2026, art. 2.2.1.10.3.2). Attachments include, among others: capital structure and shareholders, plant location and area, projected production and sales for three years, the local parts incorporation program, the letter of intent from the parent company or the <a class="g" href="#g-ckd">CKD</a> suppliers, the commitment to after-sales service and spare parts for at least ten years after the model is discontinued, and a pre-feasibility study. MinCIT decides within at most 90 calendar days. The authorization lasts five years, renewable for five more; for new companies, three years (art. 2.2.1.10.3.5).</li>
+    <li><strong>Licensing the warehouse with the DIAN</strong> as a <a class="g" href="#g-warehouse">private warehouse for transformation and/or assembly</a> (Decreto 1165, art. 88; Decreto 1131, art. 2.2.1.10.2.11). In the same resolution that licenses the warehouse, the DIAN authorizes the company to declare under the procedure. You submit MinCIT's decision and a description of the process, with the subheadings that come in and the products that go out (Resolución DIAN 46 de 2019, art. 255).</li>
+  </ol>
+  <p>After that you must meet the <a class="g" href="#g-pin">PIN</a> every year and report it to MinCIT through the VUCE: the first-half report by <strong>July 31</strong> at the latest and the annual report by <strong>March 1</strong> at the latest, the latter with the Form B sheets for domestic motorcycle parts and certification by the statutory auditor (revisor fiscal), accountant or auditor (Decreto 1131, art. 2.2.1.10.2.12).</p>
+
+  <h3>The minimum of Colombian parts (PIN)</h3>
+  <p>PIN = value of local parts ÷ (local parts + CIF value of the imported CKD) × 100. Only local purchases with at least 40&#8239;% domestic value added count as local. It used to be a flat 17&#8239;% for all motorcycles. With Decreto 1131 de 2026 it depends on the type of motorcycle and rises every year:</p>
+  <div class="tscroll">
+  <table tabindex="0">
+    <caption>Minimum annual PIN by category (Decreto 1131 de 2026, art. 2.2.1.10.2.2)</caption>
+    <thead><tr><th scope="col">Category</th><th scope="col">Subheadings</th><th class="num" scope="col">Year 1</th><th class="num" scope="col">Year 2</th><th class="num" scope="col">Year 3</th><th class="num" scope="col">Year 4</th><th class="num" scope="col">Year 5</th></tr></thead>
+    <tbody>
+      <tr><td>1 · up to 250 cc</td><td>8711.10, 8711.20</td><td class="num">18 %</td><td class="num">19 %</td><td class="num">20 %</td><td class="num">21 %</td><td class="num">22 %</td></tr>
+      <tr><td>2 · over 250 cc</td><td>8711.30, 8711.40, 8711.50</td><td class="num">7 %</td><td class="num">8 %</td><td class="num">9 %</td><td class="num">10 %</td><td class="num">11 %</td></tr>
+      <tr><td>3 · all others (electric, other)</td><td>8711.60.00.10/.20/.90</td><td class="num">3 %</td><td class="num">4 %</td><td class="num">5 %</td><td class="num">6 %</td><td class="num">7 %</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="muted" style="font-size:.9rem">“Year 1” is the year after the decree takes effect (in force since August 21, 2026), that is, 2027. Failing to meet the PIN ends the benefits and opens penalties under Decreto Ley 920 de 2023 (art. 2.2.1.10.2.9).</p>
+</section>
+
+<section data-level="5" aria-labelledby="h-duty">
+  <h2 id="h-duty">How much duty is paid, and on what</h2>
+  <p>The rule is in art. 252 of Decreto 1165. The ordinary declaration is filed when the motorcycle is finished. Duties and taxes are assessed on the value of the foreign parts it contains, at the rate of the subheading of the unit produced. For motorcycles assembled by an authorized company, that subheading is <strong>98.01</strong> of the Customs Tariff (Arancel; Note 2 of chapter 98: the levy “se liquidará por unidad producida o ensamblada dentro del depósito habilitado o en zona franca”, i.e. is assessed per unit produced or assembled in the licensed warehouse or free trade zone). The value of the imported parts comes from the production cost sheet.</p>
+  <div class="tscroll">
+  <table tabindex="0">
+    <caption>The same motorcycle, four ways (general rates, no FTA preferences)</caption>
+    <thead><tr><th scope="col">How it comes in</th><th scope="col">Subheading</th><th class="num" scope="col">Duty</th><th scope="col">On what value</th></tr></thead>
+    <tbody>
+      <tr><td>Gasoline motorcycle imported fully built</td><td>8711.10 to 8711.50</td><td class="num">30–35 %*</td><td>The whole motorcycle</td></tr>
+      <tr><td>Electric motorcycle imported fully built</td><td>8711.60.00.20</td><td class="num">15 %</td><td>The whole motorcycle</td></tr>
+      <tr><td>Loose motorcycle parts, outside the regime</td><td>8714.10</td><td class="num">10 %</td><td>Each part, when imported</td></tr>
+      <tr class="best"><td>CKD kit inside the assembly regime</td><td>98.01</td><td class="num">3 %</td><td>Only the imported parts of each finished motorcycle</td></tr>
+      <tr class="best"><td>Assembled electric motorcycle, if the company meets the 20&#8239;% electric share</td><td>98.01 (9801.20)</td><td class="num">0 %</td><td>Benefit; extends to its whole production</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="hedge"><b>Two sources disagree</b><br>* Decreto 1432 de 2025 sets 35&#8239;% for the five combustion motorcycle subheadings (8711.10 to 8711.50). Its art. 4 says it takes effect 15 days after publication (Diario Oficial of December 26, 2025). The compiled Tariff table in the DIAN normograma still shows 15&#8239;% and 30&#8239;% on those lines, with a note dating the change to January 2027. Confirm the current rate with your customs broker before quoting. Art. 3 of the decree preserves FTAs: with preferential origin the duty may be lower.</p>
+
+  <h3 id="case">Case: Motoensambles La Ceiba S.A.S. (fictional company)</h3>
+  <div class="box calc">
+    <p style="margin-top:0">La Ceiba is authorized by MinCIT and has its licensed warehouse in a plant in the Aburrá Valley. It imports 200 CKD kits from an Asian supplier (also fictional). All figures are examples: an assumed exchange rate (TRM) of 4,000 COP per dollar, not today's.</p>
+    <fieldset id="f-type">
+      <legend>Type of motorcycle</legend>
+      <label><input type="radio" name="type" value="gas" checked> Gasoline, 150 cc (category 1)</label>
+      <label><input type="radio" name="type" value="elec"> Electric (category 3)</label>
+    </fieldset>
+    <fieldset id="f-twenty">
+      <legend>Is at least 20&#8239;% of what La Ceiba assembles in the period electric?</legend>
+      <label><input type="radio" name="twenty" value="no" checked> No</label>
+      <label><input type="radio" name="twenty" value="yes"> Yes</label>
+    </fieldset>
+    <div class="tscroll">
+    <table id="calc" tabindex="0">
+      <caption>Per motorcycle</caption>
+      <tbody>
+        <tr><th scope="row">Imported parts (CIF)</th><td class="num" id="c-ckd"></td></tr>
+        <tr><th scope="row">Colombian parts purchased</th><td class="num" id="c-local"></td></tr>
+        <tr><th scope="row">PIN of this motorcycle</th><td class="num" id="c-pin"></td></tr>
+        <tr><th scope="row">Duty under the regime (98.01)</th><td class="num" id="c-reg"></td></tr>
+        <tr><th scope="row">If imported fully built</th><td class="num" id="c-cbu"></td></tr>
+        <tr><th scope="row">Batch of 200 motorcycles, duty under the regime</th><td class="num" id="c-batch"></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p id="c-note" class="muted" style="font-size:.9rem;margin-bottom:0"></p>
+  </div>
+  <p class="muted" style="font-size:.9rem">Besides the duty, the ordinary declaration pays import VAT (“tributos aduaneros”, customs duties and taxes, art. 252). This case only calculates the duty.</p>
+
+  <h3>Real dates for the case, with Colombian public holidays</h3>
+  <ol class="timeline">
+    <li><time datetime="2026-10-14">Wednesday, October 14, 2026</time>The container arrives in Cartagena and leaves under customs transit for the plant.</li>
+    <li><time datetime="2026-10-19">Monday, October 19, 2026</time>Transit ends at the plant. The 15 business days start running from here (art. 88).</li>
+    <li><time datetime="2026-11-10">Tuesday, November 10, 2026</time>Last day to file the declaration under the assembly procedure. Monday, November 2 is a public holiday and does not count. <span class="muted">We count from the business day after transit ends. If the plant were at the port, counting would start at arrival and the deadline would be Thursday, November 5. Confirm the criterion with your broker.</span></li>
+    <li><time datetime="2026-11-20">Friday, November 20, 2026</time>The first motorcycle of the batch comes off the line.</li>
+    <li><time datetime="2027-01-20">Wednesday, January 20, 2027</time>Deadline for its ordinary declaration: two months from when the final good was obtained (Res. DIAN 46, art. 261; Decreto 1165, art. 88).</li>
+    <li><time datetime="2027-03-01">Monday, March 1, 2027</time>Annual 2026 PIN report to MinCIT.</li>
+  </ol>
+</section>
+
+<section data-level="10" aria-labelledby="h-cmp">
+  <h2 id="h-cmp">How it differs from Plan Vallejo and the free trade zone</h2>
+  <p>All three let you import without paying on arrival. Two things change: where the product has to go, and when and on what you pay.</p>
+  <div class="tscroll">
+  <table class="cmp" tabindex="0">
+    <caption>Three instruments for producing with imported inputs</caption>
+    <thead><tr><th scope="col"></th><th scope="col">Assembly regime (motorcycles)</th><th scope="col">Plan Vallejo (SEIEX)</th><th scope="col">Free trade zone (zona franca)</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">What it is for</th><td>Assembling motorcycles to sell in Colombia (or export them)</td><td>Producing goods <strong>for export</strong></td><td>Producing in an area with its own customs treatment; selling abroad or to the rest of the country</td></tr>
+      <tr><th scope="row">Who grants it</th><td>MinCIT (authorization) + DIAN (warehouse and procedure)</td><td>MinCIT (program)</td><td>Qualification as an industrial user of the free trade zone</td></tr>
+      <tr><th scope="row">When importing the parts</th><td>Declaration under the procedure, no duties or taxes; restricted disposal</td><td>Temporary import with full or partial exemption or suspension of duties and taxes</td><td>Enter the zone without paying duties or taxes</td></tr>
+      <tr><th scope="row">When you pay</th><td>On nationalizing each finished motorcycle, within two months</td><td>If the committed exports happen, nothing is paid; non-compliance leads to suspension or cancellation of the program (arts. 32–33)</td><td>When the product goes out to the rest of the country</td></tr>
+      <tr><th scope="row">Duty and base</th><td>Rate of 98.01 (3&#8239;%) on the value of each motorcycle's foreign parts</td><td>Does not apply while the commitment is met</td><td>Rate of the final product's subheading on the value of the goods, minus the domestic value added (art. 483)</td></tr>
+      <tr><th scope="row">Main commitment</th><td>Minimum PIN of Colombian parts and half-yearly reports</td><td>Export and prove it (input-output tables)</td><td>Requirements of its qualification as an industrial user</td></tr>
+      <tr><th scope="row">Rule</th><td>Decreto 1165, arts. 88 and 250–252; Decreto 1074, ch. 10, amended by Decreto 1131 de 2026</td><td>Decreto 285 de 2020</td><td>Decreto 1165, free trade zones title</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="hedge"><b>To be confirmed</b><br>Note 2 of chapter 98 says per-unit assessment under 98.01 applies “dentro del depósito habilitado o en zona franca” (in the licensed warehouse or in a free trade zone). Art. 483 says what leaves a free trade zone pays the rate of the final product's subheading. We found no official source explaining how the two combine for a motorcycle assembler located in a free trade zone. Ask the DIAN before deciding where to locate the plant.</p>
+
+  <h2>What changed in 2026</h2>
+  <ul class="tight">
+    <li><strong>Decreto 218 de 2026</strong> (in force since March 17, 2026). Sets the time limit inside the warehouse: 15 business days to declare under the procedure; after that, as long as production of the final good lasts plus two more months. It also allows national or nationalized goods from third parties into the warehouse, identified and kept separate.</li>
+    <li><strong>Decreto 1131 de 2026</strong> (in force since August 21, 2026). Replaces the single 17&#8239;% PIN with three rising categories. Creates subheadings 8711.60.00.20 and 9801.20 for electric motorcycles and the 0&#8239;% rate conditional on 20&#8239;% electric production. Moves the procedures to the VUCE RTE module. If it is later verified that the company did not meet the 20&#8239;% or the PIN, it must pay the duty under Decreto 1881 de 2021, plus penalties (paragraph 2 of art. 2.2.1.10.2.4).</li>
+  </ul>
+
+  <h2>Open questions</h2>
+  <ul class="tight">
+    <li><strong>PIN for the rest of 2026.</strong> The new table starts in 2027 and replaced the 17&#8239;% article. We found no transition rule for the rest of 2026. Ask MinCIT.</li>
+    <li><strong>15 business days or 15 days.</strong> Decreto 1165 (art. 88, amended in 2026) says business days. Resolución DIAN 46 (art. 258) says “quince (15) días” (fifteen days). The decree prevails, but it is wise not to wait until the last day.</li>
+    <li><strong>Entry declaration.</strong> Decreto 659 de 2024 created the “declaración de ingreso” (entry declaration) for goods entering a warehouse for transformation and/or assembly. Part of its operation depends on the DIAN certifying its IT services (art. 67 of that decree). Check whether it already applies to you before including it in your procedure.</li>
+  </ul>
+
+  <h2>Typical beginner mistakes</h2>
+  <div class="tscroll">
+  <table tabindex="0">
+    <caption>Mistake and correction</caption>
+    <thead><tr><th scope="col">Mistake</th><th scope="col">Correction</th></tr></thead>
+    <tbody>
+      <tr><td>Believing a warehouse is enough to pay less duty.</td><td>First the MinCIT authorization, then the DIAN licensing of the warehouse. Without both, the parts pay their normal duty (8714: 10&#8239;%).</td></tr>
+      <tr><td>Thinking the 3&#8239;% is paid when the kit is imported.</td><td>Nothing is paid on import. The 3&#8239;% is paid when each finished motorcycle is nationalized, on its foreign parts.</td></tr>
+      <tr><td>Leaving finished motorcycles in the warehouse “until there is an order”.</td><td>There are two months from when the final good is obtained. If the deadline passes without declaring, exporting or re-exporting, the goods are deemed abandoned to the State (la Nación, art. 252).</td></tr>
+      <tr><td>Counting any local purchase toward the PIN.</td><td>Only parts that physically form part of the motorcycle and have at least 40&#8239;% domestic value added count, backed by Form B and the national production registry.</td></tr>
+      <tr><td>Mixing local parts and imported kits on the floor.</td><td>They must be identified by physical or electronic means and kept separate from the goods under the procedure (art. 85 par. 2 and art. 88).</td></tr>
+      <tr><td>Sending subassemblies to an outside workshop without permission.</td><td>Moving goods out of the warehouse requires authorization from the local DIAN office (Dirección Seccional) and coverage by the guarantee (Res. 46, art. 259).</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>If the motorcycles are exported, the procedure also ends with the export or re-export (Decreto 1165, arts. 252 and 380), without paying the import duty. The warehouse requires a guarantee. For the first year it is 1&#8239;% of the customs value of what is projected to be stored; on renewal, 1&#8239;% of what was stored the previous year, with reductions if there are no penalties (art. 109, num. 4).</p>
+
+  <h2>Questions for the expert</h2>
+  <div class="duo">
+    <div>
+      <h3>For MinCIT (Foreign Trade Directorate)</h3>
+      <ul class="tight">
+        <li>What minimum PIN applies to our production between August 21 and December 31, 2026?</li>
+        <li>How is the 20&#8239;% electric production measured: by units, and over what period?</li>
+        <li>Is our previous authorization still valid, or does it have to be migrated to the RTE module?</li>
+      </ul>
+    </div>
+    <div>
+      <h3>For the DIAN and the customs broker</h3>
+      <ul class="tight">
+        <li>Which 8711 rate is the system applying today: the one in Decreto 1432 or the one in the compiled table?</li>
+        <li>From which day do the 15 business days run in our case, with or without transit?</li>
+        <li>Is the entry declaration already mandatory for our warehouse?</li>
+        <li>If we assembled in a free trade zone, would we assess under 98.01 or under the final product's subheading?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="sources" aria-labelledby="h-sources">
+  <h2 id="h-sources" style="font-size:1.05rem;margin-top:0">Sources</h2>
+  <ol>
+    <li>Decreto 1165 de 2019, arts. 3, 85, 88, 109, 250–252, 380 and 483. <a href="https://normograma.dian.gov.co/dian/compilacion/docs/decreto_1165_2019.htm">normograma.dian.gov.co</a></li>
+    <li>Decreto 218 de 2026, amends art. 85 (par. 2) and art. 88 of Decreto 1165. <a href="https://normograma.dian.gov.co/dian/compilacion/docs/decreto_0218_2026.htm">normograma.dian.gov.co</a></li>
+    <li>Decreto 1131 de 2026 (MinCIT), Régimen de Ensamble para Motos. Diario Oficial 53.580; in force since August 21, 2026. <a href="https://normograma.dian.gov.co/dian/compilacion/docs/decreto_1131_2026.htm">normograma.dian.gov.co</a></li>
+    <li>Decreto 1881 de 2021, Arancel de Aduanas (Customs Tariff): chapter 98 (notes 2 and 3, heading 98.01), headings 87.11 and 87.14. <a href="https://normograma.dian.gov.co/dian/compilacion/docs/decreto_1881_2021.htm">normograma.dian.gov.co</a></li>
+    <li>Decreto 1432 de 2025, 35&#8239;% duty on combustion motorcycles. <a href="https://www.mincit.gov.co/normatividad/decretos/2025">mincit.gov.co</a></li>
+    <li>Resolución DIAN 46 de 2019, arts. 255–261 and customs valuation under the procedure. <a href="https://normograma.dian.gov.co/dian/compilacion/docs/resolucion_dian_0046_2019.htm">normograma.dian.gov.co</a></li>
+    <li>Decreto 659 de 2024, entry declaration (declaración de ingreso) and art. 67 (effective dates). <a href="https://normograma.dian.gov.co/dian/compilacion/docs/decreto_0659_2024.htm">normograma.dian.gov.co</a></li>
+    <li>Decreto 285 de 2020, Sistemas Especiales de Importación-Exportación (Plan Vallejo). <a href="https://normograma.dian.gov.co/dian/compilacion/docs/decreto_0285_2020.htm">normograma.dian.gov.co</a></li>
+  </ol>
+  <p class="muted">General explanation, not legal advice. Customs rules change often; check the current text before acting.</p>
+</footer>
+</main>
+
+<aside class="glossary" data-level="5" aria-labelledby="h-gloss">
+  <div>
+  <h2 id="h-gloss">Glossary</h2>
+  <dl>
+    <dt id="g-ckd">CKD</dt><dd>Completely knocked down: a motorcycle imported fully disassembled, with the minimum degree of disassembly in Note 2 of ch. 98: unpainted body and frame; engine, suspension, brakes and wheels separate.</dd>
+    <dt id="g-pin">PIN</dt><dd>National Integration Percentage (Porcentaje de Integración Nacional): how much of the motorcycle's material was bought in Colombia, versus the imported CKD.</dd>
+    <dt id="g-warehouse">Licensed warehouse</dt><dd>Depósito habilitado: a warehouse the DIAN authorizes to store and assemble foreign goods that have not yet paid duties and taxes.</dd>
+    <dt id="g-nationalize">Nationalize</dt><dd>Declare and pay duties and taxes so the goods are freely available and can be sold in Colombia.</dd>
+    <dt id="g-restr">Restricted disposal</dt><dd>Disposición restringida: the goods cannot be sold or freely used until the procedure is completed.</dd>
+    <dt id="g-transit">Customs transit</dt><dd>Tránsito aduanero: permission to move foreign goods that are not yet nationalized from the port to another licensed place in the country.</dd>
+    <dt id="g-vuce">VUCE</dt><dd>Ventanilla Única de Comercio Exterior (Foreign Trade Single Window). It hosts MinCIT's RTE module for authorizations and reports.</dd>
+    <dt id="g-9801">Heading 98.01</dt><dd>Special Tariff heading under which motorcycles assembled in the country by authorized companies are nationalized.</dd>
+  </dl>
+  </div>
+</aside>
+</div>
+</div>
+
+<script>
+(() => {
+  const btn = document.querySelector('.theme-toggle'), root = document.documentElement;
+  const order = ['system', 'light', 'dark'];
+  const label = { system: '◐ System', light: '☀ Light', dark: '☾ Dark' };
+  let t = root.dataset.theme || 'system';
+  const show = () => { btn.textContent = label[t]; btn.setAttribute('aria-label', 'Theme: ' + label[t].slice(2)); };
+  btn.addEventListener('click', () => {
+    t = order[(order.indexOf(t) + 1) % order.length];
+    if (t === 'system') delete root.dataset.theme; else root.dataset.theme = t;
+    try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {}
+    show();
+  });
+  show();
+})();
+</script>
+<script>
+(function () {
+  // ---------- reading level in the URL ----------
+  var radios = document.querySelectorAll('input[name="level"]');
+  function fromHash() {
+    var m = location.hash.match(/^#(1|5|10)min$/);
+    if (m) { var r = document.getElementById('level-' + m[1]); if (r) r.checked = true; }
+  }
+  fromHash();
+  radios.forEach(function (r) {
+    r.addEventListener('change', function () {
+      try { history.replaceState(null, '', '#' + r.value + 'min'); } catch (e) {}
+    });
+  });
+
+  // ---------- walkthrough ----------
+  var STEPS = [
+    { name: 'Port', title: 'The container arrives at the port', zone: 'z-port',
+      text: 'The container holds knocked-down motorcycles: unpainted body parts, the engine, the suspension, the brakes and the wheels, all separate. It is consigned to the assembler.',
+      kit: [30, 228], nat: [745, 18], bike: [735, 226, 0],
+      docs: { bl: 'act' } },
+    { name: 'Transit', title: 'It travels to the plant without paying', zone: 'z-road',
+      text: 'If the plant is not at the port, the kit travels under customs transit: a DIAN permit to move foreign cargo that has not yet paid duties.',
+      kit: [128, 228], nat: [745, 18], bike: [735, 226, 0],
+      docs: { bl: 'ok', transit: 'act' } },
+    { name: 'Entry', title: 'It enters the licensed warehouse', zone: 'z-receiving', cut: 'cut-suspend',
+      text: 'From arrival there are 15 business days to declare the parts under the assembly procedure. That declaration pays no duty or VAT: duties and taxes are suspended.',
+      note: [244, 352, '15 business days|to declare'],
+      kit: [258, 228], nat: [745, 18], bike: [735, 226, 0],
+      docs: { bl: 'ok', transit: 'ok', entry: 'act' } },
+    { name: 'Storage', title: 'It is stored as foreign goods', zone: 'z-storage',
+      text: 'The parts are still foreign: they cannot be sold or taken out of the warehouse. They are kept in storage, identified, until they move to the line.',
+      kit: [412, 228], nat: [745, 18], bike: [735, 226, 0],
+      docs: { bl: 'ok', transit: 'ok', entry: 'ok' } },
+    { name: 'Local parts', title: 'The Colombian parts come in', zone: 'z-local',
+      text: 'Tires, battery or seat bought from Colombian factories come in through another door, kept apart from the imported goods. They pay no duty and count toward the minimum of local parts MinCIT requires.',
+      kit: [412, 228], nat: [632, 112], bike: [735, 226, 0],
+      docs: { bl: 'ok', transit: 'ok', entry: 'ok', local: 'act' } },
+    { name: 'Assembly', title: 'Kit plus local parts: a motorcycle', zone: 'z-line',
+      text: 'On the line the imported and the Colombian parts come together. The company records on its cost sheet how much the imported parts of each motorcycle are worth.',
+      kit: [572, 216, 0.9], nat: [668, 216, 0.9], bike: [735, 226, 1],
+      docs: { bl: 'ok', transit: 'ok', entry: 'ok', local: 'ok', costs: 'act' } },
+    { name: 'Finished bike', title: 'Question: what is the duty paid on?', zone: 'z-finished', ask: true,
+      text: 'The motorcycle is ready and the company has two months to nationalize it. Before moving on: is the duty calculated on the whole motorcycle or on something else?',
+      note: [818, 404, '2 months to|declare it'],
+      kit: [572, 216, 0], nat: [668, 216, 0], bike: [852, 240, 1],
+      docs: { bl: 'ok', transit: 'ok', entry: 'ok', local: 'ok', costs: 'ok', ordinary: 'act' } },
+    { name: 'Exit', title: 'It is nationalized and goes on sale', zone: 'z-market', cut: 'cut-pay',
+      text: 'With the ordinary declaration filed and duties and taxes paid, the motorcycle is free and goes to the dealers. Every half-year the company reports to MinCIT how many Colombian parts it used.',
+      kit: [572, 216, 0], nat: [668, 216, 0], bike: [1010, 240, 1],
+      docs: { bl: 'ok', transit: 'ok', entry: 'ok', local: 'ok', costs: 'ok', ordinary: 'ok', report: 'act' } }
+  ];
+  var LABEL = { act: 'in progress', ok: 'done', pend: 'pending' };
+  var cur = 0, timer = null;
+  var stepsEl = document.getElementById('steps');
+  var pos = document.getElementById('pos');
+  var playBtn = document.getElementById('play');
+  var textEl = document.getElementById('steptext');
+  var notes = document.getElementById('notes');
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  STEPS.forEach(function (s, i) {
+    var li = document.createElement('li');
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = (i + 1) + '. ' + s.name;
+    b.addEventListener('click', function () { stop(); go(i); });
+    li.appendChild(b); stepsEl.appendChild(li);
+  });
+
+  function place(id, p) {
+    var g = document.getElementById(id);
+    g.setAttribute('transform', 'translate(' + p[0] + ' ' + p[1] + ')');
+    g.style.opacity = (p.length > 2 ? p[2] : 1);
+  }
+
+  function renderText(s, i) {
+    var h = '<h3>' + (i + 1) + '. ' + s.title + '</h3><p>' + s.text + '</p>';
+    if (s.ask) {
+      h += '<div class="quiz" role="group" aria-label="Step question">' +
+        '<button type="button" data-a="0">On the value of the whole motorcycle</button>' +
+        '<button type="button" data-a="1">Only on the imported parts it contains</button>' +
+        '<div class="res" aria-live="polite"></div></div>';
+    }
+    textEl.innerHTML = h;
+    if (s.ask) {
+      textEl.querySelectorAll('.quiz button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var ok = b.getAttribute('data-a') === '1';
+          textEl.querySelector('.res').innerHTML = ok
+            ? '<strong>Correct.</strong> It is paid on the value of that motorcycle\'s foreign parts, at the rate of heading 98.01 (3&#8239;%). The Colombian parts pay no duty.'
+            : '<strong>No.</strong> That would be the case for a motorcycle imported fully built. Here you pay only on that motorcycle\'s foreign parts, at the rate of heading 98.01 (3&#8239;%).';
+        });
+      });
+    }
+  }
+
+  function go(i) {
+    cur = Math.max(0, Math.min(STEPS.length - 1, i));
+    var s = STEPS[cur];
+    document.querySelectorAll('.plan .zone').forEach(function (z) { z.classList.toggle('hot', z.id === s.zone); });
+    document.querySelectorAll('.plan .cut').forEach(function (c) { c.classList.toggle('hot', c.id === s.cut); });
+    place('kit', s.kit); place('nat', s.nat); place('bike', s.bike);
+    notes.innerHTML = '';
+    if (s.note) {
+      var t = document.createElementNS(SVGNS, 'text');
+      t.setAttribute('class', 'note'); t.setAttribute('x', s.note[0]); t.setAttribute('y', s.note[1]);
+      s.note[2].split('|').forEach(function (line, k) {
+        var ts = document.createElementNS(SVGNS, 'tspan');
+        ts.setAttribute('x', s.note[0]); if (k) ts.setAttribute('dy', '16');
+        ts.textContent = line; t.appendChild(ts);
+      });
+      notes.appendChild(t);
+    }
+    stepsEl.querySelectorAll('button').forEach(function (b, k) {
+      if (k === cur) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+    });
+    pos.textContent = 'Step ' + (cur + 1) + ' of ' + STEPS.length;
+    renderText(s, cur);
+    document.querySelectorAll('#paperwork tbody tr').forEach(function (tr) {
+      var st = s.docs[tr.getAttribute('data-doc')] || 'pend';
+      var td = tr.querySelector('.st');
+      td.textContent = LABEL[st];
+      td.className = 'st ' + st;
+      tr.classList.toggle('now', st === 'act');
+    });
+  }
+
+  function words(s) { return (s.title + ' ' + s.text).split(/\s+/).length; }
+  function delay(s) { return Math.max(4000, Math.round(words(s) / 3 * 1000)); }
+  function stop() {
+    if (timer) { clearTimeout(timer); timer = null; }
+    playBtn.textContent = '▶ Play';
+  }
+  function schedule() {
+    var s = STEPS[cur];
+    if (cur >= STEPS.length - 1 || s.ask) { stop(); return; }
+    timer = setTimeout(function () { go(cur + 1); schedule(); }, delay(s));
+  }
+  function play() {
+    playBtn.textContent = '❚❚ Pause';
+    if (cur >= STEPS.length - 1) go(0); else go(cur + 1);
+    schedule();
+  }
+  playBtn.addEventListener('click', function () { if (timer) stop(); else play(); });
+  document.getElementById('prev').addEventListener('click', function () { stop(); go(cur - 1); });
+  document.getElementById('next').addEventListener('click', function () { stop(); go(cur + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var a = document.activeElement;
+    if (a && a.closest && a.closest('fieldset, .plan-scroll, table, .tscroll, input, textarea, select')) return;
+    stop();
+    go(cur + (e.key === 'ArrowRight' ? 1 : -1));
+  });
+  go(0);
+
+  // ---------- case with variants ----------
+  var TRM = 4000;
+  var fmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+  function cop(v) { return '$ ' + fmt.format(Math.round(v)); }
+  function calc() {
+    var type = document.querySelector('input[name="type"]:checked').value;
+    var twenty = document.querySelector('input[name="twenty"]:checked').value === 'yes';
+    var ckdUsd = type === 'gas' ? 520 : 700;
+    var cbuUsd = type === 'gas' ? 900 : 1150;
+    var localParts = type === 'gas' ? 480000 : 150000;
+    var ckd = ckdUsd * TRM;
+    var rate = twenty ? 0 : 0.03;
+    var pin = localParts / (localParts + ckd) * 100;
+    var minPin = type === 'gas' ? 18 : 3;
+    document.getElementById('c-ckd').textContent = 'USD ' + ckdUsd + ' = ' + cop(ckd);
+    document.getElementById('c-local').textContent = cop(localParts);
+    document.getElementById('c-pin').textContent = pin.toFixed(1) + ' % (2027 minimum: ' + minPin + ' %)';
+    document.getElementById('c-reg').textContent = (rate * 100) + ' % → ' + cop(ckd * rate);
+    if (type === 'gas') {
+      document.getElementById('c-cbu').textContent = '30–35 % of USD ' + cbuUsd + ' → ' + cop(cbuUsd * TRM * 0.30) + ' to ' + cop(cbuUsd * TRM * 0.35);
+    } else {
+      document.getElementById('c-cbu').textContent = '15 % of USD ' + cbuUsd + ' → ' + cop(cbuUsd * TRM * 0.15);
+    }
+    document.getElementById('c-batch').textContent = cop(ckd * rate * 200);
+    document.getElementById('c-note').textContent = twenty
+      ? 'With 20 % electric production, the 0 % rate extends to all of La Ceiba\'s production, including the gasoline motorcycles (Decreto 1131, art. 2.2.1.10.2.4). If MinCIT later finds it did not comply, it pays the normal duty plus penalties.'
+      : 'Without the 20 % electric share, every assembled motorcycle pays the 3 % of heading 98.01 on its imported parts, whether gasoline or electric.';
+  }
+  document.querySelectorAll('input[name="type"], input[name="twenty"]').forEach(function (r) { r.addEventListener('change', calc); });
+  calc();
+
+  addEventListener('beforeprint', stop);
+})();
+</script>
+</body>
+</html>
