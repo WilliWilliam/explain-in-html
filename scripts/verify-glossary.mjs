@@ -222,22 +222,29 @@ const glossaryChecks = {
     return open(file, { viewport: { width: 1280, height: 500 } }, async page => {
       // Scroll the window first so a page jump behind the drawer is observable.
       await page.evaluate(() => scrollTo(0, 50));
-      await openDrawer(page);
+      const y0 = await page.evaluate(() => scrollY);
+      if (y0 !== 50) return `page cannot scroll to 50px at 1280x500 (scrollY is ${y0}), so a page jump would be invisible`;
+      // Open via an in-page click: Playwright's own click would scroll the toggle into view and mask a jump.
+      await page.evaluate(() => document.querySelector('.glossary-toggle').click());
+      if (!await until(() => drawerOpen(page))) return 'drawer did not open';
       await page.waitForTimeout(300);
+      const afterOpen = await page.evaluate(() => scrollY);
+      if (afterOpen !== y0) return `window.scrollY changed ${y0} -> ${afterOpen} when the drawer opened`;
       const oy = await page.evaluate(() => getComputedStyle(document.querySelector('aside.glossary')).overflowY);
       if (oy !== 'auto' && oy !== 'scroll') return `aside overflow-y is ${oy}`;
       const overflows = () => page.evaluate(() => { const a = document.querySelector('aside.glossary'); return a.scrollHeight > a.clientHeight + 1; });
       if (!await overflows()) { await page.setViewportSize({ width: 1280, height: 300 }); await page.waitForTimeout(150); }
       if (!await overflows()) return null; // glossary fits even in 300px: only the overflow-y assertion applies
-      const y0 = await page.evaluate(() => scrollY);
+      const y1 = await page.evaluate(() => scrollY);
       const box = await page.locator('aside.glossary').boundingBox();
+      if (!box) return 'aside.glossary has no bounding box while open';
       await page.mouse.move(box.x + box.width / 2, box.y + Math.min(box.height, 300) / 2);
       // Keep wheeling past the end of the aside so any scroll chaining to the page shows up.
       for (let i = 0; i < 6; i++) { await page.mouse.wheel(0, 1000); await page.waitForTimeout(120); }
       await page.waitForTimeout(400);
-      const { top, y1 } = await page.evaluate(() => ({ top: document.querySelector('aside.glossary').scrollTop, y1: scrollY }));
+      const { top, y2 } = await page.evaluate(() => ({ top: document.querySelector('aside.glossary').scrollTop, y2: scrollY }));
       if (top <= 0) return 'wheel over the aside did not scroll it (aside.scrollTop is 0)';
-      return y0 === y1 ? null : `window.scrollY changed ${y0} -> ${y1} while scrolling the aside`;
+      return y2 === y1 ? null : `window.scrollY changed ${y1} -> ${y2} while scrolling the aside`;
     });
   },
   async 'level-1-hides-open-drawer'(file) {
