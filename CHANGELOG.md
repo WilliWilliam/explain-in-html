@@ -11,6 +11,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Examples renamed and translated: `10-reading-levels.html`, `11-warehouse-floor-plan.html`, `12-assembly-regime.html`. The old names stay as redirect pages, so existing links (including `#5min`-style anchors) keep working; `check-examples.sh` checks that each redirect points at a file that exists.
 - Evals renamed: `explain-e-invoicing-spanish`, `explain-in-one-sentence-spanish`, `explain-change-in-levels`, `explain-warehouse-deconsolidation`; graders `patterns-read` and `applies-patterns`. Descriptions and grader rubrics are in English; the Spanish cases keep their Spanish prompts and still require a Spanish reply.
 - Plugin and marketplace descriptions are in English.
+- Eval `explain-e-invoicing-spanish` gets 900 s and 25 turns (was 420 s and 15), like the warehouse case: with reading levels, the theme button and the walkthrough, the page now takes about 12 minutes to write and timed out before saving.
 - Pages: the hero counts twelve examples, and the skill-structure diagram shows `patterns.md` next to `SKILL.md` as always read.
 
 ## [1.3.0] - 2026-10-08

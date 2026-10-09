@@ -1,8 +1,8 @@
 ---
 description: Spanish request with technical and local (Colombian) context. Must trigger the skill, read patterns.md and apply its patterns.
 tags: [trigger, spanish, explainer]
-max_turns: 15
-timeout_seconds: 420
+max_turns: 25
+timeout_seconds: 900
 allowed_tools: [Read, Glob, Grep, Skill]
 ---
 
