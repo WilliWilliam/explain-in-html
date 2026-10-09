@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.4.0] - 2026-10-09
 
 ### Changed
 - The whole repo is in English. Requests in Spanish still trigger the skill and still get answers in Spanish; only the repo's own text changed.
