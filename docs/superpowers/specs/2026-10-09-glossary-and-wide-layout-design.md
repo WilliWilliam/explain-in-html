@@ -44,6 +44,7 @@ Success: in the warehouse example at 1920px, the floor plan is drawn at full win
 - Opens on hover (pointer), on focus (keyboard), and on first tap (touch; the tap does not navigate).
 - Contains the `dd` text and a "see in glossary →" link.
 - Closes on Esc, on mouseleave/blur, or on a tap outside.
+- A mouse click or Enter on a term opens the drawer at its entry and sets the hash (the same as "see in glossary"). On touch, the first tap only opens the popover.
 - JS sets `aria-describedby` on each term to its `dd` id.
 - On phone width it renders as a sheet anchored to the bottom of the viewport.
 
@@ -69,7 +70,7 @@ Success: in the warehouse example at 1920px, the floor plan is drawn at full win
 | `.wide` | `min(1600px, 100%)` | Tables, comparisons, medium diagrams, card grids |
 | `.full` | window width minus a 16–24px gutter | Floor plans, many-column flows, diagrams that gain from space |
 
-- **Page structure:** one centered column with no glossary column. `.wide` and `.full` break out of the text measure symmetrically. Use CSS grid with named column lines (`[full-start] gutter [wide-start] … [content-start] 70ch [content-end] … [wide-end] gutter [full-end]`), no JS.
+- **Page structure:** one centered column with no glossary column. The gutter is padding on the wrapper, so `.full` stops at it. `.wide` and `.full` break out of the text measure symmetrically. Use CSS grid with named column lines (`[full-start] gutter [wide-start] … [content-start] 70ch [content-end] … [wide-end] gutter [full-end]`), no JS.
 - **When to use `.full`:** the diagram has more than about 6 columns or zones, or at 1100px its labels would render below 11px. Otherwise use `.wide`.
 - **SVG:** a `.full` diagram gets a `viewBox` designed for its real width (about 1800 units wide), not an 800-unit drawing scaled up.
 - **Phone:** at 400px all three tiers are 100% with a 16px gutter. Anything that still doesn't fit sits in an `overflow-x: auto` container, as today.

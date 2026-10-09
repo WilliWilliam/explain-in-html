@@ -33,6 +33,8 @@
 
 **Language:** repo text is in English.
 
+**Temporary files:** `$SCRATCH` is the session scratchpad directory, never `/tmp` or the repo.
+
 **Version:** 1.5.0.
 
 ## Names every task uses
@@ -57,7 +59,7 @@
 | Button | the `hidden` attribute is removed |
 
 **Wide layout**
-- Wrapper: `<div class="page">` with grid lines `full`, `wide` and `content`.
+- Wrapper: `<div class="page">` with grid lines `full`, `wide` and `content`. The gutter is `padding-inline: clamp(16px, 2vw, 24px)` on `.page`, not a grid track, so `100%` resolves inside the padding and `.full` stops at the gutter.
 - Children default to `grid-column: content`; `.wide` uses `grid-column: wide` and `.full` uses `grid-column: full`.
 
 ## Review focus
@@ -107,7 +109,7 @@ Add these inside the loop, after the dark-theme block:
 
 | Check | Assertion |
 |---|---|
-| `no-js` | Context with `javaScriptEnabled: false`: `aside.glossary` is visible, its top ≥ the bottom of `main`'s previous sibling element, and `.glossary-toggle` is not visible. |
+| `no-js` | Context with `javaScriptEnabled: false`: `aside.glossary` is visible and is the last element child of `main`, its top ≥ the bottom of its own previous sibling, and `.glossary-toggle` is not visible. |
 | `starts-closed` | `.glossary-toggle` is visible, has `aria-expanded="false"`, and `aside.glossary` is not visible. If the page has `#level-10`, check it first. |
 | `describedby` | Every `.term` has `aria-describedby` pointing to an existing element whose text is non-empty. |
 | `hover-popover` | Hover the first visible `.term`: `#term-pop` is visible and its text contains the text of the term's `dd`. |
@@ -116,6 +118,7 @@ Add these inside the loop, after the dark-theme block:
 | `touch-popover` | Context 400×800, `hasTouch: true`, `isMobile: true`: tap the first visible `.term`. `#term-pop` is visible and `location.hash` is unchanged. |
 | `popover-in-viewport` | At 1280 and at 400 (touch), open the popover on the first and on the last visible `.term`. Its bounding box is within `[0, viewportWidth] × [0, viewportHeight]`. |
 | `drawer-toggle` | Record `main`'s first child width. Click `.glossary-toggle`: `aria-expanded="true"`, the aside is visible, and that width is unchanged. Press Escape: the aside is hidden and `document.activeElement` is the toggle. |
+| `click-opens-drawer` | Mouse-click the first visible `.term` (and, separately, focus it and press Enter): the drawer is open, `location.hash` equals its `href`, and the entry is inside the drawer's visible area. |
 | `see-in-glossary` | Open a popover and click `.term-pop-more`: the drawer is open and `location.hash` equals the term's `href`. |
 | `remembers-open` | Open the drawer and reload: the drawer is open. |
 | `drawer-scrolls` | With the drawer open at 1280×500, the aside's computed `overflow-y` is `auto` or `scroll`. `window.scrollY` is the same before and after scrolling the aside. |
@@ -126,7 +129,7 @@ Add these inside the loop, after the dark-theme block:
 
 | Check | Assertion |
 |---|---|
-| `full-width` | Every visible `.full` is at least `innerWidth - 2*24 - 1` px wide. |
+| `full-width` | Every visible `.full` is at least `clientWidth − 49` px and at most `clientWidth − 32` px wide (`document.documentElement.clientWidth`). |
 | `wide-width` | Every visible `.wide` is at most 1600px wide and wider than 1100px. |
 | `text-measure` | Every visible `main p` that is not inside `.wide` or `.full` is at most 780px wide. |
 
@@ -177,6 +180,7 @@ Expected: `FAIL`.
 - JS:
   - Build `#term-pop`, set `aria-describedby`, and unhide the toggle.
   - Popover events: hover/focus/first tap open; leave/blur/Esc/outside tap close.
+  - A mouse click or Enter on a `.term` acts like `.term-pop-more`: it opens the drawer at the entry and sets the hash. A first tap on touch only opens the popover.
   - Position the popover clamped to the viewport.
   - The toggle opens and closes the drawer; Esc closes it and returns focus.
   - `.term-pop-more` opens the drawer and sets the hash.
@@ -186,7 +190,7 @@ Expected: `FAIL`.
 **Wide layout**
 - The tier table from the spec.
 - The `.page` grid with named lines:
-  `[full-start] minmax(16px,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(16px,1fr) [full-end]`.
+  `[full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]`, with `padding-inline: clamp(16px, 2vw, 24px)` on `.page` (at 400px this must sum to the viewport, with no overflow).
 - The `.full` criterion, and the viewBox note (about 1800 units wide).
 
 - [ ] **Step 3: Migrate 02 by copying the snippet**
@@ -197,7 +201,7 @@ Expected: `FAIL`.
 
 - [ ] **Step 4: Run all checks on 02**
 
-Run: `node scripts/verify-glossary.mjs docs/examples/02-iri-explainer.html && node scripts/verify-example.mjs --shots /tmp/shots docs/examples/02-iri-explainer.html && scripts/check-examples.sh`
+Run: `node scripts/verify-glossary.mjs docs/examples/02-iri-explainer.html && node scripts/verify-example.mjs --shots "$SCRATCH/shots" docs/examples/02-iri-explainer.html && scripts/check-examples.sh`
 Expected: `ok` for 02 in all three (11 and 12 may still fail `check-examples.sh`). Look at the `desktop-dark` and `wide` screenshots: the popover and drawer are legible in dark (Review focus 5), and the demo is wider than before.
 
 - [ ] **Step 5: Commit**
@@ -223,6 +227,7 @@ Run: `node scripts/verify-glossary.mjs docs/examples/12-assembly-regime.html`. E
 
 - [ ] **Step 2: Migrate**
 
+- The term links in 12 have no class today. Every one of them becomes `a.term` with an `href="#g-<slug>"` that matches a `dt` id.
 - `.wrap`/`.layout` become `.page`. Delete `main > * { max-width: 72ch }` and `main > .wide`; the grid now handles the text measure.
 - `.ideas`, `.tour` and `.duo` get `.wide`. Widen the `.duo` breakpoint so the plan and the text sit side by side from 1100px.
 - The glossary uses the pattern and keeps `data-level="5"`. The `.glossary-toggle` goes next to the fixed `.theme-toggle` at `:191`.
@@ -260,11 +265,15 @@ Run: `node scripts/verify-glossary.mjs docs/examples/11-warehouse-floor-plan.htm
 - Keep every existing zone id, cargo id and step hook, so the player and the synced table keep working.
 - Below 900px, `.walk` stays one column and the SVG sits in an `overflow-x: auto` container.
 
-- [ ] **Step 4: Run all three checks, then do the manual walkthrough**
+- [ ] **Step 4: Remap coordinates in the script**
+
+Run `grep -n -E "translate|setAttribute\('(x|y|cx|cy|x1|x2|y1|y2|points|d|transform)'|\b[0-9]{3,4}\b" docs/examples/11-warehouse-floor-plan.html` over the `<script>`. Remap every coordinate literal, path and transform the player or the cargo animation uses to the 1800×600 viewBox.
+
+- [ ] **Step 5: Run all three checks, then do the manual walkthrough**
 
 Expected: `ok` everywhere. Manually: ▶ Play runs every step and the highlighted zones match, at 1280 and 1920. Look at the dark and wide screenshots.
 
-- [ ] **Step 5: Commit:** `git commit -am "Migrate warehouse example; floor plan at full width"`
+- [ ] **Step 6: Commit:** `git commit -am "Migrate warehouse example; floor plan at full width"`
 
 ---
 
@@ -341,7 +350,7 @@ Expected: no output.
 
 - [ ] **Step 3: Build the skill zip to make sure packaging still works**
 
-Run: `scripts/build-skill.sh /tmp/explain-in-html.skill`
+Run: `scripts/build-skill.sh "$SCRATCH/explain-in-html.skill"`
 Expected: exit 0.
 
 - [ ] **Step 4: Commit:** `git commit -am "Skill guidance: glossary popover + drawer, wide layout, new checks"`
