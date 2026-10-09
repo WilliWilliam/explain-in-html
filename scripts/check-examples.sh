@@ -6,6 +6,12 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 fail=0
 for f in docs/examples/*.html; do
   n=$(basename "$f"); problems=()
+  # Redirect stubs for renamed examples: they only need to point at a file that exists.
+  if grep -q 'http-equiv="refresh"' "$f"; then
+    target=$(sed -n 's/.*rel="canonical" href="\([^"]*\)".*/\1/p' "$f")
+    if [ -f "docs/examples/$target" ]; then echo "$n: ok (redirect to $target)"; else fail=1; echo "$n: redirect to missing $target"; fi
+    continue
+  fi
   grep -q '<title>' "$f"                          || problems+=("no <title>")
   grep -q 'name="viewport"' "$f"                  || problems+=("no viewport meta")
   grep -Eq 'Produced by the (explain-in-html|html-artifacts) skill' "$f" || problems+=("no prompt header comment")
