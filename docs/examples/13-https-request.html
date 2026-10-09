@@ -1,0 +1,695 @@
+<!doctype html>
+<!--
+  Produced by the explain-in-html skill (https://github.com/WilliWilliam/explain-in-html)
+  Prompt: "explain what happens when you open an HTTPS URL"
+  A concept explainer with reading levels, a time-to-scale sequence diagram walked through with play,
+  and a glossary (popover + drawer). The hostname is the reserved example.com and the address is from the
+  documentation range 203.0.113.0/24. The timings come from one stated example clock. A single file, no network when opened.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opening an HTTPS URL</title>
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root {
+  --bg:#fafaf7; --surface:#ffffff; --ink:#1a1a1f; --ink-soft:#555560; --rule:#e7e5df;
+  --accent:#8b5cf6; --accent-ink:#6d28d9; --warn:#b45309; --danger:#b91c1c; --ok:#15803d;
+  --hot:rgba(139,92,246,.10);
+  --serif: Charter, "Iowan Old Style", "Source Serif 4", ui-serif, Georgia, serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#0e0e12; --surface:#16161c; --ink:#f1f1f4; --ink-soft:#a8a8b3; --rule:#2a2a32;
+    --accent:#a78bfa; --accent-ink:#c4b5fd; --warn:#f59e0b; --danger:#f87171; --ok:#4ade80;
+    --hot:rgba(167,139,250,.12);
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#0e0e12; --surface:#16161c; --ink:#f1f1f4; --ink-soft:#a8a8b3; --rule:#2a2a32;
+  --accent:#a78bfa; --accent-ink:#c4b5fd; --warn:#f59e0b; --danger:#f87171; --ok:#4ade80;
+  --hot:rgba(167,139,250,.12);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body { font: 17px/1.55 var(--serif); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+/* wide layout: start */
+.page { display: grid; padding-inline: clamp(16px, 2vw, 24px);
+  grid-template-columns: [full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]; }
+/* main and its plain sections pass the same lines down. Grid items don't collapse margins: use one-sided ones. */
+.page > main, .page main > section:not(.wide, .full) { grid-column: full; display: grid; grid-template-columns: subgrid; }
+.page > *, .page :where(main, main > section:not(.wide, .full)) > * { grid-column: content; } /* :where keeps it below .wide/.full */
+.page .wide { grid-column: wide; }
+.page .full { grid-column: full; }
+/* wide layout: end */
+p { margin: 0 0 1em; } /* grid items do not collapse margins: one-sided */
+a { color: var(--accent-ink); }
+code, .mono { font-family: var(--mono); font-size: .86em; }
+
+/* Level selector */
+.levelbar { position: sticky; top: 0; z-index: 25; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.bar-tools { margin-left: auto; display: flex; gap: .5rem; }
+.theme-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.levelbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; padding-top: .55rem; padding-bottom: .55rem; }
+fieldset.level { border: 0; margin: 0; padding: 0; display: flex; align-items: center; gap: .6rem; }
+fieldset.level legend { float: left; font: 600 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin-right: .2rem; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.seg label { font: 500 14px/1 var(--sans); padding: .5rem .85rem; cursor: pointer; border-left: 1px solid var(--rule); }
+.seg label:first-of-type { border-left: 0; }
+.seg input:checked + label { background: var(--accent-ink); color: var(--bg); }
+.seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: -3px; }
+body:has(#level-1:checked) [data-level="5"],
+body:has(#level-1:checked) [data-level="10"],
+body:has(#level-5:checked) [data-level="10"] { display: none; }
+
+/* Header */
+header.top { padding: 1.8rem 0 .2rem; }
+main { margin: 0 0 3rem; }
+header.top h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .3em; letter-spacing: -.01em; }
+.meta { font: 13px/1.5 var(--sans); color: var(--ink-soft); }
+.tldr { font-size: 1.08rem; margin: 1rem 0 1.2rem; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .8rem; margin: 0 0 1.4rem; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 4px; padding: .7rem .9rem; font: 14.5px/1.45 var(--sans); }
+.card b { display: block; margin-bottom: .2em; }
+
+/* Sequence diagram: lanes are rows, time runs left to right at 8 viewBox units per ms */
+figure.seqfig { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: .8rem; }
+.seq-scroll { overflow-x: auto; }
+.seq { display: block; width: 100%; min-width: 900px; height: auto; color: var(--ink); }
+.seq text { font-family: var(--sans); font-size: 20px; fill: var(--ink); }
+.seq .lane { stroke: var(--rule); stroke-width: 2.5; }
+.seq .lname { font-size: 22px; font-weight: 700; }
+.seq .lsub { font-size: 18px; fill: var(--ink-soft); }
+.seq .sep { stroke: var(--rule); stroke-width: 1.5; stroke-dasharray: 6 6; }
+.seq .band { fill: transparent; transition: fill .3s; }
+.seq .phl { font-size: 21px; font-weight: 700; fill: var(--ink-soft); text-anchor: middle; }
+.seq .msg { stroke: var(--ink); stroke-width: 2.5; marker-end: url(#ah); }
+.seq .ml { paint-order: stroke; stroke: var(--surface); stroke-width: 6px; stroke-linejoin: round; }
+.seq .note { font-size: 19px; fill: var(--ink-soft); }
+.seq .box rect { fill: var(--surface); stroke: var(--ink-soft); stroke-width: 2; }
+.seq .box text { font-size: 19px; text-anchor: middle; }
+.seq .kept { stroke: var(--ok); stroke-width: 5; stroke-dasharray: 12 7; }
+.seq .keptl { fill: var(--ok); font-weight: 600; text-anchor: middle; }
+.seq .axis { stroke: var(--ink-soft); stroke-width: 1.5; }
+.seq .tick { font-size: 19px; fill: var(--ink-soft); text-anchor: middle; }
+.seq .ttl { font-size: 19px; fill: var(--ink-soft); }
+.seq #ah path { fill: var(--ink); }
+.seq #ah-hot path { fill: var(--accent-ink); }
+.seq .ph { transition: opacity .3s; }
+.seq.stepping .ph:not(.hot) { opacity: .45; }
+.seq .ph.hot .band { fill: var(--hot); }
+.seq .ph.hot .msg { stroke: var(--accent-ink); stroke-width: 3.5; marker-end: url(#ah-hot); }
+.seq .ph.hot .phl { fill: var(--accent-ink); }
+figcaption { font: 13px/1.45 var(--sans); color: var(--ink-soft); margin-top: .5rem; }
+figcaption b { color: var(--ink); }
+
+/* Walkthrough controls */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .8rem 0 .2rem; font-family: var(--sans); }
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: .35rem; padding: 0; margin: .6rem 0 0; }
+button { font: 500 14px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 5px; padding: .5rem .75rem; cursor: pointer; }
+button:hover { border-color: var(--ink-soft); }
+button:disabled { opacity: .45; cursor: default; }
+.chips button { font-size: 13px; padding: .4rem .55rem; }
+.chips button[aria-current="step"] { background: var(--accent-ink); color: var(--bg); border-color: var(--accent-ink); }
+#play { min-width: 8.5em; font-weight: 600; }
+#pos { font: 13px var(--sans); color: var(--ink-soft); margin-left: .3rem; }
+.kbd-hint { font: 12px var(--sans); color: var(--ink-soft); }
+
+.walk { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.2rem; margin: .4rem 0 0; align-items: start; }
+.walk > figure { grid-column: 1 / -1; }
+.steps-text { list-style: none; padding: 0; margin: 0; }
+.js .steps-text > li:not(.on) { display: none; }
+.steps-text > li { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem .9rem; margin-bottom: 1rem; }
+.steps-text h3 { font: 600 1.05rem/1.3 var(--sans); margin: 0 0 .35rem; }
+.steps-text p { margin: 0 0 .5rem; max-width: 66ch; }
+.rec { font: 12.5px/1.5 var(--mono); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: .4rem .55rem; margin: 0 0 .5rem; white-space: pre-wrap; overflow-wrap: anywhere; max-width: 66ch; }
+.rec span { display: block; font: 600 10.5px/1.4 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); }
+.q { border: 1px solid var(--accent); border-radius: 4px; padding: .55rem .7rem; margin: .4rem 0 .5rem; font: 15px/1.45 var(--sans); max-width: 66ch; }
+.q p { margin: 0 0 .3rem; }
+.q summary { cursor: pointer; color: var(--accent-ink); font-weight: 600; }
+
+/* Tables */
+.tscroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font: 14px/1.4 var(--sans); }
+caption { text-align: left; font: 600 12px var(--sans); color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; padding-bottom: .4rem; }
+th, td { text-align: left; vertical-align: top; padding: .4rem .55rem; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; background: var(--bg); }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.clock tr.on td { background: var(--hot); font-weight: 600; }
+.clock td:first-child { white-space: nowrap; }
+.compare tfoot td { font-weight: 700; border-top: 2px solid var(--ink-soft); border-bottom: 0; }
+.compare { min-width: 680px; }
+.compare td.why { color: var(--ink-soft); min-width: 18em; }
+.zero { color: var(--ok); font-weight: 600; }
+
+/* Body sections */
+main > section { margin: 2.2rem 0 0; }
+main > section > :is(ul, ol) { margin: 0 0 1em; }
+section > h2 { font-size: 1.35rem; margin: 0 0 .5rem; }
+.tag { font: 600 10.5px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 3px; padding: 2px 5px; vertical-align: 3px; margin-left: .4rem; }
+.mistakes li, .meet li { margin-bottom: .5rem; }
+.hedge { font: 13.5px/1.5 var(--sans); color: var(--ink-soft); border-left: 3px solid var(--warn); padding-left: .7rem; }
+/* glossary: popover + drawer: start. Tokens: --surface --ink --ink-soft --rule --accent --sans. */
+a.term { color: inherit; text-decoration: underline dotted var(--accent); text-underline-offset: 3px; }
+.glossary { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: 14px/1.5 var(--sans); color: var(--ink-soft); }
+.glossary h2 { font: 600 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink); margin: 0 0 .6em; }
+.glossary dt { font-weight: 600; color: var(--ink); margin-top: .9em; }
+.glossary dt:target { color: var(--accent); }
+.glossary dd { margin: .15em 0 0; }
+.glossary-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.glossary-toggle[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+/* With JS the aside becomes a drawer that overlays the page (never pushes it). */
+.js-glossary .glossary { position: fixed; top: 0; bottom: 0; right: 0; z-index: 20; width: min(22rem, 100vw); margin: 0; padding: 3.5rem 1.25rem 1.5rem;
+  border: 0; border-left: 1px solid var(--ink-soft); background: var(--surface); overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: 3rem;
+  visibility: hidden; transform: translateX(100%); transition: transform .2s, visibility .2s; }
+.js-glossary .glossary[data-open] { visibility: visible; transform: none; }
+#term-pop { position: absolute; z-index: 30; max-width: min(22rem, calc(100vw - 16px)); padding: .65rem .85rem; font: 14px/1.45 var(--sans); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--ink-soft); border-radius: 6px; max-height: calc(100vh - 16px); overflow: auto; }
+.term-pop-more { display: block; margin-top: .4em; color: var(--accent); }
+body:has(#level-1:checked) .glossary-toggle { display: none; }
+@media (max-width: 600px) {
+  .js-glossary .glossary { width: 100%; }
+  #term-pop { position: fixed; left: 8px; right: 8px; bottom: 8px; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { .js-glossary .glossary { transition: none; } }
+@media print {
+  .js-glossary .glossary { position: static; visibility: visible; transform: none; width: auto; margin-top: 3rem; padding: 1rem 0 0; border: 0; border-top: 1px solid var(--rule); overflow: visible; }
+  .glossary-toggle, #term-pop { display: none; }
+}
+/* glossary: popover + drawer: end */
+/* glossary on this page: the levelbar (z-index 25) stays above the drawer, so the drawer starts below it */
+.js-glossary .glossary { top: var(--bar-h, 3.2rem); padding-top: 1rem; scroll-padding-top: .5rem; }
+
+@media (max-width: 900px) {
+  .walk { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .cards { grid-template-columns: 1fr; }
+  header.top h1 { font-size: 1.55rem; }
+  body { font-size: 16.5px; }
+  table { font-size: 13px; }
+  .kbd-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seq .ph, .seq .band { transition: none; }
+}
+@media print {
+  :root, :root[data-theme] { --bg:#fff; --surface:#fff; --ink:#000; --ink-soft:#333; --rule:#bbb; --hot:#ececec; }
+  .levelbar { position: static; }
+  .seg, .controls, .chips, .kbd-hint, .theme-toggle { display: none; }
+  fieldset.level legend::after { content: " (printed version: the chosen level)"; }
+  .seq { min-width: 0; }
+  figure, table, .walk { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div class="levelbar">
+  <div class="wrap">
+    <fieldset class="level">
+      <legend>Reading time</legend>
+      <div class="seg">
+        <input type="radio" name="level" id="level-1" value="1"><label for="level-1">1 min</label>
+        <input type="radio" name="level" id="level-5" value="5"><label for="level-5">5 min</label>
+        <input type="radio" name="level" id="level-10" value="10" checked><label for="level-10">10 min</label>
+      </div>
+    </fieldset>
+    <span class="bar-tools">
+      <button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button>
+      <button class="theme-toggle" type="button">◐ System</button>
+    </span>
+  </div>
+</div>
+
+<div class="page">
+<header class="top">
+  <h1>What happens when you open an HTTPS URL</h1>
+  <div class="meta">Networking · concept explainer · one example clock, stated under the diagram · www.example.com is a placeholder</div>
+</header>
+
+<main id="content">
+<!-- ═════════ 1 minute ═════════ -->
+<p class="tldr">Before the first byte of the page arrives, the browser does three things, each waiting for an answer: it looks up the server's numeric address (DNS), opens a connection to it (TCP) and sets up encryption with it (TLS). Only then does it send the request. If the nearby CDN server, a copy server the site rents close to you, doesn't have the page, it fetches it from the site's own server far away. <strong>Almost all the waiting is round trips, not data.</strong> In our example clock the first visit takes 180 ms to the first byte; a repeat visit takes 40 ms, because most of those round trips are skipped.</p>
+
+<div class="cards">
+  <div class="card"><b>Round trips, not bandwidth</b>Each step sends a message and waits for the reply. Distance sets the cost, so a server 10 ms away beats a faster one 100 ms away.</div>
+  <div class="card"><b>The first visit pays for everything</b>180 ms here. On a repeat visit the address, the encryption keys and the page are already remembered: 40 ms.</div>
+  <div class="card"><b>The nearby server does the heavy lifting</b>The handshakes happen with a CDN server close to you. It only talks to the far-away origin when it lacks the page.</div>
+</div>
+
+<section class="walk full" aria-label="Walkthrough on the sequence diagram">
+<figure class="seqfig" id="sequence">
+  <div class="seq-scroll" tabindex="0" aria-label="Sequence diagram (scrolls sideways on small screens)">
+  <svg class="seq" viewBox="0 0 1800 530" role="img" aria-labelledby="seqT seqD">
+    <title id="seqT">Sequence diagram of a first visit to an HTTPS URL, drawn to time scale</title>
+    <desc id="seqD">Four lanes from top to bottom: browser, DNS resolver, CDN edge and origin. Time runs left to right from 0 to 180 ms, with a tick every 20 ms (one browser-to-edge round trip). Phases: DNS lookup 0 to 40 ms, TCP handshake 40 to 60, TLS 1.3 handshake 60 to 80, HTTP/2 request 80 to 90, cache miss forwarded to the origin 90 to 170, response 170 to 180, then the connection stays open.</desc>
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+      <marker id="ah-hot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+    </defs>
+
+    <!-- FIXED: lanes (y = 140, 230, 320, 410), phase separators and the time axis. x = 200 + 8 × ms -->
+    <g id="lanes">
+      <line class="lane" x1="200" y1="140" x2="1790" y2="140"/>
+      <line class="lane" x1="200" y1="230" x2="1640" y2="230"/>
+      <line class="lane" x1="200" y1="320" x2="1790" y2="320"/>
+      <line class="lane" x1="200" y1="410" x2="1790" y2="410"/>
+      <text class="lname" x="16" y="147">Browser</text>
+      <text class="lname" x="16" y="237">DNS resolver</text>
+      <text class="lname" x="16" y="327">CDN edge</text>
+      <text class="lsub" x="16" y="352">near you</text>
+      <text class="lname" x="16" y="417">Origin</text>
+      <text class="lsub" x="16" y="442">far away</text>
+    </g>
+    <g id="seps">
+      <line class="sep" x1="520" y1="80" x2="520" y2="450"/>
+      <line class="sep" x1="680" y1="80" x2="680" y2="450"/>
+      <line class="sep" x1="840" y1="80" x2="840" y2="450"/>
+      <line class="sep" x1="920" y1="80" x2="920" y2="450"/>
+      <line class="sep" x1="1560" y1="80" x2="1560" y2="450"/>
+      <line class="sep" x1="1640" y1="80" x2="1640" y2="450"/>
+    </g>
+    <g id="axis">
+      <line class="axis" x1="200" y1="462" x2="1790" y2="462"/>
+      <path class="axis" d="M200 462v8M360 462v8M520 462v8M680 462v8M840 462v8M1000 462v8M1160 462v8M1320 462v8M1480 462v8M1640 462v8"/>
+      <text class="ttl" x="16" y="491">time</text>
+      <text class="ttl" x="16" y="515">round trips</text>
+      <text class="tick" x="200" y="491">0 ms</text><text class="tick" x="360" y="491">20</text><text class="tick" x="520" y="491">40</text>
+      <text class="tick" x="680" y="491">60</text><text class="tick" x="840" y="491">80</text><text class="tick" x="1000" y="491">100</text>
+      <text class="tick" x="1160" y="491">120</text><text class="tick" x="1320" y="491">140</text><text class="tick" x="1480" y="491">160</text>
+      <text class="tick" x="1640" y="491">180 ms</text>
+      <text class="tick" x="200" y="515">0</text><text class="tick" x="360" y="515">1</text><text class="tick" x="520" y="515">2</text>
+      <text class="tick" x="680" y="515">3</text><text class="tick" x="840" y="515">4</text><text class="tick" x="1000" y="515">5</text>
+      <text class="tick" x="1160" y="515">6</text><text class="tick" x="1320" y="515">7</text><text class="tick" x="1480" y="515">8</text>
+      <text class="tick" x="1640" y="515">9 RTT</text>
+    </g>
+
+    <!-- PHASES: each group is one walkthrough step; the steps only highlight one and dim the rest -->
+    <g class="ph" data-ph="0">
+      <rect class="band" x="200" y="80" width="320" height="370"/>
+      <text class="phl" x="360" y="40">1 DNS lookup</text>
+      <line class="msg" x1="200" y1="140" x2="240" y2="230"/>
+      <g class="box"><rect x="240" y="212" width="240" height="36" rx="4"/><text x="360" y="237">looks it up · 30 ms</text></g>
+      <line class="msg" x1="480" y1="230" x2="520" y2="140"/>
+      <text class="ml" x="206" y="122">A? www.example.com</text>
+      <text class="ml" x="512" y="274" text-anchor="end">203.0.113.10 · TTL 300 s</text>
+    </g>
+    <g class="ph" data-ph="1">
+      <rect class="band" x="520" y="80" width="160" height="370"/>
+      <text class="phl" x="600" y="66">2 TCP</text>
+      <line class="msg" x1="520" y1="140" x2="600" y2="320"/>
+      <line class="msg" x1="600" y1="320" x2="680" y2="140"/>
+      <text class="ml" x="528" y="122">SYN</text>
+      <text class="ml" x="606" y="346">SYN-ACK</text>
+    </g>
+    <g class="ph" data-ph="2">
+      <rect class="band" x="680" y="80" width="160" height="370"/>
+      <text class="phl" x="760" y="40">3 TLS 1.3</text>
+      <line class="msg" x1="680" y1="140" x2="760" y2="320"/>
+      <line class="msg" x1="760" y1="320" x2="840" y2="140"/>
+      <text class="ml" x="686" y="122">ACK + ClientHello (SNI, ALPN h2)</text>
+      <text class="ml" x="766" y="370">ServerHello … Finished</text>
+    </g>
+    <g class="ph" data-ph="3">
+      <rect class="band" x="840" y="80" width="80" height="370"/>
+      <text class="phl" x="880" y="66">4 HTTP/2 request</text>
+      <line class="msg" x1="840" y1="140" x2="920" y2="320"/>
+      <text class="ml" x="846" y="98">Finished + GET /</text>
+    </g>
+    <g class="ph" data-ph="4">
+      <rect class="band" x="920" y="80" width="640" height="370"/>
+      <text class="phl" x="1240" y="40">5 Cache miss → origin</text>
+      <line class="msg" x1="920" y1="320" x2="1240" y2="410"/>
+      <line class="msg" x1="1240" y1="410" x2="1560" y2="320"/>
+      <text class="note" x="1240" y="286" text-anchor="middle">warm connection · 80 ms round trip</text>
+      <text class="ml" x="1232" y="440" text-anchor="end">GET / (cache miss)</text>
+      <text class="ml" x="1250" y="440">200 OK · max-age=300</text>
+    </g>
+    <g class="ph" data-ph="5">
+      <rect class="band" x="1560" y="80" width="80" height="370"/>
+      <text class="phl" x="1600" y="66">6 Response</text>
+      <line class="msg" x1="1560" y1="320" x2="1640" y2="140"/>
+      <text class="ml" x="1566" y="346">HEADERS 200 + DATA</text>
+      <text class="ml" x="1632" y="122" text-anchor="end">first byte at 180 ms</text>
+    </g>
+    <g class="ph" data-ph="6">
+      <rect class="band" x="1640" y="80" width="150" height="370"/>
+      <text class="phl" x="1715" y="40">7 Keep-alive</text>
+      <line class="kept" x1="1640" y1="140" x2="1790" y2="140"/>
+      <line class="kept" x1="1640" y1="320" x2="1790" y2="320"/>
+      <text class="ml keptl" x="1715" y="222">connection</text>
+      <text class="ml keptl" x="1715" y="248">stays open</text>
+    </g>
+  </svg>
+  </div>
+  <figcaption><b>Example clock:</b> 20 ms round trip between the browser and the CDN server, 80 ms between the CDN server and the origin, 40 ms for the DNS lookup (10 ms to the resolver and back, 30 ms for its own lookup), and servers that answer instantly. Real numbers vary; the proportions are the point. Each diagonal arrow is one message; its horizontal length is how long it travels. The labels are the real message names: SYN, SYN-ACK and ACK open the connection; ClientHello, ServerHello and Finished set up encryption; GET asks for the page.</figcaption>
+
+  <div class="controls" id="controls">
+    <button id="prev" type="button">← Previous</button>
+    <button id="next" type="button">Next →</button>
+    <button id="play" type="button">▶ Play</button>
+    <span id="pos" aria-live="polite">Step 1 of 7</span>
+    <span class="kbd-hint">· the ← → arrow keys also change steps</span>
+  </div>
+  <ol class="chips" id="chips" aria-label="Walkthrough steps">
+    <li><button type="button" data-go="0" aria-current="step">1 DNS lookup</button></li>
+    <li><button type="button" data-go="1">2 TCP handshake</button></li>
+    <li><button type="button" data-go="2">3 TLS handshake</button></li>
+    <li><button type="button" data-go="3">4 Request</button></li>
+    <li><button type="button" data-go="4">5 Cache miss</button></li>
+    <li><button type="button" data-go="5">6 Response</button></li>
+    <li><button type="button" data-go="6">7 Keep-alive</button></li>
+  </ol>
+</figure>
+
+  <ol class="steps-text" id="stepsText">
+    <li class="on">
+      <h3>1 · DNS lookup: find the address</h3>
+      <p>The browser only knows the name www.example.com. It asks a DNS resolver, the lookup service your network gives you (usually your internet provider's), for the server's numeric address. This resolver doesn't have the answer stored, so it asks the servers in charge of that name. 40 ms in all.</p>
+      <p data-level="5">The answer comes with a <a class="term" href="#g-ttl">TTL</a> of 300 s: the <a class="term" href="#g-resolver">resolver</a>, the operating system and the browser may reuse it that long without asking again. For a site behind a CDN, the address it returns belongs to a CDN server near you, not to the origin.</p>
+      <p class="rec" data-level="5"><span>What travels</span>query:  www.example.com  A ?
+answer: www.example.com.  300  IN  A  203.0.113.10</p>
+    </li>
+    <li>
+      <h3>2 · TCP handshake: open a connection</h3>
+      <p>The browser opens a connection to that address with three short messages: "can we talk?" (SYN), "yes" (SYN-ACK) and "OK" (ACK). The first two cost one round trip to the CDN server: 20 ms.</p>
+      <p data-level="5">The <a class="term" href="#g-syn-ack">SYN/ACK</a> exchange makes both sides agree on starting sequence numbers. The final ACK doesn't wait for anything: the browser sends it together with the first encryption message. Every round trip here is one <a class="term" href="#g-rtt">RTT</a> to the <a class="term" href="#g-edge">CDN edge</a>, not to the origin.</p>
+      <p class="rec" data-level="5"><span>What travels</span>SYN      seq=x
+SYN-ACK  seq=y  ack=x+1
+ACK      ack=y+1   (sent with the ClientHello)</p>
+    </li>
+    <li>
+      <h3>3 · TLS handshake: agree on encryption</h3>
+      <p>Before anything private is sent, the browser and the server agree on secret keys, and the server proves it really is www.example.com by showing its certificate, an identity card signed by an authority the browser trusts. With TLS 1.3 this costs one more round trip: 20 ms.</p>
+      <p data-level="5">In the <a class="term" href="#g-tls">TLS handshake</a>, the ClientHello names the site in <a class="term" href="#g-sni">SNI</a>, so one address can serve many sites, and offers HTTP/2 through <a class="term" href="#g-alpn">ALPN</a>. The server answers with ServerHello and its key share; everything after that is already encrypted: the ALPN choice (h2), the <a class="term" href="#g-chain">certificate chain</a>, a signature proving it holds the certificate's key, and Finished.</p>
+      <p class="rec" data-level="5"><span>What travels</span>ClientHello: TLS 1.3 · key share (X25519) · SNI www.example.com · ALPN [h2, http/1.1]
+ServerHello: key share
+  encrypted → EncryptedExtensions (ALPN h2) · Certificate (leaf + intermediate)
+            · CertificateVerify · Finished</p>
+      <div class="q" data-level="5">
+        <p><b>Before moving on:</b> someone on the same café Wi-Fi is watching the traffic. Can they tell which site you are opening?</p>
+        <details><summary>See answer</summary><p>Yes, the site's name, though not the page. The SNI in the ClientHello travels unencrypted (unless both sides use Encrypted Client Hello), and so does a classic DNS query. The path (/cart), the headers and the page itself are encrypted.</p></details>
+      </div>
+    </li>
+    <li>
+      <h3>4 · The request: "GET /"</h3>
+      <p>The browser sends its last encryption message (Finished) and, in the same burst, the actual request for the page: "GET /". It reaches the CDN server 10 ms later, at 90 ms.</p>
+      <p data-level="5">Because ALPN picked HTTP/2, the request is a HEADERS frame on stream 1 of the encrypted connection. The page's CSS, scripts and images will later travel over this same connection as new streams, side by side.</p>
+      <p class="rec" data-level="5"><span>What travels</span>HEADERS  stream=1
+  :method GET   :scheme https   :authority www.example.com   :path /
+  accept text/html   accept-encoding gzip, br</p>
+    </li>
+    <li>
+      <h3>5 · Cache miss: the CDN server asks the origin</h3>
+      <p>The CDN server near you doesn't have this page yet, so it asks the site's own server, the origin, which is farther away: 80 ms there and back. This is the longest wait of the whole trip.</p>
+      <p data-level="5">The <a class="term" href="#g-edge">CDN edge</a> ended your encrypted connection itself and has its own connection to the <a class="term" href="#g-origin">origin</a>. Here that connection is already open, so the miss costs exactly one edge↔origin round trip.</p>
+      <p data-level="10">If that connection were cold, the edge would first pay its own TCP and TLS handshakes, 80 ms each: 240 ms instead of 80, and 340 ms to the first byte instead of 180. Keeping warm, reused connections to the origin is a large part of what a CDN does for you on a miss.</p>
+      <p class="rec" data-level="5"><span>What travels</span>edge → origin:  GET /   (over a connection kept open from earlier requests)
+origin → edge:  200 OK   cache-control: public, max-age=300</p>
+    </li>
+    <li>
+      <h3>6 · Response: the page arrives</h3>
+      <p>The CDN server passes the page on to the browser and keeps a copy for the next visitor. The first byte reaches the browser at 180 ms; the browser starts reading the page right away.</p>
+      <p data-level="5">The edge keeps the copy for as long as the origin's cache-control allows (300 s here). The next visitor served by that edge gets a cache hit and skips step 5 entirely.</p>
+      <p class="rec" data-level="5"><span>What travels</span>HEADERS  stream=1   :status 200   content-type text/html
+DATA     stream=1   &lt;!doctype html&gt;…</p>
+    </li>
+    <li>
+      <h3>7 · Keep-alive: the connection stays open</h3>
+      <p>The browser doesn't hang up. The page's images and scripts, and your next click on the same site, travel over this open connection without repeating steps 1 to 3: each new request costs one round trip, 20 ms.</p>
+      <p data-level="5">This is <a class="term" href="#g-keep-alive">keep-alive</a>. After the handshake the server also sent a session ticket (NewSessionTicket), which lets a later visit resume encryption with <a class="term" href="#g-0rtt">0-RTT</a>: the request rides along with the ClientHello.</p>
+      <div class="q" data-level="5">
+        <p><b>Question:</b> tomorrow you open the same URL again. Which steps happen again?</p>
+        <details><summary>See answer</summary><p>DNS: no, if the cached answer's TTL hasn't run out. TCP: yes, one round trip. TLS: no extra round trip, because the GET travels with the ClientHello (0-RTT). Origin: no, if the CDN server still has the page. 40 ms instead of 180.</p></details>
+      </div>
+    </li>
+  </ol>
+
+  <div class="tscroll">
+    <table class="clock" id="clock">
+      <caption>The example clock, first visit</caption>
+      <thead><tr><th scope="col">Step</th><th scope="col" class="n">Takes</th><th scope="col" class="n">Clock</th></tr></thead>
+      <tbody>
+        <tr class="on"><td>1 DNS lookup</td><td class="n">40 ms</td><td class="n">40 ms</td></tr>
+        <tr><td>2 TCP handshake</td><td class="n">20 ms</td><td class="n">60 ms</td></tr>
+        <tr><td>3 TLS handshake</td><td class="n">20 ms</td><td class="n">80 ms</td></tr>
+        <tr><td>4 Request to the CDN server</td><td class="n">10 ms</td><td class="n">90 ms</td></tr>
+        <tr><td>5 CDN server ↔ origin</td><td class="n">80 ms</td><td class="n">170 ms</td></tr>
+        <tr><td>6 Response to the browser</td><td class="n">10 ms</td><td class="n">180 ms</td></tr>
+        <tr><td>7 Connection stays open</td><td class="n">—</td><td class="n">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═════════ 5 minutes ═════════ -->
+<section data-level="5">
+  <h2>First visit, repeat visit, next click</h2>
+  <p>The same clock, three situations. A repeat visit is the next day, within the DNS answer's TTL and the edge's cache lifetime; the next click is a link on the same site while the connection is still open. Each cell is a multiple of the 20 ms <a class="term" href="#g-rtt">RTT</a> to the edge or the 80 ms one to the origin.</p>
+  <div class="tscroll wide">
+    <table class="compare" id="compare">
+      <caption>Milliseconds to the first byte, per phase</caption>
+      <thead><tr><th scope="col">Phase</th><th scope="col" class="n">First visit</th><th scope="col" class="n">Repeat visit</th><th scope="col" class="n">Next click</th><th scope="col">What the repeat visit reuses</th></tr></thead>
+      <tbody>
+        <tr><td>DNS lookup</td><td class="n">40</td><td class="n zero">0</td><td class="n zero">0</td><td class="why">The cached answer, still within its 300 s <a class="term" href="#g-ttl">TTL</a> (browser or OS cache).</td></tr>
+        <tr><td>TCP handshake</td><td class="n">20</td><td class="n">20</td><td class="n zero">0</td><td class="why">Nothing: a new TCP connection always costs one round trip. The next click reuses the open one.</td></tr>
+        <tr><td>TLS handshake</td><td class="n">20</td><td class="n zero">0</td><td class="n zero">0</td><td class="why">The session ticket: with <a class="term" href="#g-0rtt">0-RTT</a> the GET is sent with the ClientHello, so TLS adds no round trip of its own.</td></tr>
+        <tr><td>Request and response, browser ↔ edge</td><td class="n">20</td><td class="n">20</td><td class="n">20</td><td class="why">Nothing: the question and the answer always cross once.</td></tr>
+        <tr><td>Edge ↔ origin</td><td class="n">80</td><td class="n zero">0</td><td class="n zero">0</td><td class="why">The edge's cached copy (a cache hit), still within max-age=300.</td></tr>
+      </tbody>
+      <tfoot><tr><td>Time to first byte</td><td class="n">180 ms</td><td class="n">40 ms</td><td class="n">20 ms</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</section>
+
+<section data-level="5">
+  <h2>Common mistakes</h2>
+  <ul class="mistakes">
+    <li><b>"HTTPS is slow because encryption is heavy."</b> The math takes a few milliseconds of CPU. The cost is the extra round trip of the <a class="term" href="#g-tls">TLS handshake</a>. Fix: TLS 1.3, a CDN close to users, and connections that stay open.</li>
+    <li><b>"0-RTT means no round trips."</b> It removes the TLS round trip only. Over TCP the connection handshake still costs one, and the answer still needs the request to cross. Only HTTP/3 over QUIC folds the connection and encryption handshakes together.</li>
+    <li><b>"A DNS change takes effect at once."</b> Resolvers and browsers keep the old answer until its TTL runs out. Lower the TTL a day before moving a site, then raise it again.</li>
+    <li><b>"HTTPS hides which site I visit."</b> It hides the page, not the name: the <a class="term" href="#g-sni">SNI</a> and a classic DNS query show www.example.com, unless Encrypted Client Hello and encrypted DNS are in use.</li>
+    <li><b>"The server sends its whole certificate chain, root included."</b> It sends its own certificate and the intermediates; the root is already in the browser. Forgetting an intermediate works in one browser and fails in another.</li>
+    <li><b>"The CDN asks the origin every time."</b> Only on a miss, and cache-control decides what counts as one. A page marked private or no-store goes to the origin on every request.</li>
+  </ul>
+</section>
+
+<section data-level="5">
+  <h2>Where you'll meet it</h2>
+  <ul class="meet">
+    <li><b>Your browser's developer tools.</b> The Network tab's Timing view splits each request into DNS lookup, initial connection, SSL and waiting for the server response, the same phases as the diagram.</li>
+    <li><b>curl.</b> <code>curl -so /dev/null -w '%{time_namelookup} %{time_connect} %{time_appconnect} %{time_starttransfer}\n'</code> prints the clock at the end of DNS, TCP, TLS and the first byte.</li>
+    <li><b>dig.</b> <code>dig www.example.com</code> shows the answer and its remaining TTL; run it twice and watch the number go down.</li>
+    <li><b>openssl.</b> <code>openssl s_client -connect www.example.com:443 -servername www.example.com -alpn h2</code> shows the SNI you sent, the certificate chain the server returned and the ALPN it picked.</li>
+    <li><b>A CDN dashboard.</b> The cache hit ratio is the share of requests that skip step 5; the origin latency is the 80 ms leg.</li>
+  </ul>
+</section>
+
+<!-- ═════════ 10 minutes ═════════ -->
+<section data-level="10">
+  <h2>The fine print</h2>
+  <ul>
+    <li><b>0-RTT data can be replayed.</b> The early request is encrypted with keys from the earlier session ticket, before the server has said anything in this connection, so an attacker who records it can send it again. Servers and CDNs therefore accept early data only for safe, idempotent requests such as a plain GET, never for a payment or a form post. A CDN can forward the request to the origin with an <code>Early-Data: 1</code> header, and the origin can answer <code>425 Too Early</code> to make the browser retry after the full handshake.</li>
+    <li><b>When 0-RTT doesn't happen,</b> because the ticket expired, the request isn't idempotent or the server declines early data, resumption still skips the certificate but costs the TLS round trip: the repeat visit becomes 60 ms instead of 40.</li>
+    <li><b>The edge's connection to the origin.</b> The 80 ms miss assumes the edge already had a warm, reused connection to the origin. A cold one adds a TCP and a TLS handshake at 80 ms each: the miss becomes 240 ms and the first visit 340 ms. CDNs keep connection pools and often add a shield tier, a single cache close to the origin, so most misses never reach it.</li>
+    <li><b>HTTP/3 over QUIC.</b> The connection and encryption handshakes share one round trip, so the first visit would be 160 ms. A repeat visit with 0-RTT sends the GET in the very first packet: 20 ms. The browser usually learns that a site speaks HTTP/3 from an earlier response (Alt-Svc) or from a DNS HTTPS record, so the very first visit is often HTTP/2.</li>
+    <li><b>TLS 1.2</b> needed two round trips for a full handshake, so the same first visit would take 200 ms.</li>
+  </ul>
+  <p class="hedge">The timings are a model, not a measurement: it leaves out server think time, TCP slow start, packet loss and the certificate check. Measure your own site with the tools above.</p>
+</section>
+
+<aside class="glossary" data-level="5" id="glossary" aria-labelledby="glossary-t">
+  <h2 id="glossary-t">Glossary</h2>
+  <dl>
+    <dt id="g-rtt">RTT</dt><dd id="g-rtt-d">Round-trip time: how long a message takes to reach the other side and its answer to come back. Here 20 ms between the browser and the CDN edge, 80 ms between the edge and the origin.</dd>
+    <dt id="g-resolver">DNS resolver</dt><dd id="g-resolver-d">The server that looks up names for your device, usually your internet provider's or a public one. It caches answers and asks the authoritative servers when it has none.</dd>
+    <dt id="g-ttl">TTL</dt><dd id="g-ttl-d">Time to live: how many seconds a DNS answer may be reused before asking again. 300 s in the example.</dd>
+    <dt id="g-syn-ack">SYN/ACK</dt><dd id="g-syn-ack-d">The flags of the TCP opening handshake: SYN asks to open a connection, SYN-ACK agrees, ACK confirms. One round trip before data can flow.</dd>
+    <dt id="g-tls">TLS handshake</dt><dd id="g-tls-d">The exchange that agrees on encryption keys and proves the server's identity. TLS 1.3 needs one round trip for a new connection; TLS 1.2 needed two.</dd>
+    <dt id="g-sni">SNI</dt><dd id="g-sni-d">Server Name Indication: the hostname the browser puts in the ClientHello, so one address can serve many sites, each with its own certificate. It travels unencrypted unless Encrypted Client Hello (ECH) is used.</dd>
+    <dt id="g-alpn">ALPN</dt><dd id="g-alpn-d">Application-Layer Protocol Negotiation: the browser lists the protocols it speaks (h2, http/1.1) in the ClientHello and the server picks one in its encrypted extensions.</dd>
+    <dt id="g-chain">Certificate chain</dt><dd id="g-chain-d">The server's own certificate plus the intermediate certificates that link it to a root authority the browser already trusts. The root itself is not sent.</dd>
+    <dt id="g-edge">CDN edge</dt><dd id="g-edge-d">A server of a content delivery network close to the user. It ends the encrypted connection, serves cached copies and forwards misses to the origin.</dd>
+    <dt id="g-origin">Origin</dt><dd id="g-origin-d">The site's own server, where the content really comes from. Often far from the user.</dd>
+    <dt id="g-keep-alive">Keep-alive</dt><dd id="g-keep-alive-d">Keeping a connection open after a response, so later requests skip the DNS, TCP and TLS steps. HTTP/2 also runs many requests over it at once.</dd>
+    <dt id="g-0rtt">0-RTT</dt><dd id="g-0rtt-d">TLS 1.3 early data: on a resumed session the browser sends the request together with the ClientHello, using a ticket from an earlier visit. It saves the TLS round trip, but the early data can be replayed, so only safe requests use it.</dd>
+  </dl>
+</aside>
+</main>
+</div>
+
+<script>
+(() => {
+  const btn = document.querySelector('.theme-toggle'), root = document.documentElement;
+  const order = ['system', 'light', 'dark'];
+  const label = { system: '◐ System', light: '☀ Light', dark: '☾ Dark' };
+  let t = root.dataset.theme || 'system';
+  const show = () => { btn.textContent = label[t]; btn.setAttribute('aria-label', 'Theme: ' + label[t].slice(2)); };
+  btn.addEventListener('click', () => {
+    t = order[(order.indexOf(t) + 1) % order.length];
+    if (t === 'system') delete root.dataset.theme; else root.dataset.theme = t;
+    try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {}
+    show();
+  });
+  show();
+})();
+</script>
+<script>
+(() => {
+  document.documentElement.classList.add('js');
+
+  /* level in the URL (#1min, #5min, #10min) */
+  const radios = [...document.querySelectorAll('input[name="level"]')];
+  const fromHash = location.hash.match(/^#(1|5|10)min$/);
+  if (fromHash) radios.forEach(r => { r.checked = r.value === fromHash[1]; });
+  radios.forEach(r => r.addEventListener('change', () => history.replaceState(null, '', `#${r.value}min`)));
+
+  /* walkthrough: step n highlights phase n of the diagram and row n of the clock */
+  const $ = id => document.getElementById(id);
+  const svg = document.querySelector('.seq');
+  const phases = [...svg.querySelectorAll('.ph')];
+  const items = [...document.querySelectorAll('#stepsText > li')];
+  const chips = [...document.querySelectorAll('#chips button')];
+  const rows = [...document.querySelectorAll('#clock tbody tr')];
+  const M = items.length;
+  let cur = 0, playing = false, timer = null;
+  svg.classList.add('stepping');
+
+  function render(n) {
+    phases.forEach(g => g.classList.toggle('hot', +g.dataset.ph === n));
+    rows.forEach((r, i) => r.classList.toggle('on', i === n));
+    items.forEach((li, i) => li.classList.toggle('on', i === n));
+    chips.forEach((b, i) => i === n ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current'));
+    $('pos').textContent = `Step ${n + 1} of ${M}`;
+    $('prev').disabled = n === 0;
+    $('next').disabled = n === M - 1;
+  }
+
+  /* ── play ── */
+  const visible = el => el && (el.checkVisibility ? el.checkVisibility() : el.offsetParent !== null);
+  const asksQuestion = n => [...items[n].querySelectorAll('.q')].some(visible);
+  const duration = n => {
+    const words = items[n].innerText.trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(4000, words / 3 * 1000);
+  };
+
+  function setPlaying(on) {
+    playing = on;
+    clearTimeout(timer);
+    $('play').textContent = on ? '❚❚ Pause' : '▶ Play';
+  }
+  function stop() { setPlaying(false); }
+
+  function goTo(n) { cur = Math.max(0, Math.min(M - 1, n)); render(cur); }
+
+  function afterArrive() {
+    if (!playing) return;
+    if (cur === M - 1 || asksQuestion(cur)) { stop(); return; }
+    timer = setTimeout(() => { goTo(cur + 1); afterArrive(); }, duration(cur));
+  }
+
+  $('play').addEventListener('click', () => {
+    if (playing) { stop(); return; }
+    setPlaying(true);
+    goTo(cur === M - 1 ? 0 : cur + 1);
+    afterArrive();
+  });
+  $('prev').addEventListener('click', () => { stop(); goTo(cur - 1); });
+  $('next').addEventListener('click', () => { stop(); goTo(cur + 1); });
+  chips.forEach((b, i) => b.addEventListener('click', () => { stop(); goTo(i); }));
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const a = document.activeElement;
+    if (a && a.closest('fieldset.level, .seq-scroll, input, textarea, select, .tscroll, aside')) return;
+    e.preventDefault();
+    stop();
+    goTo(cur + (e.key === 'ArrowRight' ? 1 : -1));
+  });
+
+  /* if the level changes during playback, the step's time is recalculated */
+  radios.forEach(r => r.addEventListener('change', () => { if (playing) { clearTimeout(timer); afterArrive(); } }));
+
+  /* the drawer starts below the sticky levelbar, which wraps on narrow screens */
+  const bar = document.querySelector('.levelbar');
+  const barH = () => document.documentElement.style.setProperty('--bar-h', bar.offsetHeight + 'px');
+  if (window.ResizeObserver) new ResizeObserver(barH).observe(bar);
+  barH();
+
+  render(0);
+})();
+</script>
+<script>
+// glossary: popover + drawer: start. Without JS the aside stays a list at the end of main.
+(() => {
+  const g = document.getElementById('glossary'), btn = document.querySelector('.glossary-toggle');
+  if (!g || !btn) return;
+  const sheet = matchMedia('(max-width: 600px)'), pop = document.createElement('div');
+  pop.id = 'term-pop'; pop.hidden = true; pop.setAttribute('role', 'tooltip');
+  document.body.append(pop);
+  document.documentElement.classList.add('js-glossary');
+  btn.hidden = false;
+  let cur = null, timer, touch = false, wasOpen = false;
+  const slug = t => t.getAttribute('href').slice(1);
+  const hide = () => { clearTimeout(timer); pop.hidden = true; cur = null; };
+  const later = () => { clearTimeout(timer); timer = setTimeout(hide, 200); };
+  function show(t) {
+    const d = document.getElementById(slug(t) + '-d');
+    if (!d) return;
+    clearTimeout(timer); cur = t;
+    pop.innerHTML = d.innerHTML + ` <a class="term-pop-more" href="#${slug(t)}">See in glossary →</a>`;
+    pop.hidden = false; pop.style.left = pop.style.top = '';
+    if (sheet.matches) return; // the CSS docks it as a bottom sheet
+    const r = t.getBoundingClientRect(), p = pop.getBoundingClientRect(), m = 8, W = document.documentElement.clientWidth;
+    const x = Math.max(m, Math.min(r.left, W - p.width - m));
+    const y = r.bottom + m + p.height <= innerHeight ? r.bottom + m : Math.max(m, r.top - m - p.height);
+    pop.style.left = x + scrollX + 'px'; pop.style.top = y + scrollY + 'px';
+  }
+  function setOpen(open) {
+    g.toggleAttribute('data-open', open);
+    btn.setAttribute('aria-expanded', open);
+    try { localStorage.setItem('glossary-open', open ? '1' : '0'); } catch {}
+  }
+  document.querySelectorAll('a.term').forEach(t => {
+    t.setAttribute('aria-describedby', slug(t) + '-d');
+    t.addEventListener('mouseenter', () => show(t));
+    t.addEventListener('focus', () => show(t));
+    t.addEventListener('mouseleave', later);
+    t.addEventListener('blur', later);
+    t.addEventListener('pointerdown', e => { touch = e.pointerType !== 'mouse'; wasOpen = cur === t; });
+    t.addEventListener('pointercancel', () => { touch = wasOpen = false; });
+    t.addEventListener('click', e => {
+      // First tap on touch: popover only. Mouse click, Enter or a second tap: drawer at the entry (the link sets the hash).
+      // click carries pointerType where supported ("" for Enter); the pointerdown flag is the fallback.
+      const tap = 'pointerType' in e ? e.pointerType === 'touch' || e.pointerType === 'pen' : touch;
+      if (tap && !wasOpen) { e.preventDefault(); show(t); } else { hide(); setOpen(true); }
+      touch = wasOpen = false;
+    });
+  });
+  pop.addEventListener('mouseenter', () => clearTimeout(timer));
+  pop.addEventListener('mouseleave', later);
+  pop.addEventListener('click', e => { if (e.target.closest('.term-pop-more')) { hide(); setOpen(true); } });
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('.term, #term-pop')) hide(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!pop.hidden) hide();
+    else if (g.hasAttribute('data-open')) { setOpen(false); btn.focus(); }
+  });
+  btn.addEventListener('click', () => setOpen(!g.hasAttribute('data-open')));
+  const l1 = document.getElementById('level-1'); // reading levels: level 1 closes the drawer
+  if (l1) l1.addEventListener('change', () => setOpen(false));
+  try { if (localStorage.getItem('glossary-open') === '1') setOpen(true); } catch {}
+})();
+// glossary: popover + drawer: end
+</script>
+</body>
+</html>
