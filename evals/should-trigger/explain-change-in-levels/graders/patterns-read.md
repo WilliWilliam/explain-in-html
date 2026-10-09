@@ -1,6 +1,6 @@
 ---
 type: tool_used
 tool: Read
-input_match: 'references/patrones\.md'
+input_match: 'references/patterns\.md'
 arm: with-only
 ---

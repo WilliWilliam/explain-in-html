@@ -1,6 +1,6 @@
 ---
-description: Explicación de un proceso logístico en un lugar físico (desconsolidación en un depósito en Colombia). Debe dibujar el plano del lugar y, si hay recorrido por pasos, un botón de reproducir que no arranca solo.
-tags: [trigger, spanish, explainer, logistica]
+description: Explainer of a logistics process in a physical place (deconsolidation at a bonded warehouse in Colombia). Must draw a floor plan of the place and, if there is a step-by-step walkthrough, a play button that never starts on its own.
+tags: [trigger, spanish, explainer, logistics]
 max_turns: 25
 timeout_seconds: 900
 allowed_tools: [Read, Glob, Grep, Skill]

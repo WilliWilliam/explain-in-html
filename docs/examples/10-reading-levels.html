@@ -1,0 +1,452 @@
+<!doctype html>
+<!--
+  Produced by the explain-in-html skill (https://github.com/WilliWilliam/explain-in-html)
+  Prompt: "Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer.
+  I am part of the dev team and want to understand the change deeply without being too distracted by
+  implementation details. Focus on important design and architectural concepts. Use UML diagrams (class and
+  sequence) wherever appropriate to highlight important structural and dynamic relationships."
+  Change explained: commits 0d29364 and 34543db (the fork's own patterns, Spanish support and the evals that check them).
+  Single self-contained file. No build step, no network at view time.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The fork's own patterns in explain-in-html</title>
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root {
+  --bg:#fafaf7; --surface:#fff; --ink:#1a1a1f; --ink-soft:#55555f; --rule:#e2e0d9;
+  --accent:#0f6e6e; --accent-soft:#e3f1f0; --new:#b45309;
+  --serif: Charter, "Iowan Old Style", "Source Serif 4", ui-serif, Georgia, serif;
+  --sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#0f1012; --surface:#17181c; --ink:#eeeef1; --ink-soft:#a9a9b4; --rule:#2c2d34;
+    --accent:#5ec4c0; --accent-soft:#16302f; --new:#f5a524;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#0f1012; --surface:#17181c; --ink:#eeeef1; --ink-soft:#a9a9b4; --rule:#2c2d34;
+  --accent:#5ec4c0; --accent-soft:#16302f; --new:#f5a524;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body { font: 16px/1.55 var(--serif); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 1rem 3rem; }
+code { font: .86em var(--mono); background: var(--surface); border: 1px solid var(--rule); padding: 0 4px; border-radius: 3px; }
+
+/* ── Level selector ────────────────────────────────── */
+.levelbar { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.theme-toggle { margin-left: auto; font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.levelbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding-top: .6rem; padding-bottom: .6rem; }
+fieldset.level { border: 0; margin: 0; padding: 0; display: flex; align-items: center; gap: .6rem; }
+fieldset.level legend { float: left; font: 600 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin-right: .2rem; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.seg label { font: 500 14px/1 var(--sans); padding: .5rem .85rem; cursor: pointer; border-left: 1px solid var(--rule); }
+.seg label:first-of-type { border-left: 0; }
+.seg input:checked + label { background: var(--accent); color: var(--bg); }
+.seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: -3px; }
+
+/* Visible from level N upward. Without :has() or without JS everything shows (10 min). */
+body:has(#level-1:checked) [data-level="5"],
+body:has(#level-1:checked) [data-level="10"],
+body:has(#level-5:checked) [data-level="10"] { display: none; }
+
+/* ── Content ───────────────────────────────────────── */
+header.top { padding: 1.8rem 0 .4rem; }
+header.top h1 { font-size: 1.75rem; line-height: 1.2; margin: 0 0 .3em; letter-spacing: -.01em; }
+header.top .meta { font: 13px/1.5 var(--sans); color: var(--ink-soft); }
+.tldr { font-size: 1.08rem; max-width: 68ch; margin: 1rem 0 1.2rem; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .8rem; margin: 0 0 1.5rem; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 4px; padding: .7rem .9rem; font: 14.5px/1.45 var(--sans); }
+.card b { display: block; margin-bottom: .2em; }
+section { margin: 2.2rem 0 0; }
+section > h2 { font-size: 1.3rem; margin: 0 0 .5rem; }
+section > p, section > ul, section > ol { max-width: 70ch; }
+.tag { font: 600 10.5px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 3px; padding: 2px 5px; vertical-align: 3px; margin-left: .4rem; }
+figure { margin: 1rem 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: .8rem; }
+figure svg { display: block; width: 100%; height: auto; color: var(--ink); }
+figcaption { font: 13px/1.45 var(--sans); color: var(--ink-soft); margin-top: .5rem; }
+.scroll { overflow-x: auto; }
+.scroll svg { min-width: 640px; }
+
+/* UML */
+.uml text { font: 12px var(--sans); fill: var(--ink); }
+.uml text { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.uml .small { font-size: 10.5px; fill: var(--ink-soft); }
+.uml .bold { font-weight: 600; }
+.uml .mono { font-family: var(--mono); font-size: 11px; }
+.uml .box { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+.uml .head { fill: var(--accent-soft); stroke: var(--ink); stroke-width: 1.2; }
+.uml .line { stroke: var(--ink); stroke-width: 1.2; fill: none; }
+.uml .dash { stroke-dasharray: 5 4; }
+.uml .life { stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 4 4; }
+.uml .act { fill: var(--accent-soft); stroke: var(--ink); stroke-width: 1; }
+.uml .new { stroke: var(--new); }
+.uml text.newt { fill: var(--new); font-weight: 600; }
+.uml .frame { fill: none; stroke: var(--ink-soft); stroke-width: 1; }
+.uml .m-fill { fill: var(--ink); }
+.uml .m-hollow { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+.uml .m-open { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.uml .m-new { fill: var(--new); }
+
+.prec { list-style: none; padding: 0; margin: .6rem 0; display: flex; flex-wrap: wrap; gap: .4rem; font: 14px var(--sans); align-items: center; }
+.prec li { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: .35rem .6rem; }
+.prec li.here { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.prec li.arrow { border: 0; background: none; padding: 0; color: var(--ink-soft); }
+
+table { border-collapse: collapse; width: 100%; font: 14px/1.45 var(--sans); margin: .6rem 0; }
+caption { text-align: left; font: 600 12px var(--sans); color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; padding-bottom: .4rem; }
+th, td { text-align: left; vertical-align: top; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; background: var(--surface); }
+
+@media (max-width: 720px) {
+  .cards { grid-template-columns: 1fr; }
+  header.top h1 { font-size: 1.45rem; }
+  table, thead, tbody, tr, th, td { font-size: 13px; }
+}
+@media print {
+  :root, :root[data-theme] { --bg:#fff; --surface:#fff; --ink:#000; --ink-soft:#333; --rule:#bbb; --accent-soft:#eee; }
+  .levelbar { position: static; }
+  .seg, .theme-toggle { display: none; }
+  fieldset.level legend::after { content: " (printed version: the chosen level)"; }
+  figure, table { break-inside: avoid; }
+  h2 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div class="levelbar">
+  <div class="wrap">
+    <fieldset class="level">
+      <legend>Reading time</legend>
+      <div class="seg">
+        <input type="radio" name="level" id="level-1" value="1"><label for="level-1">1 min</label>
+        <input type="radio" name="level" id="level-5" value="5"><label for="level-5">5 min</label>
+        <input type="radio" name="level" id="level-10" value="10" checked><label for="level-10">10 min</label>
+      </div>
+    </fieldset>
+    <button class="theme-toggle" type="button">◐ System</button>
+  </div>
+</div>
+
+<main class="wrap" id="content">
+<header class="top">
+  <h1>The fork's own patterns in explain-in-html</h1>
+  <div class="meta">Commits <code>0d29364</code> and <code>34543db</code> · 32 files · skill, plugin manifests and evals · for the dev team</div>
+</header>
+
+<!-- ═════════ 1 minute ═════════ -->
+<p class="tldr"><strong>What changed:</strong> the fork now has its own rules file, <code>patterns.md</code>, which the skill <strong>always reads</strong> before drafting any page. It also triggers on requests in Spanish, and the eval suite checks both things in every case.</p>
+
+<div class="cards">
+  <div class="card"><b>One more layer, not a replacement</b>The original <code>SKILL.md</code> barely changes. The fork's rules live separately, so pulling updates from upstream stays easy.</div>
+  <div class="card"><b>Mandatory read, conditional use</b>The file is always read, but each pattern says when it applies. Nothing is forced.</div>
+  <div class="card"><b>Verified, not assumed</b>Every case that should trigger the skill checks that <code>patterns.md</code> was read.</div>
+</div>
+
+<figure>
+  <div class="scroll">
+  <svg class="uml" viewBox="0 0 860 420" role="img" aria-labelledby="seq1t seq1d">
+    <title id="seq1t">Sequence diagram: how the skill loads with the change</title>
+    <desc id="seq1d">The user asks for an explanation. Claude Code matches the description, loads SKILL.md, always reads patterns.md (new), reads the reference for the category, writes the HTML, verifies it and returns the path.</desc>
+    <defs>
+      <marker id="s-fill" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="m-fill" d="M0,0 L10,5 L0,10 z"/></marker>
+      <marker id="s-new" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="m-new" d="M0,0 L10,5 L0,10 z"/></marker>
+      <marker id="s-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="m-open" d="M0,0 L10,5 L0,10"/></marker>
+    </defs>
+    <!-- participants -->
+    <g>
+      <rect class="head" x="20"  y="14" width="110" height="34" rx="2"/><text x="75"  y="36" text-anchor="middle" class="bold">User</text>
+      <rect class="head" x="180" y="14" width="120" height="34" rx="2"/><text x="240" y="36" text-anchor="middle" class="bold">Claude Code</text>
+      <rect class="head" x="350" y="14" width="130" height="34" rx="2"/><text x="415" y="36" text-anchor="middle" class="bold">SKILL.md</text>
+      <rect class="head" x="530" y="14" width="130" height="34" rx="2"/><text x="595" y="36" text-anchor="middle" class="bold">patterns.md</text>
+      <rect class="head" x="710" y="14" width="130" height="34" rx="2"/><text x="775" y="36" text-anchor="middle" class="bold">Reference</text>
+    </g>
+    <!-- lifelines -->
+    <g>
+      <line class="life" x1="75"  y1="48" x2="75"  y2="410"/>
+      <line class="life" x1="240" y1="48" x2="240" y2="410"/>
+      <line class="life" x1="415" y1="48" x2="415" y2="410"/>
+      <line class="life" x1="595" y1="48" x2="595" y2="410"/>
+      <line class="life" x1="775" y1="48" x2="775" y2="410"/>
+      <rect class="act" x="234" y="72" width="12" height="318"/>
+    </g>
+    <!-- messages -->
+    <g>
+      <line class="line" x1="75" y1="78" x2="232" y2="78" marker-end="url(#s-fill)"/>
+      <text x="82" y="72">1 · «Explícame…»</text>
+
+      <path class="line new" d="M246,110 h40 v22 h-38" marker-end="url(#s-new)"/>
+      <text x="292" y="118" class="newt">2 · matches the description</text>
+      <text x="292" y="132" class="small">(new: Spanish triggers)</text>
+
+      <line class="line" x1="246" y1="166" x2="413" y2="166" marker-end="url(#s-fill)"/>
+      <text x="254" y="160">3 · Skill(explain-in-html)</text>
+      <line class="line dash" x1="415" y1="194" x2="248" y2="194" marker-end="url(#s-open)"/>
+      <text x="262" y="188" class="small">instructions and workflow</text>
+
+      <line class="line new" x1="246" y1="236" x2="593" y2="236" stroke-width="2" marker-end="url(#s-new)"/>
+      <text x="320" y="230" class="newt">4 · Read — always, before drafting</text>
+      <line class="line dash" x1="595" y1="262" x2="248" y2="262" marker-end="url(#s-open)"/>
+      <text x="330" y="256" class="small">patterns with their «When» condition</text>
+
+      <line class="line" x1="246" y1="300" x2="773" y2="300" marker-end="url(#s-fill)"/>
+      <text x="470" y="294">5 · Read — by category</text>
+
+      <path class="line" d="M246,330 h40 v22 h-38" marker-end="url(#s-fill)"/>
+      <text x="292" y="345">6 · drafts, writes the .html, verifies it</text>
+
+      <line class="line dash" x1="234" y1="382" x2="77" y2="382" marker-end="url(#s-open)"/>
+      <text x="90" y="376" class="small">path to the .html</text>
+    </g>
+  </svg>
+  </div>
+  <figcaption>Load sequence. In orange, what the change adds: the Spanish trigger (2) and the mandatory read of <code>patterns.md</code> (4). Solid arrow: call; dashed: response.</figcaption>
+</figure>
+
+<!-- ═════════ 5 minutes ═════════ -->
+<section data-level="5">
+  <h2>The structure: where <code>patterns.md</code> fits <span class="tag">5 min</span></h2>
+  <p>The skill loads in stages. Claude Code sees only the <code>description</code> until something matches. Then it loads <code>SKILL.md</code>, which decides which references to read. The change does not touch that mechanism: <code>patterns.md</code> is just another reference, with a special rule saying it is always read.</p>
+  <figure>
+    <div class="scroll">
+    <svg class="uml" viewBox="0 0 860 470" role="img" aria-labelledby="cls1t cls1d">
+      <title id="cls1t">Class diagram: plugin, skill, references and evals</title>
+      <desc id="cls1d">The plugin is composed of one skill. The skill is composed of references; Patterns is a specialization of reference that is always read. An eval suite is composed of cases and each case of graders, of four types. Each case depends on the skill, and the patterns-read grader verifies that patterns was read.</desc>
+      <defs>
+        <marker id="c-tri" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto"><path class="m-hollow" d="M1,1 L11,6 L1,11 z"/></marker>
+        <marker id="c-dia" viewBox="0 0 16 10" refX="1" refY="5" markerWidth="14" markerHeight="9" orient="auto"><path class="m-fill" d="M1,5 L8,1 L15,5 L8,9 z"/></marker>
+        <marker id="c-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="m-open" d="M0,0 L10,5 L0,10"/></marker>
+      </defs>
+
+      <!-- Plugin -->
+      <g>
+        <rect class="box" x="20" y="20" width="170" height="78"/>
+        <text x="105" y="40" text-anchor="middle" class="bold">Plugin</text>
+        <line class="line" x1="20" y1="48" x2="190" y2="48"/>
+        <text x="30" y="66" class="mono">plugin.json</text>
+        <text x="30" y="84" class="mono">marketplace.json</text>
+      </g>
+      <!-- Skill -->
+      <g>
+        <rect class="box" x="270" y="20" width="210" height="96"/>
+        <text x="375" y="40" text-anchor="middle" class="bold">Skill</text>
+        <line class="line" x1="270" y1="48" x2="480" y2="48"/>
+        <text x="280" y="66" class="mono">name: explain-in-html</text>
+        <text x="280" y="84" class="mono">description <tspan class="newt">+ Spanish</tspan></text>
+        <text x="280" y="102" class="mono">flow: decide → read → …</text>
+      </g>
+      <!-- Reference -->
+      <g>
+        <rect class="box" x="600" y="20" width="230" height="78"/>
+        <text x="715" y="40" text-anchor="middle" class="bold">Reference</text>
+        <line class="line" x1="600" y1="48" x2="830" y2="48"/>
+        <text x="610" y="66" class="mono">category</text>
+        <text x="610" y="84" class="mono">read: per request</text>
+      </g>
+      <!-- Patterns -->
+      <g>
+        <rect class="box new" x="600" y="170" width="230" height="78" stroke-width="2"/>
+        <text x="715" y="186" text-anchor="middle" class="small">«always»</text>
+        <text x="715" y="202" text-anchor="middle" class="bold">Patterns</text>
+        <line class="line" x1="600" y1="210" x2="830" y2="210"/>
+        <text x="610" y="228" class="mono">pattern: When + rule</text>
+        <text x="610" y="243" class="mono">precedence: 3rd</text>
+      </g>
+      <!-- skill relationships -->
+      <line class="line" x1="190" y1="60" x2="270" y2="60" marker-start="url(#c-dia)"/>
+      <text x="252" y="54" class="small" text-anchor="end">1</text>
+      <line class="line" x1="480" y1="60" x2="600" y2="60" marker-start="url(#c-dia)"/>
+      <text x="590" y="54" class="small" text-anchor="end">1..*</text>
+      <line class="line" x1="715" y1="170" x2="715" y2="99" marker-end="url(#c-tri)"/>
+      <path class="line dash" d="M420,116 V209 H598" marker-end="url(#c-open)"/>
+      <text x="432" y="200" class="small">«reads before drafting»</text>
+
+      <!-- Suite / Case / Grader -->
+      <g>
+        <rect class="box" x="20" y="300" width="170" height="60"/>
+        <text x="105" y="320" text-anchor="middle" class="bold">EvalSuite</text>
+        <line class="line" x1="20" y1="328" x2="190" y2="328"/>
+        <text x="30" y="347" class="mono">with / without plugin</text>
+      </g>
+      <g>
+        <rect class="box" x="270" y="290" width="210" height="78"/>
+        <text x="375" y="310" text-anchor="middle" class="bold">EvalCase</text>
+        <line class="line" x1="270" y1="318" x2="480" y2="318"/>
+        <text x="280" y="336" class="mono">prompt.md</text>
+        <text x="280" y="354" class="mono">should / should not fire</text>
+      </g>
+      <g>
+        <rect class="box" x="600" y="290" width="230" height="60"/>
+        <text x="715" y="306" text-anchor="middle" class="small">{abstract}</text>
+        <text x="715" y="322" text-anchor="middle" class="bold" font-style="italic">Grader</text>
+        <line class="line" x1="600" y1="330" x2="830" y2="330"/>
+        <text x="610" y="345" class="mono">type · arm · weight</text>
+      </g>
+      <line class="line" x1="190" y1="330" x2="270" y2="330" marker-start="url(#c-dia)"/>
+      <text x="252" y="324" class="small" text-anchor="end">1..*</text>
+      <line class="line" x1="480" y1="320" x2="600" y2="320" marker-start="url(#c-dia)"/>
+      <text x="590" y="314" class="small" text-anchor="end">1..*</text>
+      <path class="line dash" d="M340,290 V118" marker-end="url(#c-open)"/>
+      <text x="346" y="276" class="small">«evaluates»</text>
+
+      <!-- grader subtypes -->
+      <g>
+        <rect class="box new" x="500" y="410" width="80" height="34" stroke-width="2"/><text x="540" y="431" text-anchor="middle" class="mono">tool_used</text>
+        <rect class="box" x="600" y="410" width="70" height="34"/><text x="635" y="431" text-anchor="middle" class="mono">regex</text>
+        <rect class="box" x="690" y="410" width="80" height="34"/><text x="730" y="431" text-anchor="middle" class="mono">file_exists</text>
+        <rect class="box" x="790" y="410" width="50" height="34"/><text x="815" y="431" text-anchor="middle" class="mono">llm</text>
+        <path class="line" d="M540,410 V390 H815 V410"/>
+        <line class="line" x1="635" y1="390" x2="635" y2="410"/>
+        <line class="line" x1="730" y1="390" x2="730" y2="410"/>
+        <line class="line" x1="715" y1="390" x2="715" y2="351" marker-end="url(#c-tri)"/>
+      </g>
+      <path class="line dash new" d="M500,427 H490 V258 H598" marker-end="url(#c-open)"/>
+      <text x="540" y="462" text-anchor="middle" class="small">patterns-read «verifies read»</text>
+    </svg>
+    </div>
+    <figcaption>Class diagram. Filled diamond: composition. Hollow triangle: specialization. Dashed line with open arrow: dependency. In orange, what is new.</figcaption>
+  </figure>
+
+  <h3>Who wins when two rules clash</h3>
+  <p><code>patterns.md</code> defines an explicit precedence order. The patterns are house rules: they outrank the skill's defaults, but yield to the user and to the project's design system.</p>
+  <ol class="prec" aria-label="Precedence order">
+    <li>1. User instruction</li><li class="arrow" aria-hidden="true">›</li>
+    <li>2. Project design system</li><li class="arrow" aria-hidden="true">›</li>
+    <li class="here">3. Patterns</li><li class="arrow" aria-hidden="true">›</li>
+    <li>4. Skill defaults</li>
+  </ol>
+
+  <h3>How it is checked</h3>
+  <p>Each eval case runs with and without the plugin, so the report shows what the skill <em>adds</em>, not just whether the model solves the task. The change adds three things to the suite:</p>
+  <table>
+    <caption>What the change adds to the evals</caption>
+    <thead><tr><th scope="col">Piece</th><th scope="col">What it checks</th></tr></thead>
+    <tbody>
+      <tr><td><code>patterns-read</code> in every case that should fire</td><td>That there was a <code>Read</code> of <code>references/patterns.md</code>. Counts only in the with-plugin arm.</td></tr>
+      <tr><td>Case <code>explain-e-invoicing-spanish</code></td><td>That a request in Spanish fires the skill and that the page applies the patterns: language, labeled sequence diagram, rejection path and Colombian context.</td></tr>
+      <tr><td>Case <code>explain-in-one-sentence-spanish</code></td><td>That «explícame» in a one-sentence question does <em>not</em> produce a page. It is the brake on the new triggers.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═════════ 10 minutes ═════════ -->
+<section data-level="10">
+  <h2>The dynamics of an eval run <span class="tag">10 min</span></h2>
+  <p>The <code>patterns-read</code> grader only makes sense in the with-plugin arm: without the skill, nobody knows <code>patterns.md</code> exists. That is why it carries <code>arm: with-only</code>. Without it, the no-plugin arm would always fail and the Δ would come out inflated.</p>
+  <figure>
+    <div class="scroll">
+    <svg class="uml" viewBox="0 0 860 450" role="img" aria-labelledby="seq2t seq2d">
+      <title id="seq2t">Sequence diagram: one eval run</title>
+      <desc id="seq2d">The developer runs claude plugin eval. For each case, the runner runs the prompt three times with the plugin and three without, passes transcripts and files to the graders, which answer pass or fail; patterns-read is graded only with the plugin. At the end the runner returns a report with a delta.</desc>
+      <defs>
+        <marker id="e-fill" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="m-fill" d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="e-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="m-open" d="M0,0 L10,5 L0,10"/></marker>
+      </defs>
+      <g>
+        <rect class="head" x="20"  y="14" width="110" height="34" rx="2"/><text x="75"  y="36" text-anchor="middle" class="bold">Dev</text>
+        <rect class="head" x="180" y="14" width="140" height="34" rx="2"/><text x="250" y="36" text-anchor="middle" class="bold">plugin eval</text>
+        <rect class="head" x="370" y="14" width="130" height="34" rx="2"/><text x="435" y="36" text-anchor="middle" class="bold">With-plugin arm</text>
+        <rect class="head" x="550" y="14" width="130" height="34" rx="2"/><text x="615" y="36" text-anchor="middle" class="bold">No-plugin arm</text>
+        <rect class="head" x="730" y="14" width="110" height="34" rx="2"/><text x="785" y="36" text-anchor="middle" class="bold">Graders</text>
+      </g>
+      <g>
+        <line class="life" x1="75"  y1="48" x2="75"  y2="440"/>
+        <line class="life" x1="250" y1="48" x2="250" y2="440"/>
+        <line class="life" x1="435" y1="48" x2="435" y2="440"/>
+        <line class="life" x1="615" y1="48" x2="615" y2="440"/>
+        <line class="life" x1="785" y1="48" x2="785" y2="440"/>
+        <rect class="act" x="244" y="72" width="12" height="350"/>
+      </g>
+      <line class="line" x1="75" y1="78" x2="242" y2="78" marker-end="url(#e-fill)"/>
+      <text x="82" y="72" class="mono">claude plugin eval .</text>
+
+      <rect class="frame" x="150" y="100" width="700" height="270"/>
+      <path class="frame" d="M150,100 h96 v16 l-8,8 h-88 z"/>
+      <text x="158" y="116" class="small bold">loop [per case]</text>
+
+      <line class="line" x1="256" y1="148" x2="433" y2="148" marker-end="url(#e-fill)"/>
+      <text x="264" y="142">prompt.md ×3</text>
+      <line class="line dash" x1="435" y1="176" x2="258" y2="176" marker-end="url(#e-open)"/>
+      <text x="270" y="170" class="small">transcript + files</text>
+
+      <line class="line" x1="256" y1="214" x2="613" y2="214" marker-end="url(#e-fill)"/>
+      <text x="460" y="208">prompt.md ×3</text>
+      <line class="line dash" x1="615" y1="242" x2="258" y2="242" marker-end="url(#e-open)"/>
+      <text x="460" y="236" class="small">transcript + files</text>
+
+      <line class="line" x1="256" y1="290" x2="783" y2="290" marker-end="url(#e-fill)"/>
+      <text x="470" y="284">grade both arms</text>
+      <line class="line dash" x1="785" y1="336" x2="258" y2="336" marker-end="url(#e-open)"/>
+      <text x="470" y="318" class="small">pass / fail per grader</text>
+      <text x="470" y="330" class="newt" font-size="11">patterns-read: with-plugin arm only</text>
+
+      <line class="line dash" x1="244" y1="404" x2="77" y2="404" marker-end="url(#e-open)"/>
+      <text x="90" y="398" class="small">report with Δ</text>
+    </svg>
+    </div>
+    <figcaption>One run of the suite. The Δ compares the two arms; <code>with-only</code> graders are left out of the no-plugin arm.</figcaption>
+  </figure>
+
+  <h3>Design decisions</h3>
+  <table>
+    <caption>What was chosen and what was rejected</caption>
+    <thead><tr><th scope="col">Decision</th><th scope="col">Rejected alternative</th><th scope="col">Why</th></tr></thead>
+    <tbody>
+      <tr><td>Patterns in a separate file</td><td>Writing them inside <code>SKILL.md</code></td><td><code>SKILL.md</code> stays close to the <code>dogum/html-artifacts</code> original, so pulling upstream changes does not conflict with the fork's own rules.</td></tr>
+      <tr><td>Always read, apply per «When»</td><td>Reading it only for some categories</td><td>The patterns are cross-cutting: a sequence diagram or local context shows up in reports, explainers and reviews alike.</td></tr>
+      <tr><td>Explicit precedence in the file</td><td>Letting the model decide</td><td>Without a written order, a house pattern could override a project's design system.</td></tr>
+      <tr><td>Spanish triggers in the <code>description</code></td><td>Trusting the model to translate</td><td>The <code>description</code> is the only thing visible before the skill loads. Whatever is not there does not fire it reliably.</td></tr>
+      <tr><td>A negative case in Spanish</td><td>Positive cases only</td><td>Widening the triggers raises the risk of turning a one-sentence answer into a page.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Risks and limits</h3>
+  <ul>
+    <li><strong>Reading is not applying.</strong> <code>patterns-read</code> proves there was a <code>Read</code>, not that the rules were followed. Only the invoicing case has an <code>llm</code> grader that checks application.</li>
+    <li><strong>Fixed cost per activation.</strong> Every page pays for reading <code>patterns.md</code>. Today it is about 90 lines; if it grows, it should be split into sections.</li>
+    <li><strong>Description limit.</strong> CI cuts off at 1536 characters. Every new trigger eats into the margin.</li>
+    <li><strong>Prefixed names.</strong> In Claude Code a plugin's skill shows up as <code>plugin:folder</code>. The <code>skill-fired</code> graders accept that format with a regex; the final fix landed in 1.0.1 along with the folder rename.</li>
+  </ul>
+
+  <h3>Questions for review</h3>
+  <ul>
+    <li>Should we add an <code>llm</code> pattern-application grader to another case that is not in Spanish?</li>
+    <li>Who decides when a new rule goes into <code>patterns.md</code>, and on what evidence?</li>
+  </ul>
+</section>
+</main>
+
+<script>
+(() => {
+  const btn = document.querySelector('.theme-toggle'), root = document.documentElement;
+  const order = ['system', 'light', 'dark'];
+  const label = { system: '◐ System', light: '☀ Light', dark: '☾ Dark' };
+  let t = root.dataset.theme || 'system';
+  const show = () => { btn.textContent = label[t]; btn.setAttribute('aria-label', 'Theme: ' + label[t].slice(2)); };
+  btn.addEventListener('click', () => {
+    t = order[(order.indexOf(t) + 1) % order.length];
+    if (t === 'system') delete root.dataset.theme; else root.dataset.theme = t;
+    try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {}
+    show();
+  });
+  show();
+})();
+(() => {
+  const radios = [...document.querySelectorAll('input[name="level"]')];
+  const fromHash = location.hash.match(/^#(1|5|10)min$/);
+  if (fromHash) radios.forEach(r => { r.checked = r.value === fromHash[1]; });
+  radios.forEach(r => r.addEventListener('change', () => {
+    history.replaceState(null, '', `#${r.value}min`);
+  }));
+})();
+</script>
+</body>
+</html>

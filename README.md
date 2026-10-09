@@ -1,4 +1,4 @@
-> **explain-in-html** es una versión modificada de [dogum/html-artifacts](https://github.com/dogum/html-artifacts) (Apache-2.0). Cambios: se agregó `skills/explain-in-html/references/patrones.md` con patrones propios, `SKILL.md` lo lee siempre, la skill se llama `explain-in-html` (también su carpeta) y acepta pedidos en español. Lo demás es el trabajo original de su autor.
+> **explain-in-html** is a modified version of [dogum/html-artifacts](https://github.com/dogum/html-artifacts) (Apache-2.0). Changes: added `skills/explain-in-html/references/patterns.md` with its own patterns, `SKILL.md` always reads it, the skill is named `explain-in-html` (and so is its folder), and it accepts requests in Spanish. Everything else is the original author's work.
 
 # explain-in-html
 
@@ -12,10 +12,10 @@ This skill operationalizes the recognition heuristic and per-category patterns f
 
 **[→ See the examples](docs/examples/)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
 
-## What this fork adds (1.3.0)
+## What this fork adds (1.4.0)
 
-- **`references/patrones.md`**, a set of its own patterns that `SKILL.md` always reads.
-- **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…).
+- **`references/patterns.md`**, a set of its own patterns that `SKILL.md` always reads.
+- **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…) and get the page in Spanish. The repo itself is in English.
 - **Name:** the skill and its folder are `explain-in-html`.
 - **Reading levels:** pages meant to be read (explainers, PR writeups, reports) get a 1 / 5 / 10 minute selector, opening at 10. Ask for one time ("explícamelo en 1 minuto") and you get only that level.
 - **Places and walkthroughs:** physical processes (a warehouse, a port, a terminal) get a top-down plan drawn like an engineer's drawing: fixed zones, moving cargo, one color per shipment, exceptions drawn where they happen. Step-by-step diagrams get a play button that never starts on its own and pauses on questions.
@@ -124,7 +124,7 @@ If the defaults still produce output you don't like, fork it, or put a `design-s
 
 ## Examples
 
-Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 to 12 by this fork. Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
+Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 to 12 by this fork (11 and 12 were asked in Spanish and translated for this repo). Open `docs/examples/` directly, or see them on the original's [site](https://dogum.github.io/html-artifacts/).
 
 | Pattern | Prompt | File |
 |---|---|---|
@@ -137,9 +137,9 @@ Each is a single `.html` file produced from the prompt shown: 01–09 by the ups
 | Annotated code review | "Review this PR: add retry with backoff to the API client" | [`07-code-review.html`](docs/examples/07-code-review.html) |
 | Design-token sheet | "Lay out our design tokens as a reference page" | [`08-design-tokens.html`](docs/examples/08-design-tokens.html) |
 | Incident post-mortem | "Write up yesterday's search latency outage as a post-mortem" | [`09-postmortem.html`](docs/examples/09-postmortem.html) |
-| Reading levels, UML (this fork) | "Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer…" | [`10-niveles-de-lectura.html`](docs/examples/10-niveles-de-lectura.html) |
-| Floor plan with play-through (this fork) | "Explícame cómo se desconsolida un contenedor consolidado en un depósito habilitado en Colombia…" | [`11-plano-bodega.html`](docs/examples/11-plano-bodega.html) |
-| Researched regulatory explainer (this fork) | "Explícame cómo funciona el régimen de ensamble en Colombia… Investiga." | [`12-regimen-ensamble.html`](docs/examples/12-regimen-ensamble.html) |
+| Reading levels, UML (this fork) | "Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer…" | [`10-reading-levels.html`](docs/examples/10-reading-levels.html) |
+| Floor plan with play-through (this fork) | "Explain how a consolidated container is deconsolidated at a bonded warehouse in Colombia…" | [`11-warehouse-floor-plan.html`](docs/examples/11-warehouse-floor-plan.html) |
+| Researched regulatory explainer (this fork) | "Explain how the assembly regime works in Colombia… Research it." | [`12-assembly-regime.html`](docs/examples/12-assembly-regime.html) |
 
 Made something with the skill you're proud of? [Open a gallery issue](https://github.com/WilliWilliam/explain-in-html/issues/new?template=gallery.yml).
 

@@ -348,7 +348,7 @@ footer.foot .colophon code { font-size: .92em; }
   <div class="eyebrow">A Claude skill, by way of <a href="https://thariqs.github.io/html-effectiveness/">Thariq Shihipar's argument</a></div>
   <h1>Markdown is a poor format for the things <span class="headline-em">agents now make</span>.</h1>
   <p class="lead">Plans, comparisons, code reviews, status reports, throwaway editors — they read dramatically better as self-contained HTML than as markdown documents. This skill teaches Claude when to make an HTML artifact instead, and equally important, when to <em>leave well enough alone</em>.</p>
-  <p class="lead-small">Nine artifacts below, each produced by the skill in response to a real prompt, and each rendered headless and checked before it shipped. This page is itself one of them.</p>
+  <p class="lead-small">Twelve artifacts below, each produced by the skill in response to a real prompt, and each rendered headless and checked before it shipped. This page is itself one of them.</p>
 
   <div class="actions">
     <a class="primary" href="https://github.com/WilliWilliam/explain-in-html/releases/latest">Download <code>.skill</code> →</a>
@@ -656,7 +656,7 @@ footer.foot .colophon code { font-size: .92em; }
       <span class="file">09-postmortem.html</span>
     </a>
 
-    <a class="card" href="examples/10-niveles-de-lectura.html">
+    <a class="card" href="examples/10-reading-levels.html">
       <div class="fingerprint" aria-hidden="true">
         <svg viewBox="0 0 220 56" preserveAspectRatio="none">
           <g fill="none" stroke="currentColor" stroke-width="1.4"><rect x="6" y="4" width="60" height="10" rx="2"/></g>
@@ -668,12 +668,12 @@ footer.foot .colophon code { font-size: .92em; }
       </div>
       <span class="num">10</span>
       <span class="cat">Explainer · reading levels</span>
-      <h3>Patrones propios en explain-in-html</h3>
-      <p>One page, three reading times. A 1 / 5 / 10 minute selector hides the deeper layers with CSS; each level stands alone. UML class and sequence diagrams because the prompt asked for them. In Spanish.</p>
-      <span class="file">10-niveles-de-lectura.html</span>
+      <h3>The fork's own patterns in explain-in-html</h3>
+      <p>One page, three reading times. A 1 / 5 / 10 minute selector hides the deeper layers with CSS; each level stands alone. UML class and sequence diagrams because the prompt asked for them.</p>
+      <span class="file">10-reading-levels.html</span>
     </a>
 
-    <a class="card" href="examples/11-plano-bodega.html">
+    <a class="card" href="examples/11-warehouse-floor-plan.html">
       <div class="fingerprint" aria-hidden="true">
         <svg viewBox="0 0 220 56" preserveAspectRatio="none">
           <rect x="30" y="4" width="160" height="48" fill="none" stroke="currentColor" stroke-width="2.5"/>
@@ -686,12 +686,12 @@ footer.foot .colophon code { font-size: .92em; }
       </div>
       <span class="num">11</span>
       <span class="cat">Explainer · floor plan</span>
-      <h3>Cómo se desconsolida un contenedor</h3>
-      <p>A logistics process drawn as the place where it happens: a top-down warehouse plan where the zones stay put and the cargo moves, one color per shipment, synced with the paper trail. Step controls with a play button that pauses on questions. Reading levels, real-date deadlines. Made by a fresh agent with only the skill. In Spanish.</p>
-      <span class="file">11-plano-bodega.html</span>
+      <h3>How a container is deconsolidated</h3>
+      <p>A logistics process drawn as the place where it happens: a top-down warehouse plan where the zones stay put and the cargo moves, one color per shipment, synced with the paper trail. Step controls with a play button that pauses on questions. Reading levels, real-date deadlines. Made by a fresh agent with only the skill, from a Spanish prompt; translated for this repo.</p>
+      <span class="file">11-warehouse-floor-plan.html</span>
     </a>
 
-    <a class="card" href="examples/12-regimen-ensamble.html">
+    <a class="card" href="examples/12-assembly-regime.html">
       <div class="fingerprint" aria-hidden="true">
         <svg viewBox="0 0 220 56" preserveAspectRatio="none">
           <rect x="40" y="6" width="140" height="44" fill="none" stroke="currentColor" stroke-width="2.5"/>
@@ -703,9 +703,9 @@ footer.foot .colophon code { font-size: .92em; }
       </div>
       <span class="num">12</span>
       <span class="cat">Explainer · regulation</span>
-      <h3>Régimen de ensamble de motos en Colombia</h3>
-      <p>A customs regime researched from official sources and drawn as the plant where it happens: kits enter with tributes suspended, meet national parts on the line, and pay as finished motorcycles. Two cut lines, a play-through, variants, hedges where sources disagree, and a sources list. In Spanish.</p>
-      <span class="file">12-regimen-ensamble.html</span>
+      <h3>Motorcycle assembly regime in Colombia</h3>
+      <p>A customs regime researched from official sources and drawn as the plant where it happens: kits enter with duties and taxes suspended, meet national parts on the line, and pay as finished motorcycles. Two cut lines, a play-through, variants, hedges where sources disagree, and a sources list. From a Spanish prompt; translated for this repo.</p>
+      <span class="file">12-assembly-regime.html</span>
     </a>
 
   </div>
@@ -715,13 +715,13 @@ footer.foot .colophon code { font-size: .92em; }
 <section class="structure" id="whats-in-it">
   <div class="head">
     <h2>What's in the skill</h2>
-    <span class="cat">SKILL.md + 12 references</span>
+    <span class="cat">SKILL.md + patterns.md + 12 references</span>
   </div>
-  <p class="intro"><code>SKILL.md</code> is the entry point. It teaches recognition (when does a request want HTML?), the universal rules every artifact must follow, the carve-outs, and a five-step workflow that ends with verifying the page before handing it over. Each reference is pulled in only when the task fits; most artifacts need one or two. Eight are per-category patterns; four are cross-cutting: data and charts, accessibility and print, harness mechanics (the one file that knows which surface you're on), and the pre-delivery check.</p>
+  <p class="intro"><code>SKILL.md</code> is the entry point. It teaches recognition (when does a request want HTML?), the universal rules every artifact must follow, the carve-outs, and a five-step workflow that ends with verifying the page before handing it over. <code>references/patterns.md</code>, the fork's own patterns, is read every time before drafting. Each other reference is pulled in only when the task fits; most artifacts need one or two. Eight are per-category patterns; four are cross-cutting: data and charts, accessibility and print, harness mechanics (the one file that knows which surface you're on), and the pre-delivery check.</p>
 
   <div class="hub-wrap">
     <svg viewBox="-70 -20 900 420" role="img" aria-labelledby="hub-title" style="width:100%;height:auto">
-      <title id="hub-title">Skill structure: SKILL.md at the center, twelve reference files as spokes</title>
+      <title id="hub-title">Skill structure: SKILL.md and patterns.md at the center, always read; twelve reference files as spokes</title>
       <g fill="none" stroke="currentColor" stroke-width="1" opacity=".25" stroke-dasharray="3 3">
         <line x1="380" y1="190" x2="380" y2="40"/>
         <line x1="380" y1="190" x2="545" y2="60"/>
@@ -787,16 +787,18 @@ footer.foot .colophon code { font-size: .92em; }
         </g>
       </g>
       <g transform="translate(380, 190)">
-        <circle r="58" fill="var(--accent)" opacity=".09"/>
-        <circle r="48" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"/>
-        <text text-anchor="middle" y="-3" font-family="ui-monospace, monospace" font-size="13" font-weight="600" fill="var(--accent)">SKILL.md</text>
-        <text text-anchor="middle" y="14" font-family="ui-sans-serif, sans-serif" font-size="11" fill="var(--ink-soft)">always loaded</text>
+        <circle r="68" fill="var(--accent)" opacity=".09"/>
+        <circle r="58" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text text-anchor="middle" y="-12" font-family="ui-monospace, monospace" font-size="13" font-weight="600" fill="var(--accent)">SKILL.md</text>
+        <text text-anchor="middle" y="6" font-family="ui-monospace, monospace" font-size="12" font-weight="600" fill="var(--accent)">+ patterns.md</text>
+        <text text-anchor="middle" y="24" font-family="ui-sans-serif, sans-serif" font-size="11" fill="var(--ink-soft)">always read</text>
       </g>
     </svg>
   </div>
 
   <ul class="hub-fallback" aria-hidden="false">
     <li class="hub-center"><code>SKILL.md</code><span>recognition heuristic, universal rules, carve-outs · always loaded</span></li>
+    <li class="hub-center"><code>references/patterns</code><span>the fork's own patterns · always read before drafting</span></li>
     <li><code>references/exploration-and-planning</code></li>
     <li><code>references/code-review-and-pr</code></li>
     <li><code>references/design-and-prototypes</code></li>
@@ -812,7 +814,7 @@ footer.foot .colophon code { font-size: .92em; }
   </ul>
 
   <div class="hub-legend">
-    <div class="item"><span class="dot" style="background:var(--accent)"></span><span><b>SKILL.md</b> — recognition heuristic, universal rules, carve-outs. Always in context.</span></div>
+    <div class="item"><span class="dot" style="background:var(--accent)"></span><span><b>SKILL.md</b> — recognition heuristic, universal rules, carve-outs. Always in context. <b>patterns.md</b> — the fork's own patterns, read before every draft.</span></div>
     <div class="item"><span class="dot" style="background:var(--ink-mute);opacity:.5"></span><span><b>references/</b> — pulled in on demand by the matching task type.</span></div>
   </div>
 </section>
