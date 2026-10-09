@@ -10,7 +10,7 @@
 
 **Tech stack:** plain HTML/CSS/JS (no libraries), Bash, Node + Playwright (Chromium).
 
-**Spec:** `docs/superpowers/specs/2026-10-09-glossary-and-wide-layout-design.md`
+**Spec:** `design/specs/2026-10-09-glossary-and-wide-layout-design.md`
 
 ## Global constraints
 
