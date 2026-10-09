@@ -18,6 +18,8 @@ const shots = [
   { name: 'desktop-light', width: 1280, height: 800, scheme: 'light' },
   { name: 'desktop-dark',  width: 1280, height: 800, scheme: 'dark'  },
   { name: 'phone',         width: 400,  height: 800, scheme: 'light' },
+  { name: 'wide',          width: 1600, height: 900, scheme: 'light' },
+  { name: 'ultrawide',     width: 2200, height: 900, scheme: 'light' },
 ];
 for (const s of shots) {
   const page = await browser.newPage({ viewport: { width: s.width, height: s.height }, colorScheme: s.scheme });
@@ -42,6 +44,7 @@ Then **look at the screenshots** (the Read tool renders images). Check, in this 
 3. The five-second test: title, framing line, and the shape of the content are visible above the fold.
 4. Interactive parts respond: click the first control, press the keyboard shortcut, trigger the export and check the output text.
 5. Console is clean.
+6. If the page has a glossary: the popover opens with mouse hover, keyboard focus and a first touch tap; the drawer opens from a term, Esc closes it and focus returns to the button; the drawer does not slide on page load; with JS off the glossary is a list at the end. At 1600px and above, wide and full figures use the space.
 
 If the page has reading levels, the script above only sees the default (10 min). Shoot the 1 and 5 minute views too, by opening the file with `#1min` and `#5min` or clicking the selector, and check that each one stands alone.
 

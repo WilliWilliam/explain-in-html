@@ -105,7 +105,7 @@ For logistics, foreign trade, operations: "explain how a consolidated container 
 
 For both figure sheets and flowcharts:
 
-- **Use `viewBox`, not fixed `width`/`height`.** Lets the figure scale.
+- **Use `viewBox`, not fixed `width`/`height`.** Lets the figure scale. Draw it for the width it will show at: a `.full` diagram gets a `viewBox` of about 1800 units, not an 800-unit drawing scaled up (the `.wide`/`.full` choice is in "Wide layout" in `patterns.md`).
 - **Use `currentColor` for ink** where possible. Lets the figure inherit text color and adapt to dark mode.
 - **Round numbers.** `x="120"` not `x="119.7843"`. Easier for a human to tweak by hand.
 - **Group with `<g>` and label.** A user editing the SVG needs to find things by structure, not coordinates.

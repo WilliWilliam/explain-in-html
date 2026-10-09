@@ -12,12 +12,11 @@ For "explain consistent hashing to me" or "how does our rate limiter actually wo
 - A **live interactive demo** if the concept is the kind that benefits from manipulation (sharding, hashing, scheduling, queuing, anything geometric or stateful). Click/drag/slider that lets the reader cause the system to rearrange itself.
 - A comparison table: this approach vs. the obvious naive approach, with concrete metrics.
 - "Where you'll meet it" — real systems that use this. Grounds it in things the reader knows.
-- A glossary, ideally **in the margin** with hover-link cross-refs from terms in the body text.
+- A glossary on the term (popover) and in a drawer: see "Glossary: popover + drawer" in `patterns.md`.
 - Tabbed code samples for languages/frameworks the reader might use.
 
 **What's load-bearing**
 - The live demo. For concepts that have a spatial or stateful character, a five-second interaction beats five paragraphs of prose.
-- Marginal glossary, not a glossary at the bottom. Bottom glossaries are never read; marginal ones are scanned.
 - Comparison to the naive approach with numbers, not adjectives. "Better" is meaningless; "moves 1/N keys instead of (N-1)/N" is meaningful.
 
 **Common mistakes**
@@ -85,6 +84,7 @@ For "write up the outage from yesterday."
 ```html
 <main class="explainer">
   <header>
+    <button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button>
     <h1>Consistent hashing, in one ring</h1>
     <p class="tldr">N caches, K keys. Add or remove a node and only ~K/N keys move
        — instead of ~all of them with hash mod N. Here's why.</p>
@@ -112,7 +112,8 @@ For "write up the outage from yesterday."
     <table class="compare">...</table>
   </section>
 
-  <aside class="glossary">
+  <aside class="glossary" id="glossary" aria-labelledby="glossary-t"> <!-- last child of main; see patterns.md -->
+    <h2 id="glossary-t">Glossary</h2>
     <dl>
       <dt>Ring</dt><dd>The hash output range, treated as a circle.</dd>
       <dt>Arc</dt><dd>The stretch of ring a node owns.</dd>

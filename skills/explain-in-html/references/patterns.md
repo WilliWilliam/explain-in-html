@@ -134,6 +134,7 @@ A short script adds `html.js-glossary`, one shared `#term-pop` and unhides the b
 - The open state is stored in `localStorage` key `glossary-open`, inside try/catch.
 - No slide on load: enable the drawer transition only after the initial (closed or restored) state is applied.
 - At level 1 the glossary and its button are hidden, even with the drawer open.
+- If a sticky top bar can wrap (a reading-level bar on phones), start the drawer below the bar's measured height so the bar doesn't hide the drawer heading.
 - Colors come from the theme tokens only, so both themes work. On phones the drawer is full screen and the popover is a bottom sheet.
 
 **Wide layout.**

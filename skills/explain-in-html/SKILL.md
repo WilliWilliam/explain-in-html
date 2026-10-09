@@ -19,7 +19,7 @@ The skill is a judgment call, not a format switch. Most of what follows is about
 - **Comparison.** Two or more options the reader must weigh. Side by side beats stacked.
 - **Spatial information.** Diffs, call graphs, module maps, flowcharts, timelines, before/after, the floor plan of a warehouse, port, terminal or airport. Position carries meaning.
 - **Interaction matters.** Easing curves, parameter tuning, state machines, simulations. Things the reader needs to *feel*.
-- **Reference material.** Navigated non-linearly: tabs, collapsibles, a glossary in the margin, jump links.
+- **Reference material.** Navigated non-linearly: tabs, collapsibles, a glossary on the term (popover) and in a drawer, jump links.
 - **Color or hierarchy carries meaning.** Severity, status, syntax, design tokens, data series.
 - **Data.** More than a dozen numbers, a trend, a distribution. A table with sort and filter, or a chart.
 - **One-off editor.** The reader manipulates a thing (drags tickets, toggles flags, tunes a prompt) and needs the result back as text.
