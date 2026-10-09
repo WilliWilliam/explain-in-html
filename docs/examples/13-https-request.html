@@ -331,7 +331,7 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
       <line class="msg" x1="1240" y1="410" x2="1560" y2="320"/>
       <text class="note" x="1240" y="286" text-anchor="middle">warm connection · 80 ms round trip</text>
       <text class="ml" x="1232" y="440" text-anchor="end">GET / (cache miss)</text>
-      <text class="ml" x="1250" y="440">200 OK · max-age=300</text>
+      <text class="ml" x="1250" y="440">200 OK · s-maxage=300</text>
     </g>
     <g class="ph" data-ph="5">
       <rect class="band" x="1560" y="80" width="80" height="370"/>
@@ -413,12 +413,12 @@ ServerHello: key share
       <p data-level="5">The <a class="term" href="#g-edge">CDN edge</a> ended your encrypted connection itself and has its own connection to the <a class="term" href="#g-origin">origin</a>. Here that connection is already open, so the miss costs exactly one edge↔origin round trip.</p>
       <p data-level="10">If that connection were cold, the edge would first pay its own TCP and TLS handshakes, 80 ms each: 240 ms instead of 80, and 340 ms to the first byte instead of 180. Keeping warm, reused connections to the origin is a large part of what a CDN does for you on a miss.</p>
       <p class="rec" data-level="5"><span>What travels</span>edge → origin:  GET /   (over a connection kept open from earlier requests)
-origin → edge:  200 OK   cache-control: public, max-age=300</p>
+origin → edge:  200 OK   cache-control: public, max-age=0, s-maxage=300</p>
     </li>
     <li>
       <h3>6 · Response: the page arrives</h3>
       <p>The CDN server passes the page on to the browser and keeps a copy for the next visitor. The first byte reaches the browser at 180 ms; the browser starts reading the page right away.</p>
-      <p data-level="5">The edge keeps the copy for as long as the origin's cache-control allows (300 s here). The next visitor served by that edge gets a cache hit and skips step 5 entirely.</p>
+      <p data-level="5">The edge keeps the copy for as long as the origin's s-maxage allows (300 s here). The next visitor served by that edge gets a cache hit and skips step 5 entirely. The browser's own cache gets max-age=0, so on a later visit it doesn't reuse its copy unchecked: it revalidates with the edge.</p>
       <p class="rec" data-level="5"><span>What travels</span>HEADERS  stream=1   :status 200   content-type text/html
 DATA     stream=1   &lt;!doctype html&gt;…</p>
     </li>
@@ -427,8 +427,8 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
       <p>The browser doesn't hang up. The page's images and scripts, and your next click on the same site, travel over this open connection without repeating steps 1 to 3: each new request costs one round trip, 20 ms.</p>
       <p data-level="5">This is <a class="term" href="#g-keep-alive">keep-alive</a>. After the handshake the server also sent a session ticket (NewSessionTicket), which lets a later visit resume encryption with <a class="term" href="#g-0rtt">0-RTT</a>: the request rides along with the ClientHello.</p>
       <div class="q" data-level="5">
-        <p><b>Question:</b> tomorrow you open the same URL again. Which steps happen again?</p>
-        <details><summary>See answer</summary><p>DNS: no, if the cached answer's TTL hasn't run out. TCP: yes, one round trip. TLS: no extra round trip, because the GET travels with the ClientHello (0-RTT). Origin: no, if the CDN server still has the page. 40 ms instead of 180.</p></details>
+        <p><b>Question:</b> a few minutes later, in a new tab after the connection has closed, you open the same URL again. Which steps happen again?</p>
+        <details><summary>See answer</summary><p>DNS: no, if the cached answer's TTL hasn't run out. TCP: yes, one round trip. TLS: no extra round trip, because the GET travels with the ClientHello (0-RTT). Origin: no, the CDN server still has the page (s-maxage=300). 40 ms instead of 180.</p></details>
       </div>
     </li>
   </ol>
@@ -453,7 +453,7 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
 <!-- ═════════ 5 minutes ═════════ -->
 <section data-level="5">
   <h2>First visit, repeat visit, next click</h2>
-  <p>The same clock, three situations. A repeat visit is the next day, within the DNS answer's TTL and the edge's cache lifetime; the next click is a link on the same site while the connection is still open. Each cell is a multiple of the 20 ms <a class="term" href="#g-rtt">RTT</a> to the edge or the 80 ms one to the origin.</p>
+  <p>The same clock, three situations. A repeat visit is a few minutes later, after the connection has closed but within the DNS answer's 300 s TTL and the edge's s-maxage of 300 s; the browser revalidates the page with the edge, which answers from its copy. The next click is a link to another page on the same site, while the connection is still open, and assumes that page is also cached at the edge. Each cell is a multiple of the 20 ms <a class="term" href="#g-rtt">RTT</a> to the edge or the 80 ms one to the origin.</p>
   <div class="tscroll wide">
     <table class="compare" id="compare">
       <caption>Milliseconds to the first byte, per phase</caption>
@@ -462,8 +462,8 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
         <tr><td>DNS lookup</td><td class="n">40</td><td class="n zero">0</td><td class="n zero">0</td><td class="why">The cached answer, still within its 300 s <a class="term" href="#g-ttl">TTL</a> (browser or OS cache).</td></tr>
         <tr><td>TCP handshake</td><td class="n">20</td><td class="n">20</td><td class="n zero">0</td><td class="why">Nothing: a new TCP connection always costs one round trip. The next click reuses the open one.</td></tr>
         <tr><td>TLS handshake</td><td class="n">20</td><td class="n zero">0</td><td class="n zero">0</td><td class="why">The session ticket: with <a class="term" href="#g-0rtt">0-RTT</a> the GET is sent with the ClientHello, so TLS adds no round trip of its own.</td></tr>
-        <tr><td>Request and response, browser ↔ edge</td><td class="n">20</td><td class="n">20</td><td class="n">20</td><td class="why">Nothing: the question and the answer always cross once.</td></tr>
-        <tr><td>Edge ↔ origin</td><td class="n">80</td><td class="n zero">0</td><td class="n zero">0</td><td class="why">The edge's cached copy (a cache hit), still within max-age=300.</td></tr>
+        <tr><td>Request and response, browser ↔ edge</td><td class="n">20</td><td class="n">20</td><td class="n">20</td><td class="why">Nothing: the request and the answer always cross once. With max-age=0 the browser revalidates its copy with the edge, which answers from its cache.</td></tr>
+        <tr><td>Edge ↔ origin</td><td class="n">80</td><td class="n zero">0</td><td class="n zero">0</td><td class="why">The edge's cached copy (a cache hit), still within s-maxage=300.</td></tr>
       </tbody>
       <tfoot><tr><td>Time to first byte</td><td class="n">180 ms</td><td class="n">40 ms</td><td class="n">20 ms</td><td></td></tr></tfoot>
     </table>
@@ -486,9 +486,9 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
   <h2>Where you'll meet it</h2>
   <ul class="meet">
     <li><b>Your browser's developer tools.</b> The Network tab's Timing view splits each request into DNS lookup, initial connection, SSL and waiting for the server response, the same phases as the diagram.</li>
-    <li><b>curl.</b> <code>curl -so /dev/null -w '%{time_namelookup} %{time_connect} %{time_appconnect} %{time_starttransfer}\n'</code> prints the clock at the end of DNS, TCP, TLS and the first byte.</li>
+    <li><b>curl.</b> <code>curl -so /dev/null -w '%{time_namelookup} %{time_connect} %{time_appconnect} %{time_starttransfer}\n' https://www.example.com/</code> prints the clock at the end of DNS, TCP, TLS and the first byte.</li>
     <li><b>dig.</b> <code>dig www.example.com</code> shows the answer and its remaining TTL; run it twice and watch the number go down.</li>
-    <li><b>openssl.</b> <code>openssl s_client -connect www.example.com:443 -servername www.example.com -alpn h2</code> shows the SNI you sent, the certificate chain the server returned and the ALPN it picked.</li>
+    <li><b>openssl.</b> <code>openssl s_client -connect www.example.com:443 -servername www.example.com -alpn h2</code> lets you set the SNI and shows the certificate chain (add <code>-showcerts</code>) and the ALPN the server picked.</li>
     <li><b>A CDN dashboard.</b> The cache hit ratio is the share of requests that skip step 5; the origin latency is the 80 ms leg.</li>
   </ul>
 </section>
@@ -498,7 +498,7 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
   <h2>The fine print</h2>
   <ul>
     <li><b>0-RTT data can be replayed.</b> The early request is encrypted with keys from the earlier session ticket, before the server has said anything in this connection, so an attacker who records it can send it again. Servers and CDNs therefore accept early data only for safe, idempotent requests such as a plain GET, never for a payment or a form post. A CDN can forward the request to the origin with an <code>Early-Data: 1</code> header, and the origin can answer <code>425 Too Early</code> to make the browser retry after the full handshake.</li>
-    <li><b>When 0-RTT doesn't happen,</b> because the ticket expired, the request isn't idempotent or the server declines early data, resumption still skips the certificate but costs the TLS round trip: the repeat visit becomes 60 ms instead of 40.</li>
+    <li><b>When 0-RTT doesn't happen,</b> because the ticket expired, the request isn't idempotent or the server declines early data, resumption still skips the certificate but costs the TLS round trip: the repeat visit becomes 60 ms instead of 40. Some browsers only use early data over HTTP/3, so over TCP they take the 60 ms path.</li>
     <li><b>The edge's connection to the origin.</b> The 80 ms miss assumes the edge already had a warm, reused connection to the origin. A cold one adds a TCP and a TLS handshake at 80 ms each: the miss becomes 240 ms and the first visit 340 ms. CDNs keep connection pools and often add a shield tier, a single cache close to the origin, so most misses never reach it.</li>
     <li><b>HTTP/3 over QUIC.</b> The connection and encryption handshakes share one round trip, so the first visit would be 160 ms. A repeat visit with 0-RTT sends the GET in the very first packet: 20 ms. The browser usually learns that a site speaks HTTP/3 from an earlier response (Alt-Svc) or from a DNS HTTPS record, so the very first visit is often HTTP/2.</li>
     <li><b>TLS 1.2</b> needed two round trips for a full handshake, so the same first visit would take 200 ms.</li>
