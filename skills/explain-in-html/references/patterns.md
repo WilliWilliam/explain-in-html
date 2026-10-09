@@ -115,10 +115,41 @@ body:has(#level-5:checked) [data-level="10"] { display: none; }
 ```
 The radios can sit inside a container styled as segmented buttons (the radio hidden with `opacity: 0` and the label as the button). Hide with CSS, not JS. If something fails, the full page shows. A bit of JS can store the level in the URL (`#5min`) for sharing the link. Printing outputs the chosen level. Check all three levels when reviewing the page.
 
-**Side glossary.**
+**Glossary: popover + drawer.**
 When: there are more than four or five specialized terms.
-Glossary in the margin, with terms in the text linked to their definition.
 With reading levels, the glossary starts at level 5. In what shows at level 1, terms are explained in the same sentence and aren't linked to the glossary, which is hidden there.
+```html
+<button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button> <!-- next to .theme-toggle -->
+<p>… the <a class="term" href="#g-sni">SNI</a> …</p>
+<aside class="glossary" id="glossary" data-level="5" aria-labelledby="glossary-t"> <!-- last child of main; data-level only with reading levels -->
+  <h2 id="glossary-t">Glossary</h2>
+  <dl><dt id="g-sni">SNI</dt><dd id="g-sni-d">Server Name Indication: …</dd></dl>
+</aside>
+```
+A short script adds `html.js-glossary`, one shared `#term-pop` and unhides the button. Copy the marked CSS and script blocks from `docs/examples/02-iri-explainer.html`. It must keep these behaviours:
+- Without JS and when printing, the aside is a list at the end of `main` and term links jump to it.
+- Each `.term` gets `aria-describedby="g-<slug>-d"`. Hover, focus or a first tap opens the popover (the `dd` text plus "See in glossary →"), clamped to the viewport. Leaving, blur, Esc or a tap outside closes it.
+- A mouse click or Enter on a term opens the drawer at its entry and sets the hash. On touch, the first tap only opens the popover.
+- The drawer is a fixed side panel that overlays the content and never pushes it. It starts closed. Esc or the button closes it, and focus returns to the button. It scrolls inside itself (`overscroll-behavior: contain`).
+- The open state is stored in `localStorage` key `glossary-open`, inside try/catch.
+- At level 1 the glossary and its button are hidden, even with the drawer open.
+- Colors come from the theme tokens only, so both themes work. On phones the drawer is full screen and the popover is a bottom sheet.
+
+**Wide layout.**
+When: a figure, table or diagram needs more than the text measure.
+| Class | Width | For |
+|---|---|---|
+| (default) | `min(70ch, 100%)` | Running text, lists, callouts |
+| `.wide` | `min(1600px, 100%)` | Tables, comparisons, medium diagrams, card grids |
+| `.full` | window width minus a 16–24px gutter | Floor plans, many-column flows, diagrams that gain from space |
+
+One centered column in `<div class="page">`, no side column. The gutter is padding, so `.full` stops at it:
+```css
+.page { display: grid; padding-inline: clamp(16px, 2vw, 24px);
+  grid-template-columns: [full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]; }
+```
+Children default to `grid-column: content`; `main` and its sections pass the lines down with `subgrid` (see 02). Grid items don't collapse margins, so give text one-sided margins.
+Use `.full` only when the diagram has more than about 6 columns or zones, or its labels would render below 11px at 1100px; otherwise `.wide`. A `.full` SVG gets a `viewBox` drawn for its real width (about 1800 units), not an 800-unit drawing scaled up. On phones all tiers are 100% with a 16px gutter; anything that still doesn't fit scrolls in an `overflow-x: auto` box.
 
 **A case threaded end to end.**
 When: an example is used.

@@ -24,13 +24,22 @@
 * { box-sizing: border-box; }
 html, body { background: var(--bg); color: var(--ink); margin: 0; }
 body { font: 17px/1.55 var(--serif); }
-.layout { max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 2.5rem; }
-@media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+/* wide layout: start */
+.page { display: grid; padding-inline: clamp(16px, 2vw, 24px);
+  grid-template-columns: [full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]; }
+.page > *, .page main > * { grid-column: content; }
+/* main and its plain sections pass the same lines down. Grid items don't collapse margins: use one-sided ones. */
+.page > main, .page main > section:not(.wide, .full) { grid-column: full; display: grid; grid-template-columns: subgrid; }
+.page .wide { grid-column: wide; }
+.page .full { grid-column: full; }
+/* wide layout: end */
+main { margin: 3rem 0; }
+.tools { position: fixed; top: .75rem; right: .75rem; z-index: 25; display: flex; gap: .5rem; }
 .crumb { color: var(--ink-soft); font: 13px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1em; }
 h1 { font-size: 2.1rem; line-height: 1.15; letter-spacing: -.01em; margin: 0 0 .4em; }
-.tldr { color: var(--ink-soft); font-size: 1.05rem; margin: 0 0 2em; padding-left: 1em; border-left: 3px solid var(--accent); }
-h2 { font-size: 1.3rem; margin: 2.5em 0 .6em; }
-p { margin: .8em 0; }
+.tldr { color: var(--ink-soft); font-size: 1.05rem; margin: 0 0 .8em; padding-left: 1em; border-left: 3px solid var(--accent); }
+h2 { font-size: 1.3rem; margin: 1.7em 0 .6em; }
+p { margin: 0 0 .8em; }
 em.k { font-style: normal; background: rgba(139, 92, 246, 0.12); padding: 0 .3em; border-radius: 2px; cursor: help; border-bottom: 1px dotted var(--accent); }
 figure.demo { margin: 1.5em 0 2em; padding: 1.25em; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; }
 .scene { width: 100%; height: 220px; background: linear-gradient(to bottom, transparent 0, transparent 70%, rgba(139, 92, 246, 0.04) 100%); border-bottom: 1px solid var(--rule); margin-bottom: 1em; }
@@ -50,29 +59,54 @@ table.compare { width: 100%; border-collapse: collapse; margin: 1em 0 2em; font-
 table.compare th, table.compare td { padding: .55em .75em; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
 table.compare th { font: 600 13px var(--sans); color: var(--ink-soft); text-transform: uppercase; letter-spacing: .05em; }
 table.compare td:first-child { color: var(--ink-soft); }
-aside.glossary { font: 14px/1.5 var(--sans); color: var(--ink-soft); position: sticky; top: 2rem; align-self: start; }
-aside.glossary h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink); margin: 0 0 .8em; padding-bottom: .4em; border-bottom: 1px solid var(--rule); }
-aside.glossary dt { font-weight: 600; color: var(--ink); margin-top: .9em; }
-aside.glossary dd { margin: .15em 0 0; }
+/* glossary: popover + drawer: start. Tokens: --surface --ink --ink-soft --rule --accent --sans. */
+a.term { color: inherit; text-decoration: underline dotted var(--accent); text-underline-offset: 3px; }
+.glossary { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: 14px/1.5 var(--sans); color: var(--ink-soft); }
+.glossary h2 { font: 600 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink); margin: 0 0 .6em; }
+.glossary dt { font-weight: 600; color: var(--ink); margin-top: .9em; }
+.glossary dt:target { color: var(--accent); }
+.glossary dd { margin: .15em 0 0; }
+.glossary-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.glossary-toggle[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+/* With JS the aside becomes a drawer that overlays the page (never pushes it). */
+.js-glossary .glossary { position: fixed; top: 0; bottom: 0; right: 0; z-index: 20; width: min(22rem, 100vw); margin: 0; padding: 3.5rem 1.25rem 1.5rem;
+  border: 0; border-left: 1px solid var(--ink-soft); background: var(--surface); overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: 3rem;
+  visibility: hidden; transform: translateX(100%); transition: transform .2s, visibility .2s; }
+.js-glossary .glossary[data-open] { visibility: visible; transform: none; }
+#term-pop { position: absolute; z-index: 30; max-width: min(22rem, calc(100vw - 16px)); padding: .65rem .85rem; font: 14px/1.45 var(--sans); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--ink-soft); border-radius: 6px; }
+.term-pop-more { display: block; margin-top: .4em; color: var(--accent); }
+body:has(#level-1:checked) .glossary-toggle { display: none; }
+@media (max-width: 600px) {
+  .js-glossary .glossary { width: 100%; }
+  #term-pop { position: fixed; left: 8px; right: 8px; bottom: 8px; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { .js-glossary .glossary { transition: none; } }
+@media print {
+  .js-glossary .glossary { position: static; visibility: visible; transform: none; width: auto; margin-top: 3rem; padding: 1rem 0 0; border: 0; border-top: 1px solid var(--rule); overflow: visible; }
+  .glossary-toggle, #term-pop { display: none; }
+}
+/* glossary: popover + drawer: end */
 .legend { display: flex; gap: 1.2em; font: 12px var(--sans); color: var(--ink-soft); margin-bottom: .5em; }
 .legend .sw { display: inline-block; width: 12px; height: 12px; vertical-align: middle; margin-right: .35em; border-radius: 2px; }
 :focus-visible { outline: 2px solid var(--accent, #8b5cf6); outline-offset: 2px; }
 </style>
 </head>
 <body>
-<div class="layout">
+<div class="tools"><button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button></div>
+<div class="page">
 
 <main>
   <div class="crumb">Research & Learning · concept explainer</div>
   <h1>How a quarter-car model computes IRI</h1>
-  <p class="tldr">IRI is just the suspension's relative travel rate, integrated over distance, when a standardized two-mass car drives over your road profile at 80&nbsp;km/h. The simulation below is the standard <em>golden car</em> running live — drag the bump amplitude up and watch IRI climb.</p>
+  <p class="tldr">IRI is just the suspension's <a class="term" href="#g-stroke-rate">relative travel rate</a>, integrated over distance, when a standardized two-mass car drives over your road profile at <a class="term" href="#g-80-kmh">80&nbsp;km/h</a>. The simulation below is the standard <a class="term" href="#g-golden-car">golden car</a> running live — drag the bump amplitude up and watch IRI climb.</p>
 
   <h2>The trick: don't measure the road, measure how a car reacts to it</h2>
-  <p>A road profile is just elevation vs. distance. Two roads can have the same RMS roughness but feel completely different to drive — one rattles your teeth, the other lulls you to sleep. The reason is that a vehicle's suspension is a <em class="k" title="A linear filter shaped by the masses, springs, and damper of the suspension. It rejects very-low-frequency content (long grade) and very-high-frequency content (texture), and resonates on bumps in the 1–10&nbsp;Hz band.">filter</em>: it cares about wavelengths that excite its sprung-mass and axle resonances, and ignores wavelengths outside that band.</p>
+  <p>A road profile is just elevation vs. distance. Two roads can have the same RMS roughness but feel completely different to drive — one rattles your teeth, the other lulls you to sleep. The reason is that a vehicle's suspension is a <em class="k" title="A linear filter shaped by the masses, springs, and damper of the suspension. It rejects very-low-frequency content (long grade) and very-high-frequency content (texture), and resonates on bumps in the 1–10&nbsp;Hz band.">filter</em>: it cares about wavelengths that excite its <a class="term" href="#g-sprung-mass">sprung-mass</a> and <a class="term" href="#g-unsprung-mass">axle</a> resonances, and ignores wavelengths outside that band.</p>
 
   <p>So instead of computing roughness from the profile directly, you simulate driving a <em>standardized</em> car over the profile and measure how much its suspension worked. That's IRI. The standardization matters: everyone in the world uses the same fictional vehicle (the "golden car") with the same parameters, so two engineers running the same profile through their own code get the same number.</p>
 
-  <figure class="demo">
+  <figure class="demo wide">
     <svg class="scene" viewBox="0 0 800 220" preserveAspectRatio="xMidYMid meet" id="scene">
       <!-- Road -->
       <path id="road" d="" stroke="var(--road)" stroke-width="2" fill="none"/>
@@ -137,26 +171,26 @@ aside.glossary dd { margin: .15em 0 0; }
   </table>
 
   <h2>Where you'll meet it</h2>
-  <p>Pavement contracts ("must deliver IRI &lt; 1.5&nbsp;m/km on completion"), pavement management systems prioritizing rehab, ride-quality acceptance criteria, and — relevantly to heavy-truck testing — establishing whether a test course represents the operating environment. The ASTM E950 / E1926 family of standards specifies how to compute it from a measured profile; HDM-4 uses it as the input to its rolling-resistance and vehicle-operating-cost models.</p>
-</main>
+  <p>Pavement contracts ("must deliver IRI &lt; 1.5&nbsp;<a class="term" href="#g-m-km">m/km</a> on completion"), pavement management systems prioritizing rehab, ride-quality acceptance criteria, and — relevantly to heavy-truck testing — establishing whether a test course represents the operating environment. The ASTM E950 / E1926 family of standards specifies how to compute it from a measured profile; HDM-4 uses it as the input to its rolling-resistance and vehicle-operating-cost models.</p>
 
-<aside class="glossary">
-  <h3>Glossary</h3>
-  <dl>
-    <dt>Sprung mass</dt>
-    <dd>The vehicle body — everything supported by the suspension.</dd>
-    <dt>Unsprung mass</dt>
-    <dd>The wheel and axle — between the suspension and the road.</dd>
-    <dt>Golden car</dt>
-    <dd>The standardized two-mass quarter-car used worldwide for IRI. Always the same parameters; that's the whole point.</dd>
-    <dt>Suspension stroke rate</dt>
-    <dd><code>ż_s − ż_u</code>. The relative velocity of body vs. wheel — what IRI integrates.</dd>
-    <dt>80 km/h</dt>
-    <dd>The fixed simulation speed for IRI. The choice locks the band-pass shape; running at a different speed would give a different number.</dd>
-    <dt>m/km</dt>
-    <dd>IRI's unit. Suspension travel (meters) per kilometer driven. New highway is ~1; rough rural road is ~5; airport runway is ~0.5.</dd>
-  </dl>
-</aside>
+  <aside class="glossary" id="glossary" aria-labelledby="glossary-t">
+    <h2 id="glossary-t">Glossary</h2>
+    <dl>
+      <dt id="g-sprung-mass">Sprung mass</dt>
+      <dd id="g-sprung-mass-d">The vehicle body — everything supported by the suspension.</dd>
+      <dt id="g-unsprung-mass">Unsprung mass</dt>
+      <dd id="g-unsprung-mass-d">The wheel and axle — between the suspension and the road.</dd>
+      <dt id="g-golden-car">Golden car</dt>
+      <dd id="g-golden-car-d">The standardized two-mass quarter-car used worldwide for IRI. Always the same parameters; that's the whole point.</dd>
+      <dt id="g-stroke-rate">Suspension stroke rate</dt>
+      <dd id="g-stroke-rate-d"><code>ż_s − ż_u</code>. The relative velocity of body vs. wheel — what IRI integrates.</dd>
+      <dt id="g-80-kmh">80 km/h</dt>
+      <dd id="g-80-kmh-d">The fixed simulation speed for IRI. The choice locks the band-pass shape; running at a different speed would give a different number.</dd>
+      <dt id="g-m-km">m/km</dt>
+      <dd id="g-m-km-d">IRI's unit. Suspension travel (meters) per kilometer driven. New highway is ~1; rough rural road is ~5; airport runway is ~0.5.</dd>
+    </dl>
+  </aside>
+</main>
 
 </div>
 
@@ -314,6 +348,66 @@ document.getElementById('reset').addEventListener('click', reset);
 
 reset();
 drawAll();
+</script>
+<script>
+// glossary: popover + drawer: start. Without JS the aside stays a list at the end of main.
+(() => {
+  const g = document.getElementById('glossary'), btn = document.querySelector('.glossary-toggle');
+  if (!g || !btn) return;
+  const sheet = matchMedia('(max-width: 600px)'), pop = document.createElement('div');
+  pop.id = 'term-pop'; pop.hidden = true; pop.setAttribute('role', 'tooltip');
+  document.body.append(pop);
+  document.documentElement.classList.add('js-glossary');
+  btn.hidden = false;
+  let cur = null, timer, touch = false, wasOpen = false;
+  const slug = t => t.getAttribute('href').slice(1);
+  const hide = () => { clearTimeout(timer); pop.hidden = true; cur = null; };
+  const later = () => { clearTimeout(timer); timer = setTimeout(hide, 200); };
+  function show(t) {
+    const d = document.getElementById(slug(t) + '-d');
+    if (!d) return;
+    clearTimeout(timer); cur = t;
+    pop.innerHTML = d.innerHTML + ` <a class="term-pop-more" href="#${slug(t)}">See in glossary →</a>`;
+    pop.hidden = false; pop.style.left = pop.style.top = '';
+    if (sheet.matches) return; // the CSS docks it as a bottom sheet
+    const r = t.getBoundingClientRect(), p = pop.getBoundingClientRect(), m = 8, W = document.documentElement.clientWidth;
+    const x = Math.max(m, Math.min(r.left, W - p.width - m));
+    const y = r.bottom + m + p.height <= innerHeight ? r.bottom + m : Math.max(m, r.top - m - p.height);
+    pop.style.left = x + scrollX + 'px'; pop.style.top = y + scrollY + 'px';
+  }
+  function setOpen(open) {
+    g.toggleAttribute('data-open', open);
+    btn.setAttribute('aria-expanded', open);
+    try { localStorage.setItem('glossary-open', open ? '1' : '0'); } catch {}
+  }
+  document.querySelectorAll('a.term').forEach(t => {
+    t.setAttribute('aria-describedby', slug(t) + '-d');
+    t.addEventListener('mouseenter', () => show(t));
+    t.addEventListener('focus', () => show(t));
+    t.addEventListener('mouseleave', later);
+    t.addEventListener('blur', later);
+    t.addEventListener('pointerdown', e => { touch = e.pointerType !== 'mouse'; wasOpen = cur === t; });
+    t.addEventListener('click', e => {
+      // First tap on touch: popover only. Mouse click, Enter or a second tap: drawer at the entry (the link sets the hash).
+      if (touch && !wasOpen) { e.preventDefault(); show(t); } else { hide(); setOpen(true); }
+      touch = wasOpen = false;
+    });
+  });
+  pop.addEventListener('mouseenter', () => clearTimeout(timer));
+  pop.addEventListener('mouseleave', later);
+  pop.addEventListener('click', e => { if (e.target.closest('.term-pop-more')) { hide(); setOpen(true); } });
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('.term, #term-pop')) hide(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!pop.hidden) hide();
+    else if (g.hasAttribute('data-open')) { setOpen(false); btn.focus(); }
+  });
+  btn.addEventListener('click', () => setOpen(!g.hasAttribute('data-open')));
+  const l1 = document.getElementById('level-1'); // reading levels: level 1 closes the drawer
+  if (l1) l1.addEventListener('change', () => setOpen(false));
+  try { if (localStorage.getItem('glossary-open') === '1') setOpen(true); } catch {}
+})();
+// glossary: popover + drawer: end
 </script>
 </body>
 </html>
