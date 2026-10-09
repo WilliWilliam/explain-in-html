@@ -1,7 +1,7 @@
 {
   "name": "explain-in-html",
   "displayName": "Explain in HTML",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Self-contained HTML artifacts that explain, compare and report, with the fork's own patterns. Based on dogum/html-artifacts.",
   "author": { "name": "WilliWilliam", "url": "https://github.com/WilliWilliam" },
   "homepage": "https://github.com/WilliWilliam/explain-in-html",
