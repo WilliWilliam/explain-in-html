@@ -89,7 +89,7 @@ header.top h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .3em; letter-spa
 /* Floor plan */
 figure.planfig { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: .8rem; }
 .plan-scroll { overflow-x: auto; }
-.plan { display: block; width: 100%; min-width: 1100px; height: auto; color: var(--ink); }
+.plan { display: block; width: 100%; min-width: 940px; height: auto; color: var(--ink); }
 .plan text { font-family: var(--sans); fill: var(--ink); }
 .plan .wall { fill: none; stroke: var(--ink); stroke-width: 6; }
 .plan .door { fill: var(--surface); }
@@ -98,28 +98,28 @@ figure.planfig { margin: 0; background: var(--surface); border: 1px solid var(--
 .plan .zone.restricted { stroke: var(--alert); fill: url(#hatch); }
 .plan .zone.hot { stroke: var(--accent); stroke-width: 3.5; fill: var(--hot); }
 .plan .zone.restricted.hot { fill: url(#hatch); }
-.plan .zlabel { font-size: 15px; font-weight: 700; letter-spacing: .07em; fill: var(--ink-soft); }
-.plan .llabel { font-size: 14px; font-weight: 600; letter-spacing: .05em; }
+.plan .zlabel { font-size: 19px; font-weight: 700; letter-spacing: .07em; fill: var(--ink-soft); }
+.plan .llabel { font-size: 17px; font-weight: 600; letter-spacing: .05em; }
 .plan .rack { fill: none; stroke: var(--ink-soft); stroke-width: 1.5; }
-.plan .small { font-size: 13.5px; fill: var(--ink-soft); }
+.plan .small { font-size: 16px; fill: var(--ink-soft); }
 .plan .bx rect { stroke: var(--surface); stroke-width: 1; }
-.plan .bx text { font-size: 14px; font-weight: 700; fill: var(--surface); text-anchor: middle; }
+.plan .bx text { font-size: 17px; font-weight: 700; fill: var(--surface); text-anchor: middle; }
 .plan .bx.A rect { fill: var(--A); } .plan .bx.B rect { fill: var(--B); }
 .plan .bx.C rect { fill: var(--C); } .plan .bx.D rect { fill: var(--D); }
 .plan .ghost rect { fill: none; stroke: var(--D); stroke-width: 1.5; stroke-dasharray: 3 2; }
-.plan .ghost text { font-size: 14px; font-weight: 700; fill: var(--D); text-anchor: middle; }
+.plan .ghost text { font-size: 17px; font-weight: 700; fill: var(--D); text-anchor: middle; }
 .plan .mov { transition: transform .8s cubic-bezier(.6,0,.3,1), opacity .4s; }
 .plan .off { opacity: 0; }
 .plan .faded { opacity: .45; }
 .plan .cont rect { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
-.plan .cont text { font-size: 13px; font-family: var(--mono); text-anchor: middle; }
+.plan .cont text { font-size: 15px; font-family: var(--mono); text-anchor: middle; }
 .plan .truck rect { fill: var(--surface); stroke-width: 2.5; }
-.plan .truck text { font-size: 16px; font-weight: 700; text-anchor: middle; }
+.plan .truck text { font-size: 20px; font-weight: 700; text-anchor: middle; }
 .plan #tA rect { stroke: var(--A); } .plan #tA text { fill: var(--A); }
 .plan #tB rect { stroke: var(--B); } .plan #tB text { fill: var(--B); }
 .plan #tC rect { stroke: var(--C); } .plan #tC text { fill: var(--C); }
 .plan #tD rect { stroke: var(--D); } .plan #tD text { fill: var(--D); }
-.plan .note { font-size: 15px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+.plan .note { font-size: 18px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
 .plan .note.warn { fill: var(--warn); } .plan .note.bad { fill: var(--danger); } .plan .note.ok { fill: var(--ok); }
 .legend { list-style: none; padding: 0; margin: .6rem 0 0; display: flex; flex-wrap: wrap; gap: .3rem 1rem; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
 .legend i { display: inline-block; width: 12px; height: 10px; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
@@ -285,7 +285,7 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
     <g id="stage">
       <rect id="z-yard" class="zone" x="6" y="24" width="244" height="552"/>
       <text class="zlabel" x="18" y="48">YARD AND GATE</text>
-      <text class="small" x="18" y="68">from the port ↓</text>
+      <text class="small" x="18" y="72">from the port ↓</text>
 
       <rect id="z-exit" class="zone" x="1540" y="24" width="254" height="552"/>
       <text class="zlabel" x="1552" y="48">EXIT YARD</text>
@@ -299,8 +299,8 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
       <rect class="door" x="1515" y="462" width="10" height="64"/>
 
       <rect id="z-unload" class="zone" x="290" y="240" width="130" height="120"/>
-      <text class="zlabel" x="290" y="212">UNLOADING</text>
-      <text class="zlabel" x="290" y="230">DOCK</text>
+      <text class="zlabel" x="290" y="206">UNLOADING</text>
+      <text class="zlabel" x="290" y="228">DOCK</text>
 
       <g id="z-sort-g">
         <text class="zlabel" x="452" y="56">DECONSOLIDATION</text>
@@ -340,28 +340,28 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
     <!-- WHAT MOVES (step 1 positions) -->
     <g id="cont" class="cont mov" style="transform:translate(40px,90px)">
       <rect width="150" height="46"/>
-      <text x="75" y="19">MODU 000123-4</text>
-      <text x="75" y="37" id="contSub">seal 000481</text>
+      <text x="75" y="20">MODU 000123-4</text>
+      <text x="75" y="39" id="contSub">seal 000481</text>
     </g>
 
-    <g transform="translate(1560,102)"><g id="tA" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="38">A</text></g></g>
-    <g transform="translate(1560,222)"><g id="tB" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="38">B</text></g></g>
-    <g transform="translate(1560,342)"><g id="tC" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="38">C</text></g></g>
-    <g transform="translate(1560,462)"><g id="tD" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="38">D</text></g></g>
+    <g transform="translate(1560,102)"><g id="tA" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">A</text></g></g>
+    <g transform="translate(1560,222)"><g id="tB" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">B</text></g></g>
+    <g transform="translate(1560,342)"><g id="tC" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">C</text></g></g>
+    <g transform="translate(1560,462)"><g id="tD" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">D</text></g></g>
 
     <g id="cargo">
-      <g class="bx A mov off" id="A0" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">A</text></g>
-      <g class="bx A mov off" id="A1" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">A</text></g>
-      <g class="bx A mov off" id="A2" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">A</text></g>
-      <g class="bx A mov off" id="A3" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">A</text></g>
-      <g class="bx B mov off" id="B0" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">B</text></g>
-      <g class="bx B mov off" id="B1" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">B</text></g>
-      <g class="bx C mov off" id="C0" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">C</text></g>
-      <g class="bx C mov off" id="C1" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">C</text></g>
-      <g class="bx C mov off" id="C2" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">C</text></g>
-      <g class="bx D mov off" id="D0" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">D</text></g>
-      <g class="bx D mov off" id="D1" style="transform:translate(100px,101px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">D</text></g>
-      <g class="ghost mov off" id="Dx" style="transform:translate(546px,482px)"><rect width="30" height="24" rx="2"/><text x="15" y="17">?</text></g>
+      <g class="bx A mov off" id="A0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx A mov off" id="A1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx A mov off" id="A2" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx A mov off" id="A3" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx B mov off" id="B0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">B</text></g>
+      <g class="bx B mov off" id="B1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">B</text></g>
+      <g class="bx C mov off" id="C0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">C</text></g>
+      <g class="bx C mov off" id="C1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">C</text></g>
+      <g class="bx C mov off" id="C2" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">C</text></g>
+      <g class="bx D mov off" id="D0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">D</text></g>
+      <g class="bx D mov off" id="D1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">D</text></g>
+      <g class="ghost mov off" id="Dx" style="transform:translate(554px,480px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">?</text></g>
     </g>
     <g id="notes" aria-hidden="true"><text class="note" x="18" y="164">Number and seal checked</text></g>
   </svg>
@@ -628,7 +628,7 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
   if (fromHash) radios.forEach(r => { r.checked = r.value === fromHash[1]; });
   radios.forEach(r => r.addEventListener('change', () => history.replaceState(null, '', `#${r.value}min`)));
 
-  /* ── floor plan geometry (viewBox 1800 × 600; boxes are 30 × 24, the container 150 × 46) ── */
+  /* ── floor plan geometry (viewBox 1800 × 600; boxes are 34 × 26, the container 150 × 46) ── */
   const LANE  = { A: 72, B: 192, C: 312, D: 432 };   /* lane rows, shared with the dispatch doors */
   const SHELF = { A: 96, B: 156, C: 216, D: 276 };   /* rack rows */
   const COUNT = { A: 4, B: 2, C: 3, D: 2 };
@@ -636,12 +636,12 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
   const TRUCK_OFF = 'translate(260px,0)';           /* parked past the right edge */
   function spot(loc, k, i, cpos) {
     switch (loc) {
-      case 'cont':  return [cpos[0] + 60, cpos[1] + 11, false];
-      case 'lane':  return [470 + 38 * i, LANE[k] + 50, true];
-      case 'rack':  return [815 + 38 * i, SHELF[k] + 6, true];
-      case 'insp':  return [815 + 38 * i, 470, true];
-      case 'bay':   return [1126 + 38 * i, LANE[k] + 50, true];
-      case 'truck': return [1600, LANE[k] + 50, false];
+      case 'cont':  return [cpos[0] + 58, cpos[1] + 10, false];
+      case 'lane':  return [470 + 42 * i, LANE[k] + 48, true];
+      case 'rack':  return [815 + 42 * i, SHELF[k] + 5, true];
+      case 'insp':  return [815 + 42 * i, 470, true];
+      case 'bay':   return [1126 + 42 * i, LANE[k] + 48, true];
+      case 'truck': return [1600, LANE[k] + 48, false];
     }
   }
 
@@ -712,8 +712,8 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
       t.classList.toggle('off', ts !== 'dock');
     }
     const g = $('Dx');
-    if (s.ghost === 'lane') place(g, 546, LANE.D + 50, true);
-    else if (s.ghost === 'rack') place(g, 891, SHELF.D + 6, true);
+    if (s.ghost === 'lane') place(g, 554, LANE.D + 48, true);
+    else if (s.ghost === 'rack') place(g, 899, SHELF.D + 5, true);
     else g.classList.add('off');
 
     zones.forEach(z => z.classList.toggle('hot', z.id === s.hot));
