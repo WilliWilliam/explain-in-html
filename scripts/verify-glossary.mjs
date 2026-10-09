@@ -284,9 +284,17 @@ const widthChecks = {
   },
   async 'text-measure'(file) {
     return open(file, { viewport: { width: 1920, height: 1000 } }, page => page.evaluate(() => {
-      const bad = [...document.querySelectorAll('main p')].filter(p => !p.closest('.wide, .full'))
-        .map(p => p.getBoundingClientRect().width).filter(w => w > 780.5);
-      return bad.length ? `${bad.length} paragraph(s) wider than 780px (max ${Math.round(Math.max(...bad))})` : null;
+      // Rendered paragraphs only (display:none has no client rects). Too narrow catches a child that fell into a gutter track.
+      const ws = [...document.querySelectorAll('main p')].filter(p => !p.closest('.wide, .full') && p.getClientRects().length)
+        .map(p => p.getBoundingClientRect().width);
+      const wide = ws.filter(w => w > 780.5), narrow = ws.filter(w => w < 300);
+      if (wide.length) return `${wide.length} paragraph(s) wider than 780px (max ${Math.round(Math.max(...wide))})`;
+      if (narrow.length) return `${narrow.length} paragraph(s) narrower than 300px (min ${Math.round(Math.min(...narrow))})`;
+      // Paragraphs of main and of its plain sections all sit in the content track: same left edge and width.
+      const col = [...document.querySelectorAll('main > p, main > section:not(.wide, .full) > p')].filter(p => p.getClientRects().length)
+        .map(p => { const r = p.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.width)].join('/'); });
+      const cols = [...new Set(col)];
+      return cols.length > 1 ? `paragraphs of main and its sections sit in ${cols.length} columns (left/width ${cols.join(', ')})` : null;
     }));
   },
 };

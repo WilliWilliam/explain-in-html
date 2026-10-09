@@ -27,9 +27,9 @@ body { font: 17px/1.55 var(--serif); }
 /* wide layout: start */
 .page { display: grid; padding-inline: clamp(16px, 2vw, 24px);
   grid-template-columns: [full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]; }
-.page > *, .page main > * { grid-column: content; }
 /* main and its plain sections pass the same lines down. Grid items don't collapse margins: use one-sided ones. */
 .page > main, .page main > section:not(.wide, .full) { grid-column: full; display: grid; grid-template-columns: subgrid; }
+.page > *, .page :where(main, main > section:not(.wide, .full)) > * { grid-column: content; } /* :where keeps it below .wide/.full */
 .page .wide { grid-column: wide; }
 .page .full { grid-column: full; }
 /* wide layout: end */
@@ -74,7 +74,7 @@ a.term { color: inherit; text-decoration: underline dotted var(--accent); text-u
   visibility: hidden; transform: translateX(100%); transition: transform .2s, visibility .2s; }
 .js-glossary .glossary[data-open] { visibility: visible; transform: none; }
 #term-pop { position: absolute; z-index: 30; max-width: min(22rem, calc(100vw - 16px)); padding: .65rem .85rem; font: 14px/1.45 var(--sans); color: var(--ink);
-  background: var(--surface); border: 1px solid var(--ink-soft); border-radius: 6px; }
+  background: var(--surface); border: 1px solid var(--ink-soft); border-radius: 6px; max-height: calc(100vh - 16px); overflow: auto; }
 .term-pop-more { display: block; margin-top: .4em; color: var(--accent); }
 body:has(#level-1:checked) .glossary-toggle { display: none; }
 @media (max-width: 600px) {
@@ -387,9 +387,12 @@ drawAll();
     t.addEventListener('mouseleave', later);
     t.addEventListener('blur', later);
     t.addEventListener('pointerdown', e => { touch = e.pointerType !== 'mouse'; wasOpen = cur === t; });
+    t.addEventListener('pointercancel', () => { touch = wasOpen = false; });
     t.addEventListener('click', e => {
       // First tap on touch: popover only. Mouse click, Enter or a second tap: drawer at the entry (the link sets the hash).
-      if (touch && !wasOpen) { e.preventDefault(); show(t); } else { hide(); setOpen(true); }
+      // click carries pointerType where supported ("" for Enter); the pointerdown flag is the fallback.
+      const tap = 'pointerType' in e ? e.pointerType === 'touch' || e.pointerType === 'pen' : touch;
+      if (tap && !wasOpen) { e.preventDefault(); show(t); } else { hide(); setOpen(true); }
       touch = wasOpen = false;
     });
   });

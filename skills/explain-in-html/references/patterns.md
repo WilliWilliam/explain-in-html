@@ -126,7 +126,7 @@ With reading levels, the glossary starts at level 5. In what shows at level 1, t
   <dl><dt id="g-sni">SNI</dt><dd id="g-sni-d">Server Name Indication: …</dd></dl>
 </aside>
 ```
-A short script adds `html.js-glossary`, one shared `#term-pop` and unhides the button. Copy the marked CSS and script blocks from `docs/examples/02-iri-explainer.html`. It must keep these behaviours:
+A short script adds `html.js-glossary`, one shared `#term-pop` and unhides the button. It must keep these behaviours:
 - Without JS and when printing, the aside is a list at the end of `main` and term links jump to it.
 - Each `.term` gets `aria-describedby="g-<slug>-d"`. Hover, focus or a first tap opens the popover (the `dd` text plus "See in glossary →"), clamped to the viewport. Leaving, blur, Esc or a tap outside closes it.
 - A mouse click or Enter on a term opens the drawer at its entry and sets the hash. On touch, the first tap only opens the popover.
@@ -148,7 +148,12 @@ One centered column in `<div class="page">`, no side column. The gutter is paddi
 .page { display: grid; padding-inline: clamp(16px, 2vw, 24px);
   grid-template-columns: [full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]; }
 ```
-Children default to `grid-column: content`; `main` and its sections pass the lines down with `subgrid` (see 02). Grid items don't collapse margins, so give text one-sided margins.
+```css
+.page > main, .page main > section:not(.wide, .full) { grid-column: full; display: grid; grid-template-columns: subgrid; }
+.page > *, .page :where(main, main > section:not(.wide, .full)) > * { grid-column: content; }
+.page .wide { grid-column: wide; }  .page .full { grid-column: full; }
+```
+`main` and its plain sections pass the lines down with `subgrid`, so `.wide` and `.full` also work inside a section. Grid items don't collapse margins, so give text one-sided margins.
 Use `.full` only when the diagram has more than about 6 columns or zones, or its labels would render below 11px at 1100px; otherwise `.wide`. A `.full` SVG gets a `viewBox` drawn for its real width (about 1800 units), not an 800-unit drawing scaled up. On phones all tiers are 100% with a 16px gutter; anything that still doesn't fit scrolls in an `overflow-x: auto` box.
 
 **A case threaded end to end.**
