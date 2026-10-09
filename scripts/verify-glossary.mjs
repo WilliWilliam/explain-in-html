@@ -5,7 +5,8 @@
 // .full/.wide (and redirect stubs) print "skip <file>".
 import { chromium } from 'playwright';
 import { pathToFileURL } from 'node:url';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 
 const files = process.argv.slice(2);
 if (!files.length) { console.error('usage: verify-glossary.mjs file.html ...'); process.exit(2); }
@@ -23,12 +24,13 @@ async function until(fn, timeout = 1500) {
 }
 
 // Fresh context + page per call, so checks never share state. localStorage starts empty.
-async function open(file, opts, fn) {
+// hash (e.g. '#5min') is part of the URL for both the first load and the reload.
+async function open(file, opts, fn, hash = '') {
   const ctx = await browser.newContext(opts);
   const page = await ctx.newPage();
   page.setDefaultTimeout(2000);
   try {
-    await page.goto(pathToFileURL(file).href);
+    await page.goto(pathToFileURL(file).href + hash);
     if (opts.javaScriptEnabled !== false) {
       await page.evaluate(() => { try { localStorage.clear(); } catch {} });
       await page.reload();
@@ -56,6 +58,24 @@ const norm = s => (s || '').replace(/\s+/g, ' ').trim();
 async function openDrawer(page) {
   await page.locator('.glossary-toggle').click();
   if (!await until(() => drawerOpen(page))) throw new Error('drawer did not open');
+}
+// The entry #id is inside the open drawer's visible box and its dt and dd carry .is-target.
+const entryShown = (page, id) => page.evaluate(id => {
+  const a = document.querySelector('aside.glossary'), dt = document.getElementById(id), dd = document.getElementById(id + '-d');
+  if (!dt) return `no element #${id}`;
+  const ar = a.getBoundingClientRect(), dr = dt.getBoundingClientRect();
+  if (!(dr.top >= ar.top - 1 && dr.bottom <= ar.bottom + 1 && ar.top < innerHeight && ar.bottom > 0))
+    return `entry ${Math.round(dr.top)}-${Math.round(dr.bottom)} outside drawer ${Math.round(ar.top)}-${Math.round(ar.bottom)}`;
+  if (!dt.classList.contains('is-target') || !dd || !dd.classList.contains('is-target')) return `#${id} dt/dd not highlighted with .is-target`;
+  return null;
+}, id);
+// Store "open" under this page's key; the old shared key is set too so a page still reading it fails phone-restores-closed.
+const pageKey = () => { try { localStorage.setItem('glossary-open:' + location.pathname, '1'); localStorage.setItem('glossary-open', '1'); } catch {} };
+// Another example with a glossary in the same folder (sorted, first that isn't this file): the page B of state-per-page.
+function siblingWithGlossary(file) {
+  const dir = dirname(resolve(file));
+  return readdirSync(dir).filter(f => f.endsWith('.html')).sort().map(f => join(dir, f))
+    .find(f => f !== resolve(file) && /<aside[^>]*class="[^"]*\bglossary\b/.test(readFileSync(f, 'utf8')) && !readFileSync(f, 'utf8').includes('http-equiv="refresh"'));
 }
 
 const glossaryChecks = {
@@ -176,23 +196,15 @@ const glossaryChecks = {
     });
   },
   async 'click-opens-drawer'(file) {
-    const inside = page => page.evaluate(() => {
-      const a = document.querySelector('aside.glossary');
-      const dt = document.getElementById(location.hash.slice(1));
-      if (!dt) return `no element for ${location.hash}`;
-      const ar = a.getBoundingClientRect(), dr = dt.getBoundingClientRect();
-      return dr.top >= ar.top - 1 && dr.bottom <= ar.bottom + 1 && ar.top < innerHeight && ar.bottom > 0 ? null
-        : `entry ${Math.round(dr.top)}-${Math.round(dr.bottom)} outside drawer ${Math.round(ar.top)}-${Math.round(ar.bottom)}`;
-    });
     for (const via of ['click', 'Enter']) {
       const bad = await open(file, DESKTOP, async page => {
         const t = firstTerm(page);
-        const href = await t.getAttribute('href');
+        const href = await t.getAttribute('href'), before = await hash(page);
         if (via === 'click') await t.click(); else { await t.focus(); await page.keyboard.press('Enter'); }
         if (!await until(() => drawerOpen(page))) return 'drawer not open';
         const h = await hash(page);
-        if (h !== href) return `location.hash "${h}" != href "${href}"`;
-        let r; await until(async () => !(r = await inside(page)));
+        if (h !== before) return `location.hash changed from "${before}" to "${h}"`;
+        let r; await until(async () => !(r = await entryShown(page, href.slice(1))));
         return r;
       });
       if (bad) return `via ${via}: ${bad}`;
@@ -202,13 +214,47 @@ const glossaryChecks = {
   async 'see-in-glossary'(file) {
     return open(file, DESKTOP, async page => {
       const t = firstTerm(page);
-      const href = await t.getAttribute('href');
+      const href = await t.getAttribute('href'), before = await hash(page);
       await t.hover();
       if (!await until(() => popVisible(page))) return '#term-pop not visible on hover';
       await page.locator('.term-pop-more').click();
       if (!await until(() => drawerOpen(page))) return 'drawer not open after .term-pop-more';
       const h = await hash(page);
-      return h === href ? null : `location.hash "${h}" != "${href}"`;
+      if (h !== before) return `location.hash changed from "${before}" to "${h}"`;
+      let r; await until(async () => !(r = await entryShown(page, href.slice(1))));
+      return r;
+    });
+  },
+  async 'deep-link'(file) {
+    const id = readFileSync(file, 'utf8').match(/<dt id="(g-[^"]+)"/)?.[1];
+    if (!id) return 'no <dt id="g-..."> in the source';
+    return open(file, DESKTOP, async page => {
+      if (!await until(() => drawerOpen(page))) return `drawer not open after loading #${id}`;
+      let r; await until(async () => !(r = await entryShown(page, id)));
+      return r;
+    }, '#' + id);
+  },
+  async 'keeps-level-hash'(file) {
+    if (!/id="level-5"/.test(readFileSync(file, 'utf8'))) return null;
+    return open(file, DESKTOP, async page => {
+      for (const via of ['click', 'Enter']) {
+        const t = firstTerm(page);
+        if (via === 'click') await t.click(); else { await t.focus(); await page.keyboard.press('Enter'); }
+        if (!await until(() => drawerOpen(page))) return `via ${via}: drawer not open`;
+        const h = await hash(page);
+        if (h !== '#5min') return `via ${via}: location.hash is "${h}", expected "#5min"`;
+        await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
+        await until(async () => !await drawerOpen(page));
+      }
+      return await page.evaluate(() => document.getElementById('level-5').checked) ? null : 'level 5 no longer checked';
+    }, '#5min');
+  },
+  async 'focus-moves-in'(file) {
+    return open(file, DESKTOP, async page => {
+      await openDrawer(page);
+      const inside = () => page.evaluate(() => !!document.activeElement && !!document.activeElement.closest('aside.glossary'));
+      if (await until(inside)) return null;
+      return `focus is on ${await page.evaluate(() => document.activeElement ? document.activeElement.outerHTML.slice(0, 60) : 'nothing')}, not inside aside.glossary`;
     });
   },
   async 'remembers-open'(file) {
@@ -217,6 +263,27 @@ const glossaryChecks = {
       await page.reload();
       return await until(() => drawerOpen(page)) ? null : 'drawer closed after reload';
     });
+  },
+  async 'state-per-page'(file) {
+    // Page B is a sibling example with a glossary (siblingWithGlossary), loaded in the same browser context as A.
+    const other = siblingWithGlossary(file);
+    if (!other) return null;
+    return open(file, DESKTOP, async page => {
+      await openDrawer(page);
+      await page.goto(pathToFileURL(other).href);
+      await page.waitForTimeout(300);
+      return await drawerOpen(page) ? `drawer open on ${other.split('/').pop()} after opening it on this page` : null;
+    });
+  },
+  async 'phone-restores-closed'(file) {
+    const ctx = await browser.newContext(TOUCH);
+    try {
+      const page = await ctx.newPage();
+      await page.addInitScript(pageKey);
+      await page.goto(pathToFileURL(file).href);
+      await page.waitForTimeout(300);
+      return await drawerOpen(page) ? 'drawer restored open at 400x800' : null;
+    } finally { await ctx.close(); }
   },
   async 'drawer-scrolls'(file) {
     return open(file, { viewport: { width: 1280, height: 500 } }, async page => {
@@ -271,7 +338,7 @@ const glossaryChecks = {
         const page = await ctx.newPage();
         await page.addInitScript(rec);
         if (early) await page.addInitScript(flush);
-        if (opened) await page.addInitScript(() => { try { localStorage.setItem('glossary-open', '1'); } catch {} });
+        if (opened) await page.addInitScript(pageKey);
         await page.goto(pathToFileURL(file).href);
         await page.waitForTimeout(500);
         const tr = await page.evaluate(() => window.__tr);

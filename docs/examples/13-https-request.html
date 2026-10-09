@@ -160,7 +160,8 @@ a.term { color: inherit; text-decoration: underline dotted var(--accent); text-u
 .glossary { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: 14px/1.5 var(--sans); color: var(--ink-soft); }
 .glossary h2 { font: 600 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink); margin: 0 0 .6em; }
 .glossary dt { font-weight: 600; color: var(--ink); margin-top: .9em; }
-.glossary dt:target { color: var(--accent); }
+.glossary dt.is-target { color: var(--accent); }
+.glossary dd.is-target { color: var(--ink); }
 .glossary dd { margin: .15em 0 0; }
 .glossary-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
 .glossary-toggle[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
@@ -169,6 +170,7 @@ a.term { color: inherit; text-decoration: underline dotted var(--accent); text-u
   border: 0; border-left: 1px solid var(--ink-soft); background: var(--surface); overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: 3rem;
   visibility: hidden; transform: translateX(100%); }
 .js-glossary.glossary-ready .glossary { transition: transform .2s, visibility .2s; } /* set after the first render, so load never slides */
+.js-glossary.glossary-ready .glossary[data-open] { transition: transform .2s; } /* visible at once on open, so focus can move in */
 .js-glossary .glossary[data-open] { visibility: visible; transform: none; }
 #term-pop { position: absolute; z-index: 30; max-width: min(22rem, calc(100vw - 16px)); padding: .65rem .85rem; font: 14px/1.45 var(--sans); color: var(--ink);
   background: var(--surface); border: 1px solid var(--ink-soft); border-radius: 6px; max-height: calc(100vh - 16px); overflow: auto; }
@@ -178,7 +180,7 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
   .js-glossary .glossary { width: 100%; }
   #term-pop { position: fixed; left: 8px; right: 8px; bottom: 8px; max-width: none; }
 }
-@media (prefers-reduced-motion: reduce) { .js-glossary.glossary-ready .glossary { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .js-glossary.glossary-ready .glossary, .js-glossary.glossary-ready .glossary[data-open] { transition: none; } }
 @media print {
   .js-glossary .glossary { position: static; visibility: visible; transform: none; width: auto; margin-top: 3rem; padding: 1rem 0 0; border: 0; border-top: 1px solid var(--rule); overflow: visible; }
   .glossary-toggle, #term-pop { display: none; }
@@ -635,7 +637,7 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
   const g = document.getElementById('glossary'), btn = document.querySelector('.glossary-toggle');
   if (!g || !btn) return;
   const sheet = matchMedia('(max-width: 600px)'), pop = document.createElement('div');
-  pop.id = 'term-pop'; pop.hidden = true; pop.setAttribute('role', 'tooltip');
+  pop.id = 'term-pop'; pop.hidden = true;
   document.body.append(pop);
   document.documentElement.classList.add('js-glossary');
   btn.hidden = false;
@@ -655,11 +657,24 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
     const y = r.bottom + m + p.height <= innerHeight ? r.bottom + m : Math.max(m, r.top - m - p.height);
     pop.style.left = x + scrollX + 'px'; pop.style.top = y + scrollY + 'px';
   }
-  function setOpen(open) {
+  const KEY = 'glossary-open:' + location.pathname, head = document.getElementById('glossary-t') || g;
+  head.tabIndex = -1;
+  function setOpen(open, focus) { // focus: the element inside the drawer to move focus to (none when restoring)
     g.toggleAttribute('data-open', open);
     btn.setAttribute('aria-expanded', open);
-    try { localStorage.setItem('glossary-open', open ? '1' : '0'); } catch {}
+    try { localStorage.setItem(KEY, open ? '1' : '0'); } catch {}
+    if (open && focus) focus.focus({ preventScroll: true });
   }
+  const entry = id => { const dt = id && document.getElementById(id); return dt && dt.tagName === 'DT' && g.contains(dt) ? dt : null; };
+  function openAt(dt) { // open at an entry without touching the URL: highlight it, scroll the drawer to it, focus it
+    g.querySelectorAll('.is-target').forEach(e => e.classList.remove('is-target'));
+    const dd = document.getElementById(dt.id + '-d');
+    dt.classList.add('is-target'); if (dd) dd.classList.add('is-target');
+    dt.tabIndex = -1;
+    setOpen(true, dt);
+    g.scrollTop = dt.offsetTop - parseFloat(getComputedStyle(g).scrollPaddingTop || 0);
+  }
+  const fromHash = () => { let id = ''; try { id = decodeURIComponent(location.hash.slice(1)); } catch {} const dt = entry(id); if (dt) openAt(dt); return !!dt; };
   document.querySelectorAll('a.term').forEach(t => {
     t.setAttribute('aria-describedby', slug(t) + '-d');
     t.addEventListener('mouseenter', () => show(t));
@@ -669,26 +684,34 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
     t.addEventListener('pointerdown', e => { touch = e.pointerType !== 'mouse'; wasOpen = cur === t; });
     t.addEventListener('pointercancel', () => { touch = wasOpen = false; });
     t.addEventListener('click', e => {
-      // First tap on touch: popover only. Mouse click, Enter or a second tap: drawer at the entry (the link sets the hash).
+      // First tap on touch: popover only. Mouse click, Enter or a second tap: drawer at the entry, URL unchanged.
       // click carries pointerType where supported ("" for Enter); the pointerdown flag is the fallback.
       const tap = 'pointerType' in e ? e.pointerType === 'touch' || e.pointerType === 'pen' : touch;
-      if (tap && !wasOpen) { e.preventDefault(); show(t); } else { hide(); setOpen(true); }
+      e.preventDefault();
+      if (tap && !wasOpen) show(t); else { hide(); const dt = entry(slug(t)); if (dt) openAt(dt); else setOpen(true, head); }
       touch = wasOpen = false;
     });
   });
   pop.addEventListener('mouseenter', () => clearTimeout(timer));
   pop.addEventListener('mouseleave', later);
-  pop.addEventListener('click', e => { if (e.target.closest('.term-pop-more')) { hide(); setOpen(true); } });
+  pop.addEventListener('click', e => {
+    const more = e.target.closest('.term-pop-more');
+    if (!more) return;
+    e.preventDefault(); hide();
+    const dt = entry(more.getAttribute('href').slice(1)); if (dt) openAt(dt); else setOpen(true, head);
+  });
   document.addEventListener('pointerdown', e => { if (!e.target.closest('.term, #term-pop')) hide(); });
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
     if (!pop.hidden) hide();
     else if (g.hasAttribute('data-open')) { setOpen(false); btn.focus(); }
   });
-  btn.addEventListener('click', () => setOpen(!g.hasAttribute('data-open')));
+  btn.addEventListener('click', () => setOpen(!g.hasAttribute('data-open'), head));
   const l1 = document.getElementById('level-1'); // reading levels: level 1 closes the drawer
   if (l1) l1.addEventListener('change', () => setOpen(false));
-  try { if (localStorage.getItem('glossary-open') === '1') setOpen(true); } catch {}
+  addEventListener('hashchange', fromHash); // a #g-… link opens the drawer at that entry; #5min and others are ignored
+  // A #g-… hash on load wins; otherwise restore this page's state, but never reopen the full-screen drawer on a phone.
+  if (!fromHash() && !sheet.matches) try { if (localStorage.getItem(KEY) === '1') setOpen(true); } catch {}
   requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('glossary-ready')));
 })();
 // glossary: popover + drawer: end
