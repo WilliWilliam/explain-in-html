@@ -78,7 +78,7 @@ Success: in the warehouse example at 1920px, the floor plan is drawn at full win
 ## 3. Skill text changes
 
 - **`references/patterns.md`**
-  - Replace "Side glossary" with "Glossary: popover + drawer", including a reference snippet (markup, CSS, JS).
+  - Replace "Side glossary" with "Glossary: popover + drawer": the markup skeleton with the exact names and a short list of required behaviours (about 20 lines). No full CSS/JS: upstream 2.0 spends the skill on judgment, not mechanics, and `patterns.md` is read on every invocation. The full implementation lives in example 02.
   - Add "Wide layout" with the tier table, the grid snippet and the `.full` criterion.
 - **`references/reports-and-research.md`**
   - Replace the "in the margin" bullets (lines 15, 20) and the `aside.glossary` in the skeleton.

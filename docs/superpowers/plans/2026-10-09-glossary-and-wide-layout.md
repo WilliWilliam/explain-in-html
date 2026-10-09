@@ -5,7 +5,7 @@
 **Goal:** Replace the margin glossary with a popover-on-term + collapsible drawer, and let wide content use the window's width, in both the skill's guidance and its examples.
 
 **Architecture:**
-- **No shared code.** Every example is a self-contained HTML file, so there is no shared JS/CSS. The canonical snippet lives in `skills/explain-in-html/references/patterns.md` and is copied into each example.
+- **No shared code.** Every example is a self-contained HTML file, so there is no shared JS/CSS. `patterns.md` carries only the contract (markup skeleton + required behaviours, ~20 lines). The full implementation lives in `docs/examples/02-iri-explainer.html`, in one marked CSS block and one marked script block, and Tasks 3–5 copy it from there.
 - **One behavioural test.** A Playwright script (`scripts/verify-glossary.mjs`) is the test for the pattern. Each example migration is "make it pass".
 
 **Tech stack:** plain HTML/CSS/JS (no libraries), Bash, Node + Playwright (Chromium).
@@ -158,7 +158,8 @@ git commit -m "Add glossary and wide-layout checks"
 **Interfaces:**
 - **Consumes:** the names table above, and `verify-glossary.mjs` from Task 1.
 - **Produces:**
-  - The section "Glossary: popover + drawer" in `patterns.md`: markup, CSS (~40 lines) and JS (~40 lines). Tasks 3–5 copy it verbatim.
+  - The section "Glossary: popover + drawer" in `patterns.md`: markup skeleton + required behaviours (~20 lines, no full CSS/JS).
+  - The reference implementation in `02-iri-explainer.html`: one CSS block and one `<script>` block, each marked `glossary: popover + drawer`. Tasks 3–5 copy them verbatim.
   - The section "Wide layout" with the `.page` grid snippet and the `.full` criterion (more than about 6 columns or zones, or labels under 11px at 1100px).
 
 - [ ] **Step 1: Run the test on 02 to confirm it fails**
@@ -219,7 +220,7 @@ git commit -m "Glossary popover + drawer and wide layout pattern; migrate IRI ex
 - Modify: `docs/examples/12-assembly-regime.html` (`:44-48` layout, `:162-168` glossary CSS, `:191` toggle bar, `:516-…` aside, script near `:536`)
 
 **Interfaces:**
-- **Consumes:** the snippet from `patterns.md` (Task 2).
+- **Consumes:** the marked glossary CSS and script blocks from `02-iri-explainer.html` (Task 2), and the contract in `patterns.md`.
 
 - [ ] **Step 1: Confirm it fails**
 
@@ -246,7 +247,7 @@ Expected: `ok` everywhere, including `level-1-hides-open-drawer`.
 - Modify: `docs/examples/11-warehouse-floor-plan.html` (`:47` wrap, `:130` `.walk`, `:155-167` and `:178-200` glossary CSS, `:208-218` levelbar, `:237-…` the floor-plan SVG with `viewBox="0 0 1000 500"`, `:555-…` aside, script near `:577`)
 
 **Interfaces:**
-- **Consumes:** the snippet from `patterns.md` (Task 2).
+- **Consumes:** the marked glossary CSS and script blocks from `02-iri-explainer.html` (Task 2), and the contract in `patterns.md`.
 
 - [ ] **Step 1: Confirm it fails**
 
@@ -284,7 +285,7 @@ Expected: `ok` everywhere. Manually: ▶ Play runs every step and the highlighte
 
 **Interfaces:**
 - **Consumes:**
-  - The snippets from `patterns.md` (Task 2).
+  - The marked glossary blocks from `02-iri-explainer.html` and the wide-layout grid (Task 2).
   - The reading-levels markup in `patterns.md`.
   - The walkthrough-with-play pattern and theme toggle as implemented in `11-warehouse-floor-plan.html`.
 
