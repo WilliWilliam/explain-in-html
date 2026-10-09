@@ -44,7 +44,8 @@ Then **look at the screenshots** (the Read tool renders images). Check, in this 
 3. The five-second test: title, framing line, and the shape of the content are visible above the fold.
 4. Interactive parts respond: click the first control, press the keyboard shortcut, trigger the export and check the output text.
 5. Console is clean.
-6. If the page has a glossary: the popover opens with mouse hover, keyboard focus and a first touch tap; the drawer opens from a term, Esc closes it and focus returns to the button; the drawer does not slide on page load; with JS off the glossary is a list at the end. At 1600px and above, wide and full figures use the space.
+6. If the page has a glossary: the popover opens with mouse hover, keyboard focus and a first touch tap; the drawer opens from a term, Esc closes it and focus returns to the button; the drawer does not slide on page load; with JS off the glossary is a list at the end.
+7. At 1600px and above, `.wide` and `.full` figures use the space.
 
 If the page has reading levels, the script above only sees the default (10 min). Shoot the 1 and 5 minute views too, by opening the file with `#1min` and `#5min` or clicking the selector, and check that each one stands alone.
 
@@ -62,6 +63,7 @@ Claude.ai chat, artifact-only surfaces, or a harness without a shell. Do this re
 - **Layout at 400px.** Every grid or flex row can wrap or collapse to one column. No fixed widths wider than the screen. Tables and code blocks are in an `overflow-x: auto` container. Images and SVGs have `max-width: 100%`.
 - **Theme.** Every color is a token defined on `:root`, redefined for dark. No hard-coded `#fff` backgrounds or `#000` text. SVG ink uses `currentColor` or a token. The theme button is there and the head script reads the saved choice.
 - **Script.** Every `getElementById` matches an id that exists. Event listeners are attached after the elements exist (script at the end of body, or `DOMContentLoaded`). No references to `localStorage` outside a `try/catch`. No external URL outside the allowlist.
+- **Glossary and width.** If there is a glossary: the aside is the last child of main, each dt/dd has its id, the toggle starts `hidden` and sits in a bar that stays visible, and without JS the list still reads at the end. Any `.full` SVG has a viewBox sized for its real width (~1800 units).
 - **Interaction.** Every button does something. Keyboard shortcuts documented on the page. Export button produces text that round-trips.
 - **Content.** Data the user supplied is pre-filled, not placeholders. Numbers add up. Nothing says "lorem" or "TODO".
 - **Taste.** Fewer than three of the default-AI tells in `matching-your-style.md`.

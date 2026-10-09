@@ -82,9 +82,13 @@ For "write up the outage from yesterday."
 ## Example sketch — concept explainer with live demo
 
 ```html
+<div class="topbar"> <!-- fixed or sticky; stays visible above the open drawer -->
+  <button class="theme-toggle" type="button">Theme</button>
+  <button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button>
+</div>
+<div class="page">
 <main class="explainer">
   <header>
-    <button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button>
     <h1>Consistent hashing, in one ring</h1>
     <p class="tldr">N caches, K keys. Add or remove a node and only ~K/N keys move
        — instead of ~all of them with hash mod N. Here's why.</p>
@@ -92,7 +96,7 @@ For "write up the outage from yesterday."
 
   <section>
     <h2>The trick: hash onto a circle, not a line</h2>
-    <p>Map both nodes and keys onto the same ring...</p>
+    <p>Map both nodes and keys onto the same <a class="term" href="#g-ring">ring</a>...</p>
 
     <figure class="live-demo">
       <svg id="ring" viewBox="0 0 400 400"><!-- ring rendered live --></svg>
@@ -115,10 +119,11 @@ For "write up the outage from yesterday."
   <aside class="glossary" id="glossary" aria-labelledby="glossary-t"> <!-- last child of main; see patterns.md -->
     <h2 id="glossary-t">Glossary</h2>
     <dl>
-      <dt>Ring</dt><dd>The hash output range, treated as a circle.</dd>
-      <dt>Arc</dt><dd>The stretch of ring a node owns.</dd>
+      <dt id="g-ring">Ring</dt><dd id="g-ring-d">The hash output range, treated as a circle.</dd>
+      <dt id="g-arc">Arc</dt><dd id="g-arc-d">The stretch of ring a node owns.</dd>
       ...
     </dl>
   </aside>
 </main>
+</div>
 ```

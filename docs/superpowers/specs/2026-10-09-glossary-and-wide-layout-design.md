@@ -44,7 +44,7 @@ Success: in the warehouse example at 1920px, the floor plan is drawn at full win
 - Opens on hover (pointer), on focus (keyboard), and on first tap (touch; the tap does not navigate).
 - Contains the `dd` text and a "see in glossary →" link.
 - Closes on Esc, on mouseleave/blur, or on a tap outside.
-- A mouse click or Enter on a term opens the drawer at its entry and sets the hash (the same as "see in glossary"). On touch, the first tap only opens the popover.
+- A mouse click or Enter on a term opens the drawer at its entry without changing the URL (the same as "see in glossary"); a `#g-…` link opens the drawer at that entry. On touch, the first tap only opens the popover.
 - JS sets `aria-describedby` on each term to its `dd` id.
 - On phone width it renders as a sheet anchored to the bottom of the viewport.
 

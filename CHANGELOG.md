@@ -6,13 +6,13 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 - Example `docs/examples/13-https-request.html`: what happens when you open an HTTPS URL, with a full-width sequence diagram drawn to scale, a walkthrough with play, reading levels, a 12-term glossary and a cold versus repeat visit timing table.
-- `scripts/verify-glossary.mjs`: Playwright behavioural checks for the glossary (popover, drawer, Esc and focus return, remembered state, first touch tap, no flash on load) and for the width tiers.
+- `scripts/verify-glossary.mjs`: Playwright behavioural checks for the glossary (popover, drawer, Esc and focus return, focus moving into the drawer, per-page remembered state, deep links, an unchanged hash, first touch tap, no flash on load) and for the width tiers.
 - `scripts/verify-example.mjs` renders a 1920 px view as well.
 - `scripts/check-examples.sh` gains glossary rules: the drawer button and popover wiring must exist, and every `#g-` link needs a matching id.
 - `verify-before-delivering.md` asks for the 1600 px and 2200 px checks and the glossary interaction checks.
 
 ### Changed
-- **Glossary pattern:** "glossary in the margin" is replaced by a popover on the term plus a collapsible drawer. The drawer overlays the page, starts closed, closes with Esc and returns focus, and remembers its state. Click or Enter on a term opens the drawer at its entry; the first touch tap shows only the popover. Without JS or in print the glossary is a list at the end of `main`; it is hidden at the 1 minute reading level. `references/patterns.md` carries the contract (markup skeleton and required behaviours), not a full implementation.
+- **Glossary pattern:** "glossary in the margin" is replaced by a popover on the term plus a collapsible drawer. The drawer overlays the page, starts closed, takes focus when it opens, closes with Esc and returns focus, and remembers its state per page (never reopening on phones). Click or Enter on a term opens the drawer at its entry without changing the URL, so a `#5min` reading-level hash survives; a `#g-…` link opens the drawer at that entry; the first touch tap shows only the popover. Without JS or in print the glossary is a list at the end of `main`; it is hidden at the 1 minute reading level. `references/patterns.md` carries the contract (markup skeleton and required behaviours), not a full implementation.
 - **Wide layout** section in `references/patterns.md`: three width tiers (text about 70ch, `.wide` up to 1600px, `.full` the window width minus a 16-24px gutter) through a `.page` grid, the criterion for `.full`, a viewBox of about 1800 units for `.full` diagrams, and a rule for sticky bars that wrap.
 - `SKILL.md`, `reports-and-research.md` and `diagrams-and-illustrations.md` point to the glossary and the width tiers.
 - Examples 02 (demo) and 12 (walkthrough and cards) use `.wide`; example 11's floor plan is redrawn at full width (viewBox 1800x600) with larger labels and boxes.

@@ -129,9 +129,10 @@ With reading levels, the glossary starts at level 5. In what shows at level 1, t
 A short script adds `html.js-glossary`, one shared `#term-pop` and unhides the button. It must keep these behaviours:
 - Without JS and when printing, the aside is a list at the end of `main` and term links jump to it.
 - Each `.term` gets `aria-describedby="g-<slug>-d"`. Hover, focus or a first tap opens the popover (the `dd` text plus "See in glossary →"), clamped to the viewport. Leaving, blur, Esc or a tap outside closes it.
-- A mouse click or Enter on a term opens the drawer at its entry and sets the hash. On touch, the first tap only opens the popover.
-- The drawer is a fixed side panel that overlays the content and never pushes it. It starts closed. Esc or the button closes it, and focus returns to the button. It scrolls inside itself (`overscroll-behavior: contain`).
-- The open state is stored in `localStorage` key `glossary-open`, inside try/catch.
+- A click or Enter on a term opens the drawer at its entry without changing the URL; a #g-… link opens the drawer at that entry. "See in glossary →" does the same. On touch, the first tap only opens the popover.
+- The drawer is a fixed side panel that overlays the content and never pushes it. It starts closed. Esc or the button closes it, and focus returns to the button. The toggle stays visible and clickable above the open drawer (it is the only close control on phones). It scrolls inside itself (`overscroll-behavior: contain`).
+- Opening the drawer moves focus into it: to the heading (`tabindex="-1"`) or, when opening at an entry, to that `dt`.
+- The open state is stored per page in `localStorage` key `'glossary-open:' + location.pathname`, inside try/catch, and is never restored on phones.
 - No slide on load: enable the drawer transition only after the initial (closed or restored) state is applied.
 - At level 1 the glossary and its button are hidden, even with the drawer open.
 - If a sticky top bar can wrap (a reading-level bar on phones), start the drawer below the bar's measured height so the bar doesn't hide the drawer heading.
@@ -155,7 +156,7 @@ One centered column in `<div class="page">`, no side column. The gutter is paddi
 .page > *, .page :where(main, main > section:not(.wide, .full)) > * { grid-column: content; }
 .page .wide { grid-column: wide; }  .page .full { grid-column: full; }
 ```
-`main` and its plain sections pass the lines down with `subgrid`, so `.wide` and `.full` also work inside a section. Grid items don't collapse margins, so give text one-sided margins.
+`main` and its plain sections pass the lines down with `subgrid`, so `.wide` and `.full` also work inside a section that is a direct child of `main`. Grid items don't collapse margins, so give text one-sided margins.
 Use `.full` only when the diagram has more than about 6 columns or zones, or its labels would render below 11px at 1100px; otherwise `.wide`. A `.full` SVG gets a `viewBox` drawn for its real width (about 1800 units), not an 800-unit drawing scaled up. On phones all tiers are 100% with a 16px gutter; anything that still doesn't fit scrolls in an `overflow-x: auto` box.
 
 **A case threaded end to end.**
