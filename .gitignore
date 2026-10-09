@@ -12,3 +12,6 @@ dist/
 # eval run output
 evals/results/
 .superpowers/
+
+# local deps
+node_modules/

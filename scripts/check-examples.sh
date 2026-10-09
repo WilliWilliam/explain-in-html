@@ -24,6 +24,14 @@ for f in docs/examples/*.html; do
     grep -q 'prefers-color-scheme: dark' "$f"     || problems+=("no dark media query")
     grep -q 'data-theme="dark"' "$f"              || problems+=("no data-theme=dark block")
   fi
+  # Glossary pattern: drawer button + popover wiring, and every term link must resolve to an entry.
+  if grep -q 'class="glossary"' "$f"; then
+    grep -q 'aria-controls="glossary"' "$f"       || problems+=("glossary without drawer button")
+    grep -q 'aria-describedby' "$f"               || problems+=("glossary without popover wiring")
+  fi
+  for slug in $(grep -o 'href="#g-[^"]*"' "$f" | sed 's/href="#\(.*\)"/\1/' | sort -u); do
+    grep -q "id=\"$slug\"" "$f"                   || problems+=("term links to missing $slug")
+  done
   # Anything with manipulable state must export and must have keyboard handling.
   if grep -q 'draggable' "$f"; then
     grep -Eqi 'copy as|clipboard' "$f"           || problems+=("editor without export")
