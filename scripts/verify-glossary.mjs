@@ -256,6 +256,31 @@ const glossaryChecks = {
       return await until(async () => !await vis(page, '.glossary-toggle')) ? null : '.glossary-toggle still visible at level 1';
     });
   },
+  async 'no-flash-on-load'(file) {
+    // The drawer must never slide on load, closed or restored open, even if style was flushed before the script ran.
+    const rec = () => {
+      window.__tr = [];
+      addEventListener('transitionrun', e => { if (e.target.id === 'glossary') window.__tr.push(e.propertyName); }, true);
+    };
+    const flush = () => new MutationObserver(() => { const a = document.getElementById('glossary'); if (a) getComputedStyle(a).transform; })
+      .observe(document, { childList: true, subtree: true });
+    const bad = [];
+    for (const [label, opened, early] of [['closed', false, false], ['restored-open', true, false], ['closed+early-flush', false, true], ['restored-open+early-flush', true, true]]) {
+      const ctx = await browser.newContext(DESKTOP);
+      try {
+        const page = await ctx.newPage();
+        await page.addInitScript(rec);
+        if (early) await page.addInitScript(flush);
+        if (opened) await page.addInitScript(() => { try { localStorage.setItem('glossary-open', '1'); } catch {} });
+        await page.goto(pathToFileURL(file).href);
+        await page.waitForTimeout(500);
+        const tr = await page.evaluate(() => window.__tr);
+        if (tr.length) bad.push(`${label}: ${tr.join(',')}`);
+        if (opened && !await drawerOpen(page)) bad.push(`${label}: drawer not open`);
+      } finally { await ctx.close(); }
+    }
+    return bad.length ? 'transition ran on load (' + bad.join('; ') + ')' : null;
+  },
   async print(file) {
     return open(file, DESKTOP, async page => {
       await page.emulateMedia({ media: 'print' });

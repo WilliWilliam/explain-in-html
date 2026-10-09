@@ -132,6 +132,7 @@ A short script adds `html.js-glossary`, one shared `#term-pop` and unhides the b
 - A mouse click or Enter on a term opens the drawer at its entry and sets the hash. On touch, the first tap only opens the popover.
 - The drawer is a fixed side panel that overlays the content and never pushes it. It starts closed. Esc or the button closes it, and focus returns to the button. It scrolls inside itself (`overscroll-behavior: contain`).
 - The open state is stored in `localStorage` key `glossary-open`, inside try/catch.
+- No slide on load: enable the drawer transition only after the initial (closed or restored) state is applied.
 - At level 1 the glossary and its button are hidden, even with the drawer open.
 - Colors come from the theme tokens only, so both themes work. On phones the drawer is full screen and the popover is a bottom sheet.
 
