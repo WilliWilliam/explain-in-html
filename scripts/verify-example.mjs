@@ -14,6 +14,7 @@ const views = [
   { name: 'desktop-light', width: 1280, height: 800, scheme: 'light' },
   { name: 'desktop-dark',  width: 1280, height: 800, scheme: 'dark' },
   { name: 'phone',         width: 400,  height: 800, scheme: 'light' },
+  { name: 'wide',          width: 1920, height: 1000, scheme: 'light' },
 ];
 const browser = await chromium.launch();
 let failed = 0;

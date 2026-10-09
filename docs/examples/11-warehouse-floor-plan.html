@@ -44,14 +44,25 @@
 html, body { margin: 0; background: var(--bg); color: var(--ink); }
 body { font: 17px/1.55 var(--serif); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.wrap { max-width: 1100px; margin: 0 auto; padding: 0 1rem 3rem; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+/* wide layout: start */
+.page { display: grid; padding-inline: clamp(16px, 2vw, 24px);
+  grid-template-columns: [full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]; }
+/* main and its plain sections pass the same lines down. Grid items don't collapse margins: use one-sided ones. */
+.page > main, .page main > section:not(.wide, .full) { grid-column: full; display: grid; grid-template-columns: subgrid; }
+.page > *, .page :where(main, main > section:not(.wide, .full)) > * { grid-column: content; } /* :where keeps it below .wide/.full */
+.page .wide { grid-column: wide; }
+.page .full { grid-column: full; }
+/* wide layout: end */
+p { margin: 0 0 1em; } /* grid items do not collapse margins: one-sided */
 a { color: var(--accent-ink); }
 .ca { color: var(--A); } .cb { color: var(--B); } .cc { color: var(--C); } .cd { color: var(--D); }
 .ca, .cb, .cc, .cd { font-weight: 600; font-family: var(--sans); font-size: .92em; }
 
 /* Level selector */
-.levelbar { position: sticky; top: 0; z-index: 3; background: var(--bg); border-bottom: 1px solid var(--rule); }
-.theme-toggle { margin-left: auto; font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.levelbar { position: sticky; top: 0; z-index: 25; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.bar-tools { margin-left: auto; display: flex; gap: .5rem; }
+.theme-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
 .levelbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; padding-top: .55rem; padding-bottom: .55rem; }
 fieldset.level { border: 0; margin: 0; padding: 0; display: flex; align-items: center; gap: .6rem; }
 fieldset.level legend { float: left; font: 600 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin-right: .2rem; }
@@ -67,9 +78,10 @@ body:has(#level-5:checked) [data-level="10"] { display: none; }
 
 /* Header */
 header.top { padding: 1.8rem 0 .2rem; }
+main { margin: 0 0 3rem; }
 header.top h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .3em; letter-spacing: -.01em; }
 .meta { font: 13px/1.5 var(--sans); color: var(--ink-soft); }
-.tldr { font-size: 1.08rem; max-width: 70ch; margin: 1rem 0 1.2rem; }
+.tldr { font-size: 1.08rem; margin: 1rem 0 1.2rem; }
 .cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .8rem; margin: 0 0 1.4rem; }
 .card { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 4px; padding: .7rem .9rem; font: 14.5px/1.45 var(--sans); }
 .card b { display: block; margin-bottom: .2em; }
@@ -77,7 +89,7 @@ header.top h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .3em; letter-spa
 /* Floor plan */
 figure.planfig { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: .8rem; }
 .plan-scroll { overflow-x: auto; }
-.plan { display: block; width: 100%; min-width: 720px; height: auto; color: var(--ink); }
+.plan { display: block; width: 100%; min-width: 940px; height: auto; color: var(--ink); }
 .plan text { font-family: var(--sans); fill: var(--ink); }
 .plan .wall { fill: none; stroke: var(--ink); stroke-width: 6; }
 .plan .door { fill: var(--surface); }
@@ -86,28 +98,28 @@ figure.planfig { margin: 0; background: var(--surface); border: 1px solid var(--
 .plan .zone.restricted { stroke: var(--alert); fill: url(#hatch); }
 .plan .zone.hot { stroke: var(--accent); stroke-width: 3.5; fill: var(--hot); }
 .plan .zone.restricted.hot { fill: url(#hatch); }
-.plan .zlabel { font-size: 11px; font-weight: 700; letter-spacing: .07em; fill: var(--ink-soft); }
-.plan .llabel { font-size: 10.5px; font-weight: 600; letter-spacing: .05em; }
+.plan .zlabel { font-size: 19px; font-weight: 700; letter-spacing: .07em; fill: var(--ink-soft); }
+.plan .llabel { font-size: 17px; font-weight: 600; letter-spacing: .05em; }
 .plan .rack { fill: none; stroke: var(--ink-soft); stroke-width: 1.5; }
-.plan .small { font-size: 10px; fill: var(--ink-soft); }
+.plan .small { font-size: 16px; fill: var(--ink-soft); }
 .plan .bx rect { stroke: var(--surface); stroke-width: 1; }
-.plan .bx text { font-size: 11px; font-weight: 700; fill: var(--surface); text-anchor: middle; }
+.plan .bx text { font-size: 17px; font-weight: 700; fill: var(--surface); text-anchor: middle; }
 .plan .bx.A rect { fill: var(--A); } .plan .bx.B rect { fill: var(--B); }
 .plan .bx.C rect { fill: var(--C); } .plan .bx.D rect { fill: var(--D); }
 .plan .ghost rect { fill: none; stroke: var(--D); stroke-width: 1.5; stroke-dasharray: 3 2; }
-.plan .ghost text { font-size: 11px; font-weight: 700; fill: var(--D); text-anchor: middle; }
+.plan .ghost text { font-size: 17px; font-weight: 700; fill: var(--D); text-anchor: middle; }
 .plan .mov { transition: transform .8s cubic-bezier(.6,0,.3,1), opacity .4s; }
 .plan .off { opacity: 0; }
 .plan .faded { opacity: .45; }
 .plan .cont rect { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
-.plan .cont text { font-size: 10px; font-family: var(--mono); text-anchor: middle; }
+.plan .cont text { font-size: 15px; font-family: var(--mono); text-anchor: middle; }
 .plan .truck rect { fill: var(--surface); stroke-width: 2.5; }
-.plan .truck text { font-size: 12px; font-weight: 700; text-anchor: middle; }
+.plan .truck text { font-size: 20px; font-weight: 700; text-anchor: middle; }
 .plan #tA rect { stroke: var(--A); } .plan #tA text { fill: var(--A); }
 .plan #tB rect { stroke: var(--B); } .plan #tB text { fill: var(--B); }
 .plan #tC rect { stroke: var(--C); } .plan #tC text { fill: var(--C); }
 .plan #tD rect { stroke: var(--D); } .plan #tD text { fill: var(--D); }
-.plan .note { font-size: 11px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.plan .note { font-size: 18px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
 .plan .note.warn { fill: var(--warn); } .plan .note.bad { fill: var(--danger); } .plan .note.ok { fill: var(--ok); }
 .legend { list-style: none; padding: 0; margin: .6rem 0 0; display: flex; flex-wrap: wrap; gap: .3rem 1rem; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
 .legend i { display: inline-block; width: 12px; height: 10px; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
@@ -127,7 +139,8 @@ button:disabled { opacity: .45; cursor: default; }
 #pos { font: 13px var(--sans); color: var(--ink-soft); margin-left: .3rem; }
 .kbd-hint { font: 12px var(--sans); color: var(--ink-soft); }
 
-.walk { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 1.2rem; margin-top: 1rem; align-items: start; }
+.walk { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 1.2rem; margin: .4rem 0 0; align-items: start; }
+.walk > figure { grid-column: 1 / -1; }
 .steps-text { list-style: none; padding: 0; margin: 0; }
 .js .steps-text > li:not(.on) { display: none; }
 .steps-text > li { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem .9rem; margin-bottom: 1rem; }
@@ -152,33 +165,56 @@ th { font-weight: 600; background: var(--bg); }
 .st-ok { color: var(--ok); } .st-warn { color: var(--warn); } .st-bad { color: var(--danger); } .st-n { color: var(--ink-soft); font-weight: 500; }
 .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: .35rem; vertical-align: 0; }
 
-/* Body with glossary in the margin */
-.doc { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 2rem; margin-top: 1rem; }
-.doc main > section { margin: 2.2rem 0 0; }
-.doc main > section:first-child { margin-top: 1rem; }
+/* Body sections */
+main > section { margin: 2.2rem 0 0; }
+main > section > :is(ul, ol) { margin: 0 0 1em; }
 section > h2 { font-size: 1.35rem; margin: 0 0 .5rem; }
-section > p, section > ul, section > ol { max-width: 70ch; }
 .tag { font: 600 10.5px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 3px; padding: 2px 5px; vertical-align: 3px; margin-left: .4rem; }
+/* glossary: popover + drawer: start. Tokens: --surface --ink --ink-soft --rule --accent --sans. */
 a.term { color: inherit; text-decoration: underline dotted var(--accent); text-underline-offset: 3px; }
-aside.glossary { position: sticky; top: 4rem; align-self: start; font: 13.5px/1.45 var(--sans); border-left: 1px solid var(--rule); padding-left: 1rem; margin-top: 1rem; max-height: calc(100vh - 5rem); overflow-y: auto; }
-aside.glossary h2 { font: 600 12px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin: 0 0 .5rem; }
-aside.glossary dt { font-weight: 600; margin-top: .6rem; }
-aside.glossary dd { margin: .1rem 0 0; color: var(--ink-soft); }
-aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot); }
+.glossary { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: 14px/1.5 var(--sans); color: var(--ink-soft); }
+.glossary h2 { font: 600 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink); margin: 0 0 .6em; }
+.glossary dt { font-weight: 600; color: var(--ink); margin-top: .9em; }
+.glossary dt.is-target { color: var(--accent); }
+.glossary dd.is-target { color: var(--ink); }
+.glossary dd { margin: .15em 0 0; }
+.glossary-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.glossary-toggle[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+/* With JS the aside becomes a drawer that overlays the page (never pushes it). */
+.js-glossary .glossary { position: fixed; top: 0; bottom: 0; right: 0; z-index: 20; width: min(22rem, 100vw); margin: 0; padding: 3.5rem 1.25rem 1.5rem;
+  border: 0; border-left: 1px solid var(--ink-soft); background: var(--surface); overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: 3rem;
+  visibility: hidden; transform: translateX(100%); }
+.js-glossary.glossary-ready .glossary { transition: transform .2s, visibility .2s; } /* set after the first render, so load never slides */
+.js-glossary.glossary-ready .glossary[data-open] { transition: transform .2s; } /* visible at once on open, so focus can move in */
+.js-glossary .glossary[data-open] { visibility: visible; transform: none; }
+#term-pop { position: absolute; z-index: 30; max-width: min(22rem, calc(100vw - 16px)); padding: .65rem .85rem; font: 14px/1.45 var(--sans); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--ink-soft); border-radius: 6px; max-height: calc(100vh - 16px); overflow: auto; }
+.term-pop-more { display: block; margin-top: .4em; color: var(--accent); }
+body:has(#level-1:checked) .glossary-toggle { display: none; }
+@media (max-width: 600px) {
+  .js-glossary .glossary { width: 100%; }
+  #term-pop { position: fixed; left: 8px; right: 8px; bottom: 8px; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { .js-glossary.glossary-ready .glossary, .js-glossary.glossary-ready .glossary[data-open] { transition: none; } }
+@media print {
+  .js-glossary .glossary { position: static; visibility: visible; transform: none; width: auto; margin-top: 3rem; padding: 1rem 0 0; border: 0; border-top: 1px solid var(--rule); overflow: visible; }
+  .glossary-toggle, #term-pop { display: none; }
+}
+/* glossary: popover + drawer: end */
+/* glossary on this page: the levelbar (z-index 25) stays above the drawer, so the drawer starts below it */
+.js-glossary .glossary { top: var(--bar-h, 3.2rem); padding-top: 1rem; scroll-padding-top: .5rem; }
 
-.timeline { list-style: none; padding: 0; margin: .6rem 0; border-left: 2px solid var(--rule); max-width: 70ch; }
+.timeline { list-style: none; padding: 0; margin: .6rem 0; border-left: 2px solid var(--rule); }
 .timeline li { position: relative; padding: 0 0 .9rem 1.1rem; }
 .timeline li::before { content: ""; position: absolute; left: -6px; top: .45em; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
 .timeline li.limit::before { border-color: var(--danger); background: var(--danger); }
 .timeline time { display: block; font: 600 13px var(--sans); color: var(--ink-soft); }
-.hedge { font: 13.5px/1.5 var(--sans); color: var(--ink-soft); border-left: 3px solid var(--warn); padding-left: .7rem; max-width: 70ch; }
+.hedge { font: 13.5px/1.5 var(--sans); color: var(--ink-soft); border-left: 3px solid var(--warn); padding-left: .7rem; }
 .mistakes li, .questions li { margin-bottom: .45rem; }
 .questions h3 { font: 600 1rem var(--sans); margin: 1rem 0 .3rem; }
 
 @media (max-width: 900px) {
-  .walk { grid-template-columns: 1fr; }
-  .doc { grid-template-columns: 1fr; }
-  aside.glossary { position: static; max-height: none; border-left: 0; border-top: 1px solid var(--rule); padding: 1rem 0 0; }
+  .walk { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 720px) {
   .cards { grid-template-columns: 1fr; }
@@ -196,8 +232,6 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
   .seg, .controls, .chips, .kbd-hint, .theme-toggle { display: none; }
   fieldset.level legend::after { content: " (printed version: the chosen level)"; }
   .plan { min-width: 0; }
-  aside.glossary { position: static; max-height: none; }
-  .doc { grid-template-columns: 1fr; }
   figure, table, .walk { break-inside: avoid; }
   h2, h3 { break-after: avoid; }
 }
@@ -215,16 +249,20 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
         <input type="radio" name="level" id="level-10" value="10" checked><label for="level-10">10 min</label>
       </div>
     </fieldset>
-    <button class="theme-toggle" type="button">◐ System</button>
+    <span class="bar-tools">
+      <button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button>
+      <button class="theme-toggle" type="button">◐ System</button>
+    </span>
   </div>
 </div>
 
-<div class="wrap">
+<div class="page">
 <header class="top">
   <h1>How a container is deconsolidated at a bonded warehouse</h1>
   <div class="meta">Colombia · sea imports · for people new to foreign trade · fictitious case, companies and plates</div>
 </header>
 
+<main id="content">
 <!-- ═════════ 1 minute ═════════ -->
 <p class="tldr">A consolidated container carries goods from several owners under a single <i>master</i> transport document, issued to the freight forwarder. Inside, each importer's cargo has its own <b>house document</b> (documento hijo). At the bonded warehouse (depósito habilitado) the container is opened and every package is counted against its house document. From there, <strong>each shipment follows its own process</strong>: its own declaration, its own DIAN review and its own payments. That is why the shipments arrive together in the container and leave on different days.</p>
 
@@ -234,100 +272,101 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
   <div class="card"><b>The first to get customs release leaves first</b>The order inside the container does not matter. For each declaration, DIAN decides whether it gets automatic release (levante) or a documentary or physical inspection.</div>
 </div>
 
+<section class="walk full" aria-label="Walkthrough on the floor plan">
 <figure class="planfig" id="floor-plan">
   <div class="plan-scroll" tabindex="0" aria-label="Warehouse floor plan (scrolls sideways on small screens)">
-  <svg class="plan" viewBox="0 0 1000 500" role="img" aria-labelledby="planT planD">
+  <svg class="plan" viewBox="0 0 1800 600" role="img" aria-labelledby="planT planD">
     <title id="planT">Floor plan of a bonded warehouse during a deconsolidation</title>
     <desc id="planD">Top view. On the left, the yard and the gate where the container comes in from the port. Inside the warehouse, from left to right: unloading dock, deconsolidation area with one lane per house document (A, B, C and D), rack storage, the DIAN inspection area below it, and the dispatch dock with one door per shipment. On the right, the exit yard where each shipment is loaded onto its truck.</desc>
     <defs>
-      <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" stroke-width="2" opacity=".18"/>
+      <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="10" stroke="currentColor" stroke-width="2.5" opacity=".18"/>
       </pattern>
     </defs>
 
-    <!-- FIXED STAGE -->
+    <!-- FIXED STAGE (viewBox 1800 × 600; lanes and doors share the rows y = 72, 192, 312, 432) -->
     <g id="stage">
-      <rect id="z-yard" class="zone" x="4" y="20" width="146" height="460"/>
-      <text class="zlabel" x="12" y="40">YARD AND GATE</text>
-      <text class="small" x="12" y="58">from the port ↓</text>
+      <rect id="z-yard" class="zone" x="6" y="24" width="244" height="552"/>
+      <text class="zlabel" x="18" y="48">YARD AND GATE</text>
+      <text class="small" x="18" y="72">from the port ↓</text>
 
-      <rect id="z-exit" class="zone" x="870" y="20" width="126" height="460"/>
-      <text class="zlabel" x="878" y="40">EXIT YARD</text>
-      <text class="small" x="878" y="470">to the road →</text>
+      <rect id="z-exit" class="zone" x="1540" y="24" width="254" height="552"/>
+      <text class="zlabel" x="1552" y="48">EXIT YARD</text>
+      <text class="small" x="1552" y="564">to the road →</text>
 
-      <rect class="wall" x="160" y="20" width="700" height="460"/>
-      <rect class="door" x="156" y="222" width="8" height="76"/>
-      <rect class="door" x="856" y="82" width="8" height="46"/>
-      <rect class="door" x="856" y="182" width="8" height="46"/>
-      <rect class="door" x="856" y="282" width="8" height="46"/>
-      <rect class="door" x="856" y="382" width="8" height="46"/>
+      <rect class="wall" x="270" y="24" width="1250" height="552"/>
+      <rect class="door" x="265" y="258" width="10" height="84"/>
+      <rect class="door" x="1515" y="102" width="10" height="64"/>
+      <rect class="door" x="1515" y="222" width="10" height="64"/>
+      <rect class="door" x="1515" y="342" width="10" height="64"/>
+      <rect class="door" x="1515" y="462" width="10" height="64"/>
 
-      <rect id="z-unload" class="zone" x="172" y="216" width="92" height="88"/>
-      <text class="zlabel" x="172" y="196">UNLOADING</text>
-      <text class="zlabel" x="172" y="209">DOCK</text>
+      <rect id="z-unload" class="zone" x="290" y="240" width="130" height="120"/>
+      <text class="zlabel" x="290" y="206">UNLOADING</text>
+      <text class="zlabel" x="290" y="228">DOCK</text>
 
       <g id="z-sort-g">
-        <text class="zlabel" x="282" y="48">DECONSOLIDATION</text>
-        <rect id="z-sort" class="zone" x="278" y="56" width="174" height="398"/>
-        <rect class="zone" x="284" y="62"  width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
-        <rect class="zone" x="284" y="162" width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
-        <rect class="zone" x="284" y="262" width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
-        <rect class="zone" x="284" y="362" width="162" height="86" style="stroke-width:1.2;stroke-dasharray:4 4"/>
-        <text class="llabel" x="292" y="78"  style="fill:var(--A)">A · TEXTILES</text>
-        <text class="llabel" x="292" y="178" style="fill:var(--B)">B · SPARE PARTS</text>
-        <text class="llabel" x="292" y="278" style="fill:var(--C)">C · COSMETICS</text>
-        <text class="llabel" x="292" y="378" style="fill:var(--D)">D · ELECTRONICS</text>
+        <text class="zlabel" x="452" y="56">DECONSOLIDATION</text>
+        <rect id="z-sort" class="zone" x="446" y="64" width="314" height="488"/>
+        <rect class="zone" x="454" y="72"  width="298" height="112" style="stroke-width:1.4;stroke-dasharray:5 5"/>
+        <rect class="zone" x="454" y="192" width="298" height="112" style="stroke-width:1.4;stroke-dasharray:5 5"/>
+        <rect class="zone" x="454" y="312" width="298" height="112" style="stroke-width:1.4;stroke-dasharray:5 5"/>
+        <rect class="zone" x="454" y="432" width="298" height="112" style="stroke-width:1.4;stroke-dasharray:5 5"/>
+        <text class="llabel" x="466" y="94"  style="fill:var(--A)">A · TEXTILES</text>
+        <text class="llabel" x="466" y="214" style="fill:var(--B)">B · SPARE PARTS</text>
+        <text class="llabel" x="466" y="334" style="fill:var(--C)">C · COSMETICS</text>
+        <text class="llabel" x="466" y="454" style="fill:var(--D)">D · ELECTRONICS</text>
       </g>
 
-      <text class="zlabel" x="466" y="48">STORAGE</text>
-      <rect id="z-storage" class="zone" x="466" y="56" width="164" height="240"/>
-      <rect class="rack" x="474" y="84"  width="148" height="26"/>
-      <rect class="rack" x="474" y="136" width="148" height="26"/>
-      <rect class="rack" x="474" y="188" width="148" height="26"/>
-      <rect class="rack" x="474" y="240" width="148" height="26"/>
-      <text class="small" x="612" y="102">A</text>
-      <text class="small" x="612" y="154">B</text>
-      <text class="small" x="612" y="206">C</text>
-      <text class="small" x="612" y="258">D</text>
+      <text class="zlabel" x="796" y="56">STORAGE</text>
+      <rect id="z-storage" class="zone" x="790" y="64" width="290" height="276"/>
+      <rect class="rack" x="805" y="96"  width="260" height="36"/>
+      <rect class="rack" x="805" y="156" width="260" height="36"/>
+      <rect class="rack" x="805" y="216" width="260" height="36"/>
+      <rect class="rack" x="805" y="276" width="260" height="36"/>
+      <text class="small" x="1046" y="119">A</text>
+      <text class="small" x="1046" y="179">B</text>
+      <text class="small" x="1046" y="239">C</text>
+      <text class="small" x="1046" y="299">D</text>
 
-      <rect id="z-insp" class="zone restricted" x="466" y="316" width="164" height="138" fill="url(#hatch)"/>
-      <text class="zlabel" x="474" y="336" style="fill:var(--alert)">DIAN INSPECTION</text>
+      <rect id="z-insp" class="zone restricted" x="790" y="364" width="290" height="188" fill="url(#hatch)"/>
+      <text class="zlabel" x="805" y="390" style="fill:var(--alert)">DIAN INSPECTION</text>
 
-      <text class="zlabel" x="648" y="48">DISPATCH DOCK</text>
-      <rect id="z-dispatch" class="zone" x="644" y="56" width="204" height="398"/>
-      <text class="llabel" x="656" y="78"  style="fill:var(--ink-soft)">DOOR A</text>
-      <text class="llabel" x="656" y="178" style="fill:var(--ink-soft)">DOOR B</text>
-      <text class="llabel" x="656" y="278" style="fill:var(--ink-soft)">DOOR C</text>
-      <text class="llabel" x="656" y="378" style="fill:var(--ink-soft)">DOOR D</text>
+      <text class="zlabel" x="1116" y="56">DISPATCH DOCK</text>
+      <rect id="z-dispatch" class="zone" x="1110" y="64" width="390" height="488"/>
+      <text class="llabel" x="1126" y="94"  style="fill:var(--ink-soft)">DOOR A</text>
+      <text class="llabel" x="1126" y="214" style="fill:var(--ink-soft)">DOOR B</text>
+      <text class="llabel" x="1126" y="334" style="fill:var(--ink-soft)">DOOR C</text>
+      <text class="llabel" x="1126" y="454" style="fill:var(--ink-soft)">DOOR D</text>
     </g>
 
     <!-- WHAT MOVES (step 1 positions) -->
-    <g id="cont" class="cont mov" style="transform:translate(15px,70px)">
-      <rect width="120" height="36"/>
-      <text x="60" y="15">MODU 000123-4</text>
-      <text x="60" y="29" id="contSub">seal 000481</text>
+    <g id="cont" class="cont mov" style="transform:translate(40px,90px)">
+      <rect width="150" height="46"/>
+      <text x="75" y="20">MODU 000123-4</text>
+      <text x="75" y="39" id="contSub">seal 000481</text>
     </g>
 
-    <g transform="translate(878,82)"><g id="tA" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">A</text></g></g>
-    <g transform="translate(878,182)"><g id="tB" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">B</text></g></g>
-    <g transform="translate(878,282)"><g id="tC" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">C</text></g></g>
-    <g transform="translate(878,382)"><g id="tD" class="truck mov off" style="transform:translate(130px,0)"><rect width="76" height="46"/><rect x="78" y="8" width="22" height="30"/><text x="38" y="28">D</text></g></g>
+    <g transform="translate(1560,102)"><g id="tA" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">A</text></g></g>
+    <g transform="translate(1560,222)"><g id="tB" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">B</text></g></g>
+    <g transform="translate(1560,342)"><g id="tC" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">C</text></g></g>
+    <g transform="translate(1560,462)"><g id="tD" class="truck mov off" style="transform:translate(260px,0)"><rect width="100" height="64"/><rect x="103" y="12" width="28" height="40"/><text x="50" y="39">D</text></g></g>
 
     <g id="cargo">
-      <g class="bx A mov off" id="A0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
-      <g class="bx A mov off" id="A1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
-      <g class="bx A mov off" id="A2" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
-      <g class="bx A mov off" id="A3" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">A</text></g>
-      <g class="bx B mov off" id="B0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">B</text></g>
-      <g class="bx B mov off" id="B1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">B</text></g>
-      <g class="bx C mov off" id="C0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">C</text></g>
-      <g class="bx C mov off" id="C1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">C</text></g>
-      <g class="bx C mov off" id="C2" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">C</text></g>
-      <g class="bx D mov off" id="D0" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">D</text></g>
-      <g class="bx D mov off" id="D1" style="transform:translate(64px,79px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">D</text></g>
-      <g class="ghost mov off" id="Dx" style="transform:translate(348px,400px)"><rect width="22" height="18" rx="2"/><text x="11" y="13">?</text></g>
+      <g class="bx A mov off" id="A0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx A mov off" id="A1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx A mov off" id="A2" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx A mov off" id="A3" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">A</text></g>
+      <g class="bx B mov off" id="B0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">B</text></g>
+      <g class="bx B mov off" id="B1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">B</text></g>
+      <g class="bx C mov off" id="C0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">C</text></g>
+      <g class="bx C mov off" id="C1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">C</text></g>
+      <g class="bx C mov off" id="C2" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">C</text></g>
+      <g class="bx D mov off" id="D0" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">D</text></g>
+      <g class="bx D mov off" id="D1" style="transform:translate(98px,100px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">D</text></g>
+      <g class="ghost mov off" id="Dx" style="transform:translate(554px,480px)"><rect width="34" height="26" rx="2"/><text x="17" y="19">?</text></g>
     </g>
-    <g id="notes" aria-hidden="true"><text class="note" x="12" y="126">Number and seal checked</text></g>
+    <g id="notes" aria-hidden="true"><text class="note" x="18" y="164">Number and seal checked</text></g>
   </svg>
   </div>
   <ul class="legend" aria-label="Floor plan key">
@@ -361,7 +400,6 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
   <figcaption>The floor plan does not change; what moves is the cargo. Each importer has a color, and it is the same in the plan, in the table and in the text.</figcaption>
 </figure>
 
-<div class="walk">
   <ol class="steps-text" id="stepsText">
     <li class="on">
       <h3>1 · Arrives at the gate</h3>
@@ -445,10 +483,7 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
       </tbody>
     </table>
   </div>
-</div>
-
-<div class="doc">
-<main id="content">
+</section>
 
 <!-- ═════════ 5 minutes ═════════ -->
 <section data-level="5">
@@ -550,26 +585,24 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
   </ul>
 </section>
 
-</main>
-
-<aside class="glossary" data-level="5" aria-labelledby="gloss-t">
-  <h2 id="gloss-t">Glossary</h2>
+<aside class="glossary" data-level="5" id="glossary" aria-labelledby="glossary-t">
+  <h2 id="glossary-t">Glossary</h2>
   <dl>
-    <dt id="g-consolidated">Consolidated container</dt><dd>A container with cargo from several owners (LCL), put together by a freight forwarder.</dd>
-    <dt id="g-forwarder">International freight forwarder</dt><dd>Consolidates and deconsolidates. Holds the master BL and issues the house documents.</dd>
-    <dt id="g-house">House document (documento hijo)</dt><dd>Each importer's BL or air waybill within the master. It is the unit the importer declares with.</dd>
-    <dt id="g-manifest">Cargo manifest</dt><dd>List of everything the vessel is carrying, which the shipping line transmits before arrival.</dd>
-    <dt id="g-warehouse">Bonded warehouse (depósito habilitado)</dt><dd>A warehouse authorized by DIAN to store cargo that has not yet been cleared through customs.</dd>
-    <dt id="g-transfer-form">Transfer form (planilla de envío)</dt><dd>Authorizes moving the cargo from the port to the warehouse.</dd>
-    <dt id="g-report">Unloading and discrepancy report (informe de descargue e inconsistencias)</dt><dd>Report to DIAN of what arrived extra, short or damaged.</dd>
-    <dt id="g-declaration">Import declaration</dt><dd>The document with which the importer clears its goods through customs and assesses the taxes.</dd>
-    <dt id="g-risk">Risk management</dt><dd>DIAN system that decides whether a declaration gets automatic release or goes to inspection.</dd>
-    <dt id="g-release">Customs release (levante)</dt><dd>DIAN's authorization to dispose of the goods.</dd>
-    <dt id="g-approval">Prior approval (visto bueno)</dt><dd>Prior permit from another agency (INVIMA, ICA) for certain products, processed through the VUCE.</dd>
-    <dt id="g-abandonment">Legal abandonment (abandono legal)</dt><dd>What happens when the deadline passes with no release: the goods are placed at DIAN's disposal.</dd>
+    <dt id="g-consolidated">Consolidated container</dt><dd id="g-consolidated-d">A container with cargo from several owners (LCL), put together by a freight forwarder.</dd>
+    <dt id="g-forwarder">International freight forwarder</dt><dd id="g-forwarder-d">Consolidates and deconsolidates. Holds the master BL and issues the house documents.</dd>
+    <dt id="g-house">House document (documento hijo)</dt><dd id="g-house-d">Each importer's BL or air waybill within the master. It is the unit the importer declares with.</dd>
+    <dt id="g-manifest">Cargo manifest</dt><dd id="g-manifest-d">List of everything the vessel is carrying, which the shipping line transmits before arrival.</dd>
+    <dt id="g-warehouse">Bonded warehouse (depósito habilitado)</dt><dd id="g-warehouse-d">A warehouse authorized by DIAN to store cargo that has not yet been cleared through customs.</dd>
+    <dt id="g-transfer-form">Transfer form (planilla de envío)</dt><dd id="g-transfer-form-d">Authorizes moving the cargo from the port to the warehouse.</dd>
+    <dt id="g-report">Unloading and discrepancy report (informe de descargue e inconsistencias)</dt><dd id="g-report-d">Report to DIAN of what arrived extra, short or damaged.</dd>
+    <dt id="g-declaration">Import declaration</dt><dd id="g-declaration-d">The document with which the importer clears its goods through customs and assesses the taxes.</dd>
+    <dt id="g-risk">Risk management</dt><dd id="g-risk-d">DIAN system that decides whether a declaration gets automatic release or goes to inspection.</dd>
+    <dt id="g-release">Customs release (levante)</dt><dd id="g-release-d">DIAN's authorization to dispose of the goods.</dd>
+    <dt id="g-approval">Prior approval (visto bueno)</dt><dd id="g-approval-d">Prior permit from another agency (INVIMA, ICA) for certain products, processed through the VUCE.</dd>
+    <dt id="g-abandonment">Legal abandonment (abandono legal)</dt><dd id="g-abandonment-d">What happens when the deadline passes with no release: the goods are placed at DIAN's disposal.</dd>
   </dl>
 </aside>
-</div>
+</main>
 </div>
 
 <script>
@@ -598,19 +631,20 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
   if (fromHash) radios.forEach(r => { r.checked = r.value === fromHash[1]; });
   radios.forEach(r => r.addEventListener('change', () => history.replaceState(null, '', `#${r.value}min`)));
 
-  /* ── floor plan geometry ── */
-  const LANE  = { A: 62, B: 162, C: 262, D: 362 };
-  const SHELF = { A: 84, B: 136, C: 188, D: 240 };
+  /* ── floor plan geometry (viewBox 1800 × 600; boxes are 34 × 26, the container 150 × 46) ── */
+  const LANE  = { A: 72, B: 192, C: 312, D: 432 };   /* lane rows, shared with the dispatch doors */
+  const SHELF = { A: 96, B: 156, C: 216, D: 276 };   /* rack rows */
   const COUNT = { A: 4, B: 2, C: 3, D: 2 };
-  const CONT  = { gate: [15, 70], dock: [36, 242], empty: [15, 70], gone: [15, -60] };
+  const CONT  = { gate: [40, 90], dock: [112, 277], empty: [40, 90], gone: [40, -80] };
+  const TRUCK_OFF = 'translate(260px,0)';           /* parked past the right edge */
   function spot(loc, k, i, cpos) {
     switch (loc) {
-      case 'cont':  return [cpos[0] + 49, cpos[1] + 9, false];
-      case 'lane':  return [292 + 28 * i, LANE[k] + 36, true];
-      case 'rack':  return [480 + 28 * i, SHELF[k] + 4, true];
-      case 'insp':  return [490 + 28 * i, 390, true];
-      case 'bay':   return [668 + 28 * i, LANE[k] + 36, true];
-      case 'truck': return [900, LANE[k] + 36, false];
+      case 'cont':  return [cpos[0] + 58, cpos[1] + 10, false];
+      case 'lane':  return [470 + 42 * i, LANE[k] + 48, true];
+      case 'rack':  return [815 + 42 * i, SHELF[k] + 5, true];
+      case 'insp':  return [815 + 42 * i, 470, true];
+      case 'bay':   return [1126 + 42 * i, LANE[k] + 48, true];
+      case 'truck': return [1600, LANE[k] + 48, false];
     }
   }
 
@@ -619,34 +653,34 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
   const off = { A: 'off', B: 'off', C: 'off', D: 'off' };
   const S = [
     { c: 'gate', loc: all('cont'), ghost: null, trucks: off, hot: 'z-yard',
-      notes: [[12, 126, 'Number and seal checked', '']],
+      notes: [[18, 164, 'Number and seal checked', '']],
       p: { M: ['—', 'In transit with transfer form', 'n'], A: ['—', 'Inside the container', 'n'], B: ['—', 'Inside the container', 'n'], C: ['—', 'Inside the container', 'n'], D: ['—', 'Inside the container', 'n'] } },
     { c: 'dock', loc: all('cont'), ghost: null, trucks: off, hot: 'z-unload',
-      notes: [[20, 300, 'Seal intact: opened', 'ok']],
+      notes: [[18, 350, 'Seal intact: opened', 'ok']],
       p: { M: ['—', 'Received (receipt form)', 'ok'], A: ['—', 'Inside the container', 'n'], B: ['—', 'Inside the container', 'n'], C: ['—', 'Inside the container', 'n'], D: ['—', 'Inside the container', 'n'] } },
     { c: 'dock', loc: all('lane'), ghost: 'lane', trucks: off, hot: 'z-sort',
-      notes: [[292, 140, '4 / 4 matches', 'ok'], [292, 240, '2 / 2 matches', 'ok'], [292, 340, '3 / 3 matches', 'ok'], [292, 440, '2 / 3 · 1 package short', 'bad']],
+      notes: [[470, 170, '4 / 4 matches', 'ok'], [470, 290, '2 / 2 matches', 'ok'], [470, 410, '3 / 3 matches', 'ok'], [470, 530, '2 / 3 · 1 package short', 'bad']],
       p: { M: ['11', 'Counted: 11 of 12', 'warn'], A: ['4', 'Matches', 'ok'], B: ['2', 'Matches', 'ok'], C: ['3', 'Matches', 'ok'], D: ['2', 'Shortage: 2 of 3', 'bad'] } },
     { c: 'empty', loc: all('rack'), ghost: 'rack', trucks: off, hot: 'z-storage',
-      notes: [[12, 126, 'Empty: back to the line', ''], [474, 284, 'D: shortage reported to DIAN', 'bad']],
+      notes: [[18, 164, 'Empty: back to the line', ''], [805, 332, 'D: shortage reported to DIAN', 'bad']],
       p: { M: ['11', 'Discrepancy reported', 'warn'], A: ['4', 'In storage, not cleared', 'n'], B: ['2', 'In storage, not cleared', 'n'], C: ['3', 'In storage, not cleared', 'n'], D: ['2', 'Shortage reported', 'bad'] } },
     { c: 'gone', loc: all('rack'), ghost: 'rack', trucks: off, hot: 'z-storage',
-      notes: [[474, 80, 'automatic release', 'ok'], [474, 132, 'physical inspection', 'warn'], [474, 184, 'document inspection', 'warn'], [474, 236, 'clear up shortage', 'bad']],
+      notes: [[805, 90, 'automatic release', 'ok'], [805, 150, 'physical inspection', 'warn'], [805, 210, 'document inspection', 'warn'], [805, 270, 'clear up shortage', 'bad']],
       p: { M: ['11', 'Each house doc on its own', 'n'], A: ['4', 'Automatic release', 'ok'], B: ['2', 'Physical inspection', 'warn'], C: ['3', 'Documentary inspection', 'warn'], D: ['2', 'Not declared: clear up shortage', 'bad'] } },
     { c: 'gone', loc: { A: 'bay', B: 'rack', C: 'rack', D: 'rack' }, ghost: 'rack', trucks: { A: 'dock', B: 'off', C: 'off', D: 'off' }, hot: 'z-dispatch',
-      notes: [[656, 140, 'release + fees paid + BL freed', 'ok']],
+      notes: [[1126, 170, 'release + fees paid + BL freed', 'ok']],
       p: { M: ['11', 'Deliveries under way', 'n'], A: ['4', 'Loading at door A', 'ok'], B: ['2', 'Awaiting inspection', 'warn'], C: ['3', 'In document review', 'warn'], D: ['2', 'Clearing up shortage', 'bad'] } },
     { c: 'gone', loc: { A: 'truck', B: 'insp', C: 'rack', D: 'rack' }, ghost: 'rack', trucks: { A: 'gone', B: 'off', C: 'off', D: 'off' }, hot: 'z-insp',
-      notes: [[474, 430, 'DIAN opens, compares', 'warn'], [474, 184, 'paper review', 'warn']],
+      notes: [[805, 536, 'DIAN opens, compares', 'warn'], [805, 210, 'paper review', 'warn']],
       p: { M: ['7', '1 of 4 shipments delivered', 'n'], A: ['0', 'Left', 'n'], B: ['2', 'Under inspection (clock paused)', 'warn'], C: ['3', 'In document review', 'warn'], D: ['2', 'Clearing up shortage', 'bad'] } },
     { c: 'gone', loc: { A: 'truck', B: 'bay', C: 'bay', D: 'rack' }, ghost: 'rack', trucks: { A: 'gone', B: 'dock', C: 'dock', D: 'off' }, hot: 'z-dispatch',
-      notes: [[656, 240, 'inspection OK · release', 'ok'], [656, 340, 'docs approved · release', 'ok'], [474, 236, 'declared 2 packages', 'warn']],
+      notes: [[1126, 290, 'inspection OK · release', 'ok'], [1126, 410, 'docs approved · release', 'ok'], [805, 270, 'declared 2 packages', 'warn']],
       p: { M: ['7', 'Deliveries under way', 'n'], A: ['0', 'Left', 'n'], B: ['2', 'Loading at door B', 'ok'], C: ['3', 'Loading at door C', 'ok'], D: ['2', 'Declared 2 packages', 'warn'] } },
     { c: 'gone', loc: { A: 'truck', B: 'truck', C: 'truck', D: 'bay' }, ghost: null, trucks: { A: 'gone', B: 'gone', C: 'gone', D: 'dock' }, hot: 'z-dispatch',
-      notes: [[656, 440, 'release for 2 packages', 'ok']],
+      notes: [[1126, 530, 'release for 2 packages', 'ok']],
       p: { M: ['2', '3 of 4 shipments delivered', 'n'], A: ['0', 'Left', 'n'], B: ['0', 'Left', 'n'], C: ['0', 'Left', 'n'], D: ['2', 'Loading at door D', 'ok'] } },
     { c: 'gone', loc: all('truck'), ghost: null, trucks: { A: 'gone', B: 'gone', C: 'gone', D: 'gone' }, hot: 'z-exit',
-      notes: [[878, 250, 'Warehouse empty', '']],
+      notes: [[1556, 310, 'Warehouse empty', '']],
       p: { M: ['0', 'Deconsolidation closed', 'ok'], A: ['0', 'Left', 'n'], B: ['0', 'Left', 'n'], C: ['0', 'Left', 'n'], D: ['0', 'Left (1 package reported)', 'n'] } },
   ];
 
@@ -677,12 +711,12 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
         place($(k + i), x, y, show);
       }
       const t = $('t' + k), ts = s.trucks[k];
-      t.style.transform = ts === 'dock' ? 'translate(0px,0)' : 'translate(130px,0)';
+      t.style.transform = ts === 'dock' ? 'translate(0px,0)' : TRUCK_OFF;
       t.classList.toggle('off', ts !== 'dock');
     }
     const g = $('Dx');
-    if (s.ghost === 'lane') place(g, 348, 398, true);
-    else if (s.ghost === 'rack') place(g, 536, 244, true);
+    if (s.ghost === 'lane') place(g, 554, LANE.D + 48, true);
+    else if (s.ghost === 'rack') place(g, 899, SHELF.D + 5, true);
     else g.classList.add('off');
 
     zones.forEach(z => z.classList.toggle('hot', z.id === s.hot));
@@ -757,8 +791,99 @@ aside.glossary dt:target, aside.glossary dt:target + dd { background: var(--hot)
   /* if the level changes during playback, the step's time is recalculated */
   radios.forEach(r => r.addEventListener('change', () => { if (playing) { clearTimeout(timer); afterArrive(); } }));
 
+  /* the drawer starts below the sticky levelbar, which wraps on narrow screens */
+  const bar = document.querySelector('.levelbar');
+  const barH = () => document.documentElement.style.setProperty('--bar-h', bar.offsetHeight + 'px');
+  if (window.ResizeObserver) new ResizeObserver(barH).observe(bar);
+  barH();
+
   render(0);
 })();
+</script>
+<script>
+// glossary: popover + drawer: start. Without JS the aside stays a list at the end of main.
+(() => {
+  const g = document.getElementById('glossary'), btn = document.querySelector('.glossary-toggle');
+  if (!g || !btn) return;
+  const sheet = matchMedia('(max-width: 600px)'), pop = document.createElement('div');
+  pop.id = 'term-pop'; pop.hidden = true;
+  document.body.append(pop);
+  document.documentElement.classList.add('js-glossary');
+  btn.hidden = false;
+  let cur = null, timer, touch = false, wasOpen = false;
+  const slug = t => t.getAttribute('href').slice(1);
+  const hide = () => { clearTimeout(timer); pop.hidden = true; cur = null; };
+  const later = () => { clearTimeout(timer); timer = setTimeout(hide, 200); };
+  function show(t) {
+    const d = document.getElementById(slug(t) + '-d');
+    if (!d) return;
+    clearTimeout(timer); cur = t;
+    pop.innerHTML = d.innerHTML + ` <a class="term-pop-more" href="#${slug(t)}">See in glossary →</a>`;
+    pop.hidden = false; pop.style.left = pop.style.top = '';
+    if (sheet.matches) return; // the CSS docks it as a bottom sheet
+    const r = t.getBoundingClientRect(), p = pop.getBoundingClientRect(), m = 8, W = document.documentElement.clientWidth;
+    const x = Math.max(m, Math.min(r.left, W - p.width - m));
+    const y = r.bottom + m + p.height <= innerHeight ? r.bottom + m : Math.max(m, r.top - m - p.height);
+    pop.style.left = x + scrollX + 'px'; pop.style.top = y + scrollY + 'px';
+  }
+  const KEY = 'glossary-open:' + location.pathname, head = document.getElementById('glossary-t') || g;
+  head.tabIndex = -1;
+  function setOpen(open, focus) { // focus: the element inside the drawer to move focus to (none when restoring)
+    g.toggleAttribute('data-open', open);
+    btn.setAttribute('aria-expanded', open);
+    try { localStorage.setItem(KEY, open ? '1' : '0'); } catch {}
+    if (open && focus) focus.focus({ preventScroll: true });
+  }
+  const entry = id => { const dt = id && document.getElementById(id); return dt && dt.tagName === 'DT' && g.contains(dt) ? dt : null; };
+  function openAt(dt) { // open at an entry without touching the URL: highlight it, scroll the drawer to it, focus it
+    g.querySelectorAll('.is-target').forEach(e => e.classList.remove('is-target'));
+    const dd = document.getElementById(dt.id + '-d');
+    dt.classList.add('is-target'); if (dd) dd.classList.add('is-target');
+    dt.tabIndex = -1;
+    setOpen(true, dt);
+    g.scrollTop = dt.offsetTop - parseFloat(getComputedStyle(g).scrollPaddingTop || 0);
+  }
+  const fromHash = () => { let id = ''; try { id = decodeURIComponent(location.hash.slice(1)); } catch {} const dt = entry(id); if (dt) openAt(dt); return !!dt; };
+  document.querySelectorAll('a.term').forEach(t => {
+    t.setAttribute('aria-describedby', slug(t) + '-d');
+    t.addEventListener('mouseenter', () => show(t));
+    t.addEventListener('focus', () => show(t));
+    t.addEventListener('mouseleave', later);
+    t.addEventListener('blur', later);
+    t.addEventListener('pointerdown', e => { touch = e.pointerType !== 'mouse'; wasOpen = cur === t; });
+    t.addEventListener('pointercancel', () => { touch = wasOpen = false; });
+    t.addEventListener('click', e => {
+      // First tap on touch: popover only. Mouse click, Enter or a second tap: drawer at the entry, URL unchanged.
+      // click carries pointerType where supported ("" for Enter); the pointerdown flag is the fallback.
+      const tap = 'pointerType' in e ? e.pointerType === 'touch' || e.pointerType === 'pen' : touch;
+      e.preventDefault();
+      if (tap && !wasOpen) show(t); else { hide(); const dt = entry(slug(t)); if (dt) openAt(dt); else setOpen(true, head); }
+      touch = wasOpen = false;
+    });
+  });
+  pop.addEventListener('mouseenter', () => clearTimeout(timer));
+  pop.addEventListener('mouseleave', later);
+  pop.addEventListener('click', e => {
+    const more = e.target.closest('.term-pop-more');
+    if (!more) return;
+    e.preventDefault(); hide();
+    const dt = entry(more.getAttribute('href').slice(1)); if (dt) openAt(dt); else setOpen(true, head);
+  });
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('.term, #term-pop')) hide(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!pop.hidden) hide();
+    else if (g.hasAttribute('data-open')) { setOpen(false); btn.focus(); }
+  });
+  btn.addEventListener('click', () => setOpen(!g.hasAttribute('data-open'), head));
+  const l1 = document.getElementById('level-1'); // reading levels: level 1 closes the drawer
+  if (l1) l1.addEventListener('change', () => setOpen(false));
+  addEventListener('hashchange', fromHash); // a #g-… link opens the drawer at that entry; #5min and others are ignored
+  // A #g-… hash on load wins; otherwise restore this page's state, but never reopen the full-screen drawer on a phone.
+  if (!fromHash() && !sheet.matches) try { if (localStorage.getItem(KEY) === '1') setOpen(true); } catch {}
+  requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('glossary-ready')));
+})();
+// glossary: popover + drawer: end
 </script>
 </body>
 </html>

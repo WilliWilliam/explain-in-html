@@ -12,12 +12,11 @@ For "explain consistent hashing to me" or "how does our rate limiter actually wo
 - A **live interactive demo** if the concept is the kind that benefits from manipulation (sharding, hashing, scheduling, queuing, anything geometric or stateful). Click/drag/slider that lets the reader cause the system to rearrange itself.
 - A comparison table: this approach vs. the obvious naive approach, with concrete metrics.
 - "Where you'll meet it" — real systems that use this. Grounds it in things the reader knows.
-- A glossary, ideally **in the margin** with hover-link cross-refs from terms in the body text.
+- A glossary on the term (popover) and in a drawer: see "Glossary: popover + drawer" in `patterns.md`.
 - Tabbed code samples for languages/frameworks the reader might use.
 
 **What's load-bearing**
 - The live demo. For concepts that have a spatial or stateful character, a five-second interaction beats five paragraphs of prose.
-- Marginal glossary, not a glossary at the bottom. Bottom glossaries are never read; marginal ones are scanned.
 - Comparison to the naive approach with numbers, not adjectives. "Better" is meaningless; "moves 1/N keys instead of (N-1)/N" is meaningful.
 
 **Common mistakes**
@@ -83,6 +82,11 @@ For "write up the outage from yesterday."
 ## Example sketch — concept explainer with live demo
 
 ```html
+<div class="topbar"> <!-- fixed or sticky; stays visible above the open drawer -->
+  <button class="theme-toggle" type="button">Theme</button>
+  <button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button>
+</div>
+<div class="page">
 <main class="explainer">
   <header>
     <h1>Consistent hashing, in one ring</h1>
@@ -92,7 +96,7 @@ For "write up the outage from yesterday."
 
   <section>
     <h2>The trick: hash onto a circle, not a line</h2>
-    <p>Map both nodes and keys onto the same ring...</p>
+    <p>Map both nodes and keys onto the same <a class="term" href="#g-ring">ring</a>...</p>
 
     <figure class="live-demo">
       <svg id="ring" viewBox="0 0 400 400"><!-- ring rendered live --></svg>
@@ -112,12 +116,14 @@ For "write up the outage from yesterday."
     <table class="compare">...</table>
   </section>
 
-  <aside class="glossary">
+  <aside class="glossary" id="glossary" aria-labelledby="glossary-t"> <!-- last child of main; see patterns.md -->
+    <h2 id="glossary-t">Glossary</h2>
     <dl>
-      <dt>Ring</dt><dd>The hash output range, treated as a circle.</dd>
-      <dt>Arc</dt><dd>The stretch of ring a node owns.</dd>
+      <dt id="g-ring">Ring</dt><dd id="g-ring-d">The hash output range, treated as a circle.</dd>
+      <dt id="g-arc">Arc</dt><dd id="g-arc-d">The stretch of ring a node owns.</dd>
       ...
     </dl>
   </aside>
 </main>
+</div>
 ```

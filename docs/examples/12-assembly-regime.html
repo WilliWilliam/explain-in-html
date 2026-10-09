@@ -41,17 +41,24 @@
 * { box-sizing: border-box; }
 html { background: var(--bg); color: var(--ink); }
 body { font: 17px/1.55 var(--serif); margin: 0; background: var(--bg); color: var(--ink); }
-.wrap { max-width: 1180px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
-.layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
-@media (min-width: 1100px) { .layout { grid-template-columns: minmax(0, 1fr) 15.5rem; } }
-main > * { max-width: 72ch; }
-main > .wide { max-width: none; }
+/* wide layout: start */
+.page { display: grid; padding-inline: clamp(16px, 2vw, 24px);
+  grid-template-columns: [full-start] minmax(0,1fr) [wide-start] minmax(0, calc((1600px - 70ch)/2)) [content-start] min(70ch, 100%) [content-end] minmax(0, calc((1600px - 70ch)/2)) [wide-end] minmax(0,1fr) [full-end]; }
+/* main and its plain sections pass the same lines down. Grid items don't collapse margins: use one-sided ones. */
+.page > main, .page main > section:not(.wide, .full) { grid-column: full; display: grid; grid-template-columns: subgrid; }
+.page > *, .page :where(main, main > section:not(.wide, .full)) > * { grid-column: content; } /* :where keeps it below .wide/.full */
+.page .wide { grid-column: wide; }
+.page .full { grid-column: full; }
+/* wide layout: end */
+.page > header { padding-top: 2.5rem; }
+main { margin: 0 0 4rem; }
+.tools { position: fixed; top: .75rem; right: .75rem; z-index: 25; display: flex; gap: .5rem; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 a { color: var(--accent-ink); }
 h1 { font-size: 2.1rem; line-height: 1.15; letter-spacing: -.01em; margin: .2em 0 .3em; }
-h2 { font-size: 1.4rem; margin: 2.2em 0 .5em; }
-h3 { font-size: 1.08rem; margin: 1.5em 0 .4em; }
-p { margin: .6em 0; }
+h2 { font-size: 1.4rem; margin: 2.2em 0 .5em; } /* grid items do not collapse margins: p has bottom only */
+h3 { font-size: 1.08rem; margin: 1.2em 0 .4em; }
+p { margin: 0 0 .8em; }
 .kicker { font: 600 .78rem/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
 .tldr { font-size: 1.08rem; }
 small, .muted { color: var(--ink-soft); }
@@ -71,12 +78,12 @@ body:has(#level-1:checked) [data-level="10"],
 body:has(#level-5:checked) [data-level="10"] { display: none !important; }
 
 /* key ideas */
-.ideas { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .8rem; margin: 1.4rem 0; max-width: none; }
+.ideas { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .8rem; margin: 1.4rem 0 1.8rem; }
 .idea { border: 1px solid var(--rule); border-top: 3px solid var(--accent); background: var(--surface); padding: .8rem 1rem; border-radius: 4px; font-size: .95rem; }
 .idea b { display: block; font-family: var(--sans); font-size: .95rem; margin-bottom: .2rem; }
 
 /* floor plan */
-figure { margin: 1.4rem 0; }
+figure { margin: 1.4rem 0 1rem; }
 figcaption { font-size: .9rem; color: var(--ink-soft); margin-top: .5rem; }
 .plan-scroll { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); border-radius: 4px; }
 .plan { display: block; width: 100%; min-width: 780px; height: auto; color: var(--ink); font-family: var(--sans); }
@@ -130,7 +137,7 @@ figcaption { font-size: .9rem; color: var(--ink-soft); margin-top: .5rem; }
 
 .tour { display: grid; grid-template-columns: minmax(0,1fr); gap: 1rem; }
 .duo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.2rem; }
-@media (min-width: 900px) { .duo { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; } }
+@media (min-width: 1100px) { .duo { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; } }
 
 /* tables */
 .tscroll { overflow-x: auto; }
@@ -159,25 +166,46 @@ ol.tight, ul.tight { padding-left: 1.2rem; margin: .4rem 0; }
 ul.tight li, ol.tight li { margin: .25rem 0; }
 .err { display: grid; grid-template-columns: minmax(0,1fr); gap: .6rem; }
 
-/* glossary */
-aside.glossary { font: .88rem/1.45 var(--sans); }
-@media (min-width: 1100px) { aside.glossary > div { position: sticky; top: 1rem; } }
-aside.glossary h2 { font-size: 1rem; margin: 0 0 .5rem; }
-aside.glossary dt { font-weight: 700; margin-top: .7rem; }
-aside.glossary dd { margin: .1rem 0 0; color: var(--ink-soft); }
-aside.glossary dt:target, aside.glossary dt:target + dd { background: color-mix(in srgb, var(--accent) 14%, transparent); }
-a.g { color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; }
+/* glossary: popover + drawer: start. Tokens: --surface --ink --ink-soft --rule --accent --sans. */
+a.term { color: inherit; text-decoration: underline dotted var(--accent); text-underline-offset: 3px; }
+.glossary { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: 14px/1.5 var(--sans); color: var(--ink-soft); }
+.glossary h2 { font: 600 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink); margin: 0 0 .6em; }
+.glossary dt { font-weight: 600; color: var(--ink); margin-top: .9em; }
+.glossary dt.is-target { color: var(--accent); }
+.glossary dd.is-target { color: var(--ink); }
+.glossary dd { margin: .15em 0 0; }
+.glossary-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.glossary-toggle[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+/* With JS the aside becomes a drawer that overlays the page (never pushes it). */
+.js-glossary .glossary { position: fixed; top: 0; bottom: 0; right: 0; z-index: 20; width: min(22rem, 100vw); margin: 0; padding: 3.5rem 1.25rem 1.5rem;
+  border: 0; border-left: 1px solid var(--ink-soft); background: var(--surface); overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: 3rem;
+  visibility: hidden; transform: translateX(100%); }
+.js-glossary.glossary-ready .glossary { transition: transform .2s, visibility .2s; } /* set after the first render, so load never slides */
+.js-glossary.glossary-ready .glossary[data-open] { transition: transform .2s; } /* visible at once on open, so focus can move in */
+.js-glossary .glossary[data-open] { visibility: visible; transform: none; }
+#term-pop { position: absolute; z-index: 30; max-width: min(22rem, calc(100vw - 16px)); padding: .65rem .85rem; font: 14px/1.45 var(--sans); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--ink-soft); border-radius: 6px; max-height: calc(100vh - 16px); overflow: auto; }
+.term-pop-more { display: block; margin-top: .4em; color: var(--accent); }
+body:has(#level-1:checked) .glossary-toggle { display: none; }
+@media (max-width: 600px) {
+  .js-glossary .glossary { width: 100%; }
+  #term-pop { position: fixed; left: 8px; right: 8px; bottom: 8px; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { .js-glossary.glossary-ready .glossary, .js-glossary.glossary-ready .glossary[data-open] { transition: none; } }
+@media print {
+  .js-glossary .glossary { position: static; visibility: visible; transform: none; width: auto; margin-top: 3rem; padding: 1rem 0 0; border: 0; border-top: 1px solid var(--rule); overflow: visible; }
+  .glossary-toggle, #term-pop { display: none; }
+}
+/* glossary: popover + drawer: end */
 
 footer.sources { font: .85rem/1.45 var(--sans); border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; }
-.theme-toggle { position: fixed; top: .75rem; right: .75rem; z-index: 10; font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
+.theme-toggle { font: 13px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; }
 footer.sources ol { padding-left: 1.2rem; }
 footer.sources li { margin: .3rem 0; }
 
 @media print {
   :root, :root[data-theme] { --bg: #fff; --surface: #fff; --ink: #000; --ink-soft: #333; --rule: #bbb; }
   body { font-size: 11pt; }
-  .wrap { padding: 0; max-width: none; }
-  .layout { display: block; }
   fieldset.level, .steps, .controls, .kbd-hint, .calc fieldset, button { display: none !important; }
   .plan-scroll { overflow: visible; border: 0; }
   .plan { min-width: 0; }
@@ -188,8 +216,11 @@ footer.sources li { margin: .3rem 0; }
 </style>
 </head>
 <body>
-<button class="theme-toggle" type="button">◐ System</button>
-<div class="wrap">
+<div class="tools">
+  <button class="glossary-toggle" type="button" aria-controls="glossary" aria-expanded="false" hidden>Glossary</button>
+  <button class="theme-toggle" type="button">◐ System</button>
+</div>
+<div class="page">
 <header>
   <p class="kicker">Foreign trade · Colombia · updated October 2026</p>
   <h1>Motorcycle assembly regime in Colombia</h1>
@@ -204,10 +235,9 @@ footer.sources li { margin: .3rem 0; }
   </fieldset>
 </header>
 
-<div class="layout">
 <main>
 
-<section class="ideas" aria-label="Key ideas">
+<section class="ideas wide" aria-label="Key ideas">
   <div class="idea"><b>It is a real customs procedure</b>It is called “import for transformation and/or assembly” (importación para transformación y/o ensamble, Decreto 1165 de 2019, art. 250). For motorcycles, MinCIT runs it as the “Motorcycle Assembly Regime” (Régimen de Ensamble para Motos).</div>
   <div class="idea"><b>You pay at the end, and little</b>The parts come in without paying. When the finished motorcycle leaves, you pay 3&#8239;% on the value of its imported parts, not on the whole motorcycle.</div>
   <div class="idea"><b>Two authorities, two permits</b>MinCIT authorizes the company and monitors the minimum of Colombian parts. The DIAN licenses the warehouse and receives the declarations.</div>
@@ -345,10 +375,10 @@ footer.sources li { margin: .3rem 0; }
   <h2 id="h-who">Who can use it and which permits it needs</h2>
   <p>There are two permits and they go in order: without MinCIT's you cannot apply for the DIAN's.</p>
   <ol class="tight">
-    <li><strong>MinCIT authorization as an assembler.</strong> You apply to the Foreign Trade Directorate (Dirección de Comercio Exterior) through the <a class="g" href="#g-vuce">VUCE</a>, module “Régimen de Ensamble para Motos de Transformación o Ensamble – RTE” (Decreto 1131 de 2026, art. 2.2.1.10.3.2). Attachments include, among others: capital structure and shareholders, plant location and area, projected production and sales for three years, the local parts incorporation program, the letter of intent from the parent company or the <a class="g" href="#g-ckd">CKD</a> suppliers, the commitment to after-sales service and spare parts for at least ten years after the model is discontinued, and a pre-feasibility study. MinCIT decides within at most 90 calendar days. The authorization lasts five years, renewable for five more; for new companies, three years (art. 2.2.1.10.3.5).</li>
-    <li><strong>Licensing the warehouse with the DIAN</strong> as a <a class="g" href="#g-warehouse">private warehouse for transformation and/or assembly</a> (Decreto 1165, art. 88; Decreto 1131, art. 2.2.1.10.2.11). In the same resolution that licenses the warehouse, the DIAN authorizes the company to declare under the procedure. You submit MinCIT's decision and a description of the process, with the subheadings that come in and the products that go out (Resolución DIAN 46 de 2019, art. 255).</li>
+    <li><strong>MinCIT authorization as an assembler.</strong> You apply to the Foreign Trade Directorate (Dirección de Comercio Exterior) through the <a class="term" href="#g-vuce">VUCE</a>, module “Régimen de Ensamble para Motos de Transformación o Ensamble – RTE” (Decreto 1131 de 2026, art. 2.2.1.10.3.2). Attachments include, among others: capital structure and shareholders, plant location and area, projected production and sales for three years, the local parts incorporation program, the letter of intent from the parent company or the <a class="term" href="#g-ckd">CKD</a> suppliers, the commitment to after-sales service and spare parts for at least ten years after the model is discontinued, and a pre-feasibility study. MinCIT decides within at most 90 calendar days. The authorization lasts five years, renewable for five more; for new companies, three years (art. 2.2.1.10.3.5).</li>
+    <li><strong>Licensing the warehouse with the DIAN</strong> as a <a class="term" href="#g-warehouse">private warehouse for transformation and/or assembly</a> (Decreto 1165, art. 88; Decreto 1131, art. 2.2.1.10.2.11). In the same resolution that licenses the warehouse, the DIAN authorizes the company to declare under the procedure. You submit MinCIT's decision and a description of the process, with the subheadings that come in and the products that go out (Resolución DIAN 46 de 2019, art. 255).</li>
   </ol>
-  <p>After that you must meet the <a class="g" href="#g-pin">PIN</a> every year and report it to MinCIT through the VUCE: the first-half report by <strong>July 31</strong> at the latest and the annual report by <strong>March 1</strong> at the latest, the latter with the Form B sheets for domestic motorcycle parts and certification by the statutory auditor (revisor fiscal), accountant or auditor (Decreto 1131, art. 2.2.1.10.2.12).</p>
+  <p>After that you must meet the <a class="term" href="#g-pin">PIN</a> every year and report it to MinCIT through the VUCE: the first-half report by <strong>July 31</strong> at the latest and the annual report by <strong>March 1</strong> at the latest, the latter with the Form B sheets for domestic motorcycle parts and certification by the statutory auditor (revisor fiscal), accountant or auditor (Decreto 1131, art. 2.2.1.10.2.12).</p>
 
   <h3>The minimum of Colombian parts (PIN)</h3>
   <p>PIN = value of local parts ÷ (local parts + CIF value of the imported CKD) × 100. Only local purchases with at least 40&#8239;% domestic value added count as local. It used to be a flat 17&#8239;% for all motorcycles. With Decreto 1131 de 2026 it depends on the type of motorcycle and rises every year:</p>
@@ -476,7 +506,7 @@ footer.sources li { margin: .3rem 0; }
   <p>If the motorcycles are exported, the procedure also ends with the export or re-export (Decreto 1165, arts. 252 and 380), without paying the import duty. The warehouse requires a guarantee. For the first year it is 1&#8239;% of the customs value of what is projected to be stored; on renewal, 1&#8239;% of what was stored the previous year, with reductions if there are no penalties (art. 109, num. 4).</p>
 
   <h2>Questions for the expert</h2>
-  <div class="duo">
+  <div class="duo wide">
     <div>
       <h3>For MinCIT (Foreign Trade Directorate)</h3>
       <ul class="tight">
@@ -511,24 +541,20 @@ footer.sources li { margin: .3rem 0; }
   </ol>
   <p class="muted">General explanation, not legal advice. Customs rules change often; check the current text before acting.</p>
 </footer>
-</main>
-
-<aside class="glossary" data-level="5" aria-labelledby="h-gloss">
-  <div>
-  <h2 id="h-gloss">Glossary</h2>
+<aside class="glossary" data-level="5" id="glossary" aria-labelledby="glossary-t">
+  <h2 id="glossary-t">Glossary</h2>
   <dl>
-    <dt id="g-ckd">CKD</dt><dd>Completely knocked down: a motorcycle imported fully disassembled, with the minimum degree of disassembly in Note 2 of ch. 98: unpainted body and frame; engine, suspension, brakes and wheels separate.</dd>
-    <dt id="g-pin">PIN</dt><dd>National Integration Percentage (Porcentaje de Integración Nacional): how much of the motorcycle's material was bought in Colombia, versus the imported CKD.</dd>
-    <dt id="g-warehouse">Licensed warehouse</dt><dd>Depósito habilitado: a warehouse the DIAN authorizes to store and assemble foreign goods that have not yet paid duties and taxes.</dd>
-    <dt id="g-nationalize">Nationalize</dt><dd>Declare and pay duties and taxes so the goods are freely available and can be sold in Colombia.</dd>
-    <dt id="g-restr">Restricted disposal</dt><dd>Disposición restringida: the goods cannot be sold or freely used until the procedure is completed.</dd>
-    <dt id="g-transit">Customs transit</dt><dd>Tránsito aduanero: permission to move foreign goods that are not yet nationalized from the port to another licensed place in the country.</dd>
-    <dt id="g-vuce">VUCE</dt><dd>Ventanilla Única de Comercio Exterior (Foreign Trade Single Window). It hosts MinCIT's RTE module for authorizations and reports.</dd>
-    <dt id="g-9801">Heading 98.01</dt><dd>Special Tariff heading under which motorcycles assembled in the country by authorized companies are nationalized.</dd>
+    <dt id="g-ckd">CKD</dt><dd id="g-ckd-d">Completely knocked down: a motorcycle imported fully disassembled, with the minimum degree of disassembly in Note 2 of ch. 98: unpainted body and frame; engine, suspension, brakes and wheels separate.</dd>
+    <dt id="g-pin">PIN</dt><dd id="g-pin-d">National Integration Percentage (Porcentaje de Integración Nacional): how much of the motorcycle's material was bought in Colombia, versus the imported CKD.</dd>
+    <dt id="g-warehouse">Licensed warehouse</dt><dd id="g-warehouse-d">Depósito habilitado: a warehouse the DIAN authorizes to store and assemble foreign goods that have not yet paid duties and taxes.</dd>
+    <dt id="g-nationalize">Nationalize</dt><dd id="g-nationalize-d">Declare and pay duties and taxes so the goods are freely available and can be sold in Colombia.</dd>
+    <dt id="g-restr">Restricted disposal</dt><dd id="g-restr-d">Disposición restringida: the goods cannot be sold or freely used until the procedure is completed.</dd>
+    <dt id="g-transit">Customs transit</dt><dd id="g-transit-d">Tránsito aduanero: permission to move foreign goods that are not yet nationalized from the port to another licensed place in the country.</dd>
+    <dt id="g-vuce">VUCE</dt><dd id="g-vuce-d">Ventanilla Única de Comercio Exterior (Foreign Trade Single Window). It hosts MinCIT's RTE module for authorizations and reports.</dd>
+    <dt id="g-9801">Heading 98.01</dt><dd id="g-9801-d">Special Tariff heading under which motorcycles assembled in the country by authorized companies are nationalized.</dd>
   </dl>
-  </div>
 </aside>
-</div>
+</main>
 </div>
 
 <script>
@@ -737,6 +763,91 @@ footer.sources li { margin: .3rem 0; }
 
   addEventListener('beforeprint', stop);
 })();
+</script>
+<script>
+// glossary: popover + drawer: start. Without JS the aside stays a list at the end of main.
+(() => {
+  const g = document.getElementById('glossary'), btn = document.querySelector('.glossary-toggle');
+  if (!g || !btn) return;
+  const sheet = matchMedia('(max-width: 600px)'), pop = document.createElement('div');
+  pop.id = 'term-pop'; pop.hidden = true;
+  document.body.append(pop);
+  document.documentElement.classList.add('js-glossary');
+  btn.hidden = false;
+  let cur = null, timer, touch = false, wasOpen = false;
+  const slug = t => t.getAttribute('href').slice(1);
+  const hide = () => { clearTimeout(timer); pop.hidden = true; cur = null; };
+  const later = () => { clearTimeout(timer); timer = setTimeout(hide, 200); };
+  function show(t) {
+    const d = document.getElementById(slug(t) + '-d');
+    if (!d) return;
+    clearTimeout(timer); cur = t;
+    pop.innerHTML = d.innerHTML + ` <a class="term-pop-more" href="#${slug(t)}">See in glossary →</a>`;
+    pop.hidden = false; pop.style.left = pop.style.top = '';
+    if (sheet.matches) return; // the CSS docks it as a bottom sheet
+    const r = t.getBoundingClientRect(), p = pop.getBoundingClientRect(), m = 8, W = document.documentElement.clientWidth;
+    const x = Math.max(m, Math.min(r.left, W - p.width - m));
+    const y = r.bottom + m + p.height <= innerHeight ? r.bottom + m : Math.max(m, r.top - m - p.height);
+    pop.style.left = x + scrollX + 'px'; pop.style.top = y + scrollY + 'px';
+  }
+  const KEY = 'glossary-open:' + location.pathname, head = document.getElementById('glossary-t') || g;
+  head.tabIndex = -1;
+  function setOpen(open, focus) { // focus: the element inside the drawer to move focus to (none when restoring)
+    g.toggleAttribute('data-open', open);
+    btn.setAttribute('aria-expanded', open);
+    try { localStorage.setItem(KEY, open ? '1' : '0'); } catch {}
+    if (open && focus) focus.focus({ preventScroll: true });
+  }
+  const entry = id => { const dt = id && document.getElementById(id); return dt && dt.tagName === 'DT' && g.contains(dt) ? dt : null; };
+  function openAt(dt) { // open at an entry without touching the URL: highlight it, scroll the drawer to it, focus it
+    g.querySelectorAll('.is-target').forEach(e => e.classList.remove('is-target'));
+    const dd = document.getElementById(dt.id + '-d');
+    dt.classList.add('is-target'); if (dd) dd.classList.add('is-target');
+    dt.tabIndex = -1;
+    setOpen(true, dt);
+    g.scrollTop = dt.offsetTop - parseFloat(getComputedStyle(g).scrollPaddingTop || 0);
+  }
+  const fromHash = () => { let id = ''; try { id = decodeURIComponent(location.hash.slice(1)); } catch {} const dt = entry(id); if (dt) openAt(dt); return !!dt; };
+  document.querySelectorAll('a.term').forEach(t => {
+    t.setAttribute('aria-describedby', slug(t) + '-d');
+    t.addEventListener('mouseenter', () => show(t));
+    t.addEventListener('focus', () => show(t));
+    t.addEventListener('mouseleave', later);
+    t.addEventListener('blur', later);
+    t.addEventListener('pointerdown', e => { touch = e.pointerType !== 'mouse'; wasOpen = cur === t; });
+    t.addEventListener('pointercancel', () => { touch = wasOpen = false; });
+    t.addEventListener('click', e => {
+      // First tap on touch: popover only. Mouse click, Enter or a second tap: drawer at the entry, URL unchanged.
+      // click carries pointerType where supported ("" for Enter); the pointerdown flag is the fallback.
+      const tap = 'pointerType' in e ? e.pointerType === 'touch' || e.pointerType === 'pen' : touch;
+      e.preventDefault();
+      if (tap && !wasOpen) show(t); else { hide(); const dt = entry(slug(t)); if (dt) openAt(dt); else setOpen(true, head); }
+      touch = wasOpen = false;
+    });
+  });
+  pop.addEventListener('mouseenter', () => clearTimeout(timer));
+  pop.addEventListener('mouseleave', later);
+  pop.addEventListener('click', e => {
+    const more = e.target.closest('.term-pop-more');
+    if (!more) return;
+    e.preventDefault(); hide();
+    const dt = entry(more.getAttribute('href').slice(1)); if (dt) openAt(dt); else setOpen(true, head);
+  });
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('.term, #term-pop')) hide(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!pop.hidden) hide();
+    else if (g.hasAttribute('data-open')) { setOpen(false); btn.focus(); }
+  });
+  btn.addEventListener('click', () => setOpen(!g.hasAttribute('data-open'), head));
+  const l1 = document.getElementById('level-1'); // reading levels: level 1 closes the drawer
+  if (l1) l1.addEventListener('change', () => setOpen(false));
+  addEventListener('hashchange', fromHash); // a #g-… link opens the drawer at that entry; #5min and others are ignored
+  // A #g-… hash on load wins; otherwise restore this page's state, but never reopen the full-screen drawer on a phone.
+  if (!fromHash() && !sheet.matches) try { if (localStorage.getItem(KEY) === '1') setOpen(true); } catch {}
+  requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('glossary-ready')));
+})();
+// glossary: popover + drawer: end
 </script>
 </body>
 </html>

@@ -13,6 +13,7 @@ Thanks for helping. This is a small repo and the bar is simple: the skill should
 ```bash
 scripts/check-examples.sh                         # static rules over docs/examples
 node scripts/verify-example.mjs docs/examples/*.html docs/index.html   # needs Playwright + Chromium
+node scripts/verify-glossary.mjs docs/examples/*.html                  # glossary popover/drawer and wide-layout checks
 scripts/build-skill.sh                            # the Claude.ai zip still builds
 claude plugin validate .                          # manifests are valid
 ```

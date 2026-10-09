@@ -12,7 +12,7 @@ This skill operationalizes the recognition heuristic and per-category patterns f
 
 **[→ See the examples](https://williwilliam.github.io/explain-in-html/#examples)** · **[Changelog](CHANGELOG.md)** · **[Latest release](https://github.com/WilliWilliam/explain-in-html/releases/latest)**
 
-## What this fork adds (1.4.0)
+## What this fork adds (1.5.0)
 
 - **`references/patterns.md`**, a set of its own patterns that `SKILL.md` always reads.
 - **Spanish requests** trigger the skill ("explícame", "compara", "reporte", "diagrama"…) and get the page in Spanish. The repo itself is in English.
@@ -20,6 +20,8 @@ This skill operationalizes the recognition heuristic and per-category patterns f
 - **Reading levels:** pages meant to be read (explainers, PR writeups, reports) get a 1 / 5 / 10 minute selector, opening at 10. Ask for one time ("explícamelo en 1 minuto") and you get only that level.
 - **Places and walkthroughs:** physical processes (a warehouse, a port, a terminal) get a top-down plan drawn like an engineer's drawing: fixed zones, moving cargo, one color per shipment, exceptions drawn where they happen. Step-by-step diagrams get a play button that never starts on its own and pauses on questions.
 - **Theme button:** every page gets a small system · light · dark button, so the reader can switch without changing their OS setting.
+- **Glossary:** terms in a page get a popover on the term and a collapsible drawer with every entry (it overlays, starts closed and remembers if you opened it); without JavaScript or in print it is a list at the end.
+- **Wide layout:** three width tiers (text, `.wide` up to 1600px, `.full` for the whole window) so diagrams and tables use the screen instead of a narrow column.
 - **Evals:** four cases on top of the original seven (eleven in total): two in Spanish, one for reading levels and one for logistics.
 
 See [CHANGELOG.md](CHANGELOG.md) for details.
@@ -124,7 +126,7 @@ If the defaults still produce output you don't like, fork it, or put a `design-s
 
 ## Examples
 
-Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 to 12 by this fork (11 and 12 were asked in Spanish and translated for this repo). Open `docs/examples/` directly, or see them on the [site](https://williwilliam.github.io/explain-in-html/#examples).
+Each is a single `.html` file produced from the prompt shown: 01–09 by the upstream `html-artifacts` skill, 10 to 13 by this fork (11 and 12 were asked in Spanish and translated for this repo). Open `docs/examples/` directly, or see them on the [site](https://williwilliam.github.io/explain-in-html/#examples).
 
 | Pattern | Prompt | File |
 |---|---|---|
@@ -140,6 +142,7 @@ Each is a single `.html` file produced from the prompt shown: 01–09 by the ups
 | Reading levels, UML (this fork) | "Prepare an HTML explainer for this change. I want a 1 minute, a 5 minute and a 10 minute explainer…" | [`10-reading-levels.html`](docs/examples/10-reading-levels.html) |
 | Floor plan with play-through (this fork) | "Explain how a consolidated container is deconsolidated at a bonded warehouse in Colombia…" | [`11-warehouse-floor-plan.html`](docs/examples/11-warehouse-floor-plan.html) |
 | Researched regulatory explainer (this fork) | "Explain how the assembly regime works in Colombia… Research it." | [`12-assembly-regime.html`](docs/examples/12-assembly-regime.html) |
+| Full-width sequence diagram with glossary (this fork) | "Explain what happens when you open an HTTPS URL…" | [`13-https-request.html`](docs/examples/13-https-request.html) |
 
 Made something with the skill you're proud of? [Open a gallery issue](https://github.com/WilliWilliam/explain-in-html/issues/new?template=gallery.yml).
 
