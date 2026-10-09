@@ -244,7 +244,7 @@ body:has(#level-1:checked) .glossary-toggle { display: none; }
 
 <div class="cards">
   <div class="card"><b>Round trips, not bandwidth</b>Each step sends a message and waits for the reply. Distance sets the cost, so a server 10 ms away beats a faster one 100 ms away.</div>
-  <div class="card"><b>The first visit pays for everything</b>180 ms here. On a repeat visit the address, the encryption keys and the page are already remembered: 40 ms.</div>
+  <div class="card"><b>The first visit pays for everything</b>180 ms here. On a repeat visit the address, the encryption keys and the page are already remembered: 40 ms. That assumes 0-RTT over TCP, where the request rides along with the first encryption message; without it, 60 ms.</div>
   <div class="card"><b>The nearby server does the heavy lifting</b>The handshakes happen with a CDN server close to you. It only talks to the far-away origin when it lacks the page.</div>
 </div>
 
@@ -501,7 +501,7 @@ DATA     stream=1   &lt;!doctype html&gt;…</p>
   <h2>The fine print</h2>
   <ul>
     <li><b>0-RTT data can be replayed.</b> The early request is encrypted with keys from the earlier session ticket, before the server has said anything in this connection, so an attacker who records it can send it again. Servers and CDNs therefore accept early data only for safe, idempotent requests such as a plain GET, never for a payment or a form post. A CDN can forward the request to the origin with an <code>Early-Data: 1</code> header, and the origin can answer <code>425 Too Early</code> to make the browser retry after the full handshake.</li>
-    <li><b>When 0-RTT doesn't happen,</b> because the ticket expired, the request isn't idempotent or the server declines early data, resumption still skips the certificate but costs the TLS round trip: the repeat visit becomes 60 ms instead of 40. Some browsers only use early data over HTTP/3, so over TCP they take the 60 ms path.</li>
+    <li><b>When 0-RTT doesn't happen,</b> because the ticket expired, the request isn't idempotent or the server declines early data, resumption still skips the certificate but costs the TLS round trip: the repeat visit becomes 60 ms instead of 40. Chrome, for example, only sends early data over HTTP/3, so over TCP it takes the 60 ms path.</li>
     <li><b>The edge's connection to the origin.</b> The 80 ms miss assumes the edge already had a warm, reused connection to the origin. A cold one adds a TCP and a TLS handshake at 80 ms each: the miss becomes 240 ms and the first visit 340 ms. CDNs keep connection pools and often add a shield tier, a single cache close to the origin, so most misses never reach it.</li>
     <li><b>HTTP/3 over QUIC.</b> The connection and encryption handshakes share one round trip, so the first visit would be 160 ms. A repeat visit with 0-RTT sends the GET in the very first packet: 20 ms. The browser usually learns that a site speaks HTTP/3 from an earlier response (Alt-Svc) or from a DNS HTTPS record, so the very first visit is often HTTP/2.</li>
     <li><b>TLS 1.2</b> needed two round trips for a full handshake, so the same first visit would take 200 ms.</li>
